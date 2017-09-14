@@ -164,7 +164,8 @@ soundbeam.TSD<-function(data, t=1, ind=NULL, cs="g", seabed=-12000, rot=1, compe
 			}
 		else if(substring(tolower(cs),1,1)=="g"){
 			# z-rotation of the beams added the z-rotation of the vessel:
-			theta = data$dira + data$rtzv
+			# c() around data$rtzv avoids the new warning message in R 3.4: "Recycling array of length 1 in vector-array arithmetic is deprecated. Use c() or as.vector() instead."
+			theta = data$dira + c(data$rtzv)
 			# x-rotation of the beams added the x-rotation of the vessel which is set to 0 according to the compensation for roll and pitch:
 			phi = data$dire-pi/2
 			# Get the positions along the beams:
