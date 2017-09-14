@@ -1,0 +1,10 @@
+########## Version 1.0 ##########
+
+Library for reading, processing (noise estimation, segmentation) and converting sonar data to the TSD format. Contains many functions used by the packages echoIBM and cpplot3d.
+
+
+########## Version 1.1 ##########
+
+Changed read.event() to return a matrix of the segmentation mask, containing voxel indices, positions and sv.
+
+Moved development to GitHub
