@@ -23,8 +23,9 @@ Acoustics_datasets_directory <- function(path=NULL){
 	else{
 		stop(paste0("The file \n\n", file, "\n\nmissing. ", warnmessage))
 	}
-	if(length(out)==0){
-		warning(paste0("The file ", file, " is empty. ", warnmessage))
-	}
+	# Changed on 2017-09-14 to not issue a warning, since there should be no problems specifying all events by their full path:
+	#if(length(out)==0){
+	#	warning(paste0("The file ", file, " is empty. ", warnmessage))
+	#}
 	return(out)
 }
