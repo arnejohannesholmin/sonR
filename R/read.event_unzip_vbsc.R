@@ -37,9 +37,11 @@ read.event_unzip_vbsc <- function(x, pad=TRUE, split=TRUE, filename=NULL, t=NULL
 	if(length(x$vbsc)>0 && length(x$vxIX)>0){
 		# In the unlikely event that all time steps have equal number of positive voxels in the compressed mode, split into a list:
 		if(!is.list(x$vbsc)){
+			thislen <- nrow(x$vbsc)
 			thisnumt = ncol(x$vbsc)
-			x$vbsc = split(x$vbsc, rep(seq_len(thisnumt), each=length(thisnumt)/thisnumt))
-			x$vxIX = split(x$vxIX, rep(seq_len(thisnumt), each=length(thisnumt)/thisnumt))
+			splitvec <-  rep(seq_len(thisnumt), each=thislen)
+			x$vbsc = split(x$vbsc, splitvec)
+			x$vxIX = split(x$vxIX, splitvec)
 			#x$vbsc = as.data.frame(x$vbsc)
 			#x$vxIX = as.data.frame(x$vxIX)
 			}

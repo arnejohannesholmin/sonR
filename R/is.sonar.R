@@ -41,18 +41,29 @@ is.sonar<-function(esnm="MS70", bydirs=FALSE, data=list(), margin=10*pi/180, bmm
 	##################################################
 	##################################################
 	########## Preparation ##########
-	# Define echosounders:
-	echsounders = c("ek60", "me70")
-	# Define sonars:
-	fishsonars = c("sx80", "sh80", "su80", "sx90", "sh90", "su90")
-	sonars = c("ms70", fishsonars)
-	# Test:
 	if(is.list(esnm)){
 		data = esnm
 		esnm = esnm$esnm[1]
-		}
-	issonar = if(fishery) tolower(esnm) %in% fishsonars else tolower(esnm) %in% sonars
-	#isechsounder = tolower(esnm) %in% echsounders
+	}
+	# Test using sonR_implemented():
+	if(fishery){
+		issonar <- sonR_implemented(esnm, type=c("MBS", "OFS"))
+	}
+	else{
+		issonar <- sonR_implemented(esnm, type=c("MBS"))
+	}
+	### # Define echosounders:
+	### echsounders = c("ek60", "me70")
+	### # Define sonars:
+	### fishsonars = c("sx80", "sh80", "su80", "sx90", "sh90", "su90")
+	### sonars = c("ms70", fishsonars)
+	### # Test:
+	### if(is.list(esnm)){
+	### 	data = esnm
+	### 	esnm = esnm$esnm[1]
+	### 	}
+	### issonar = if(fishery) tolower(esnm) %in% fishsonars else tolower(esnm) %in% sonars
+	### #isechsounder = tolower(esnm) %in% echsounders
 	
 	
 	########## Execution and output ##########

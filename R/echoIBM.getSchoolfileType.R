@@ -17,7 +17,7 @@
 #' @export
 #' @rdname echoIBM.getSchoolfileType
 #'
-echoIBM.getSchoolfileType=function(schoolfiles,dynschoolnames,staticschoolnames){
+echoIBM.getSchoolfileType <- function(schoolfiles, dynschoolnames, staticschoolnames, thr=0.5){
 	
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -43,24 +43,25 @@ echoIBM.getSchoolfileType=function(schoolfiles,dynschoolnames,staticschoolnames)
 	##################################################
 	########## Preparation ##########
 	# Defining school file type 'schooltype' (0 for dynamic school files and 1 for static school files):
-	schooltypeD=zeros(length(schoolfiles))
-	schooltypeS=zeros(length(schoolfiles))
-	schooltypeB=zeros(length(schoolfiles))
+	schooltypeD <- zeros(length(schoolfiles))
+	schooltypeS <- zeros(length(schoolfiles))
+	schooltypeB <- zeros(length(schoolfiles))
 	
 	
 	########## Execution ##########
 	# For loop through the school files:
 	for(i in seq_along(schoolfiles)){
-		this=suppressWarnings(read.TSD(schoolfiles[i],var=NULL,header=TRUE))
+		this=suppressWarnings(read.TSD(schoolfiles[i], var=NULL, header=TRUE))
+		thislabl <- setdiff(this$labl, c("size","info","d000", labl.TSD("t")))
 		# Make an exeption for "size", "info" and "d000", which may be present both in dynamic and static data:
-		if(all(setdiff(this$labl,c("size","info","d000")) %in% staticschoolnames)){
-			schooltypeS[i]=1
+		if(mean(thislabl %in% staticschoolnames) > thr){
+			schooltypeS[i] <- 1
 			}
-		if(any(setdiff(this$labl,c("size","info","d000")) %in% dynschoolnames)){
-			schooltypeD[i]=1
+		if(mean(thislabl %in% dynschoolnames) > thr){
+			schooltypeD[i] <- 1
 			}
 		if(any(this$labl %in% c("psxS"))){
-			schooltypeB[i]=1
+			schooltypeB[i] <- 1
 			}
 		}
 	

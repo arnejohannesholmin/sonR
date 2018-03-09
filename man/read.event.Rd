@@ -14,7 +14,7 @@ read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
   pamkpar = list(), nsind = 0.75, hins_add = 10, pdns_scale = 1e-14,
   TOV = 0, allow.old = FALSE, ggsz = 10, pad = TRUE, split = TRUE,
   cal = 1, fanWidth = "b2", onestep = TRUE, other = FALSE, fill = NA,
-  ...)
+  info.out = FALSE, ...)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}

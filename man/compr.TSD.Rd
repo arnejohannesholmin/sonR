@@ -8,7 +8,8 @@
 compr.TSD(data = NULL, tres = NULL, xres = NULL, zres = NULL,
   rres = NULL, bres = NULL, funvbsc = c("median", "mean"),
   funt = c("median", "mean"), adds = list(), split = TRUE,
-  skipAngles = TRUE, origin = 1, z0 = 0, keepEmpty = TRUE, ...)
+  skipAngles = TRUE, origin = 1, z0 = 0, keepEmpty = TRUE,
+  drop = FALSE, ...)
 
 compr.event(event, filenr = "all", tres = NULL, xres = NULL,
   zres = NULL, rres = NULL, bres = NULL, cores = 1,
@@ -42,6 +43,12 @@ compr.event(event, filenr = "all", tres = NULL, xres = NULL,
 \item{skipAngles}{is TRUE to discard electircal angles from the data (saves time).}
 
 \item{origin}{is either the time index of the origin, or the origin itself, given as c(longitude, latitude).}
+
+\item{z0}{is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).}
+
+\item{keepEmpty}{is TRUE to keep empty time intervals as filled with NAs.}
+
+\item{drop}{is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).}
 
 \item{...}{further arguments passed to psx.TSD().}
 

@@ -150,37 +150,46 @@ compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rr
 		}
 	
 	# Move through the list of pings files and read and possibly compress:
-	if(cores>1 || identical(cores, 1L)){
-		# Generate the clusters of time steps:
-		cores = min(cores, length(filenr))
-		cl<-makeCluster(cores, outfile="")
-		# Reorder the files so that they are read as closely in position on the drive as possible:
-		cc = clusterSplit(cl, filenr)
-		corenr = rep(seq_len(cores), sapply(cc, length))
-		l = unlist(lapply(seq_len(cores), function(xx) seq(xx, by=cores, l=length(cc[[xx]]))), use.names=FALSE)
-		corenr[rank(l)] = corenr
-													################# Here we are creating a vector of files which is only as long as the length of filenr, whereas the indt is for all files, which may be unwise. The function will only work for filenr starting from 1 !!!!!!!!!!!!!!!!!!!!!!!!
-		dumpfiles = NAs(length(indt))
-		dumpfiles[filenr] = file.path(dirname(event_compr), paste0(basename(event_compr), "_core_", corenr, ".txt"))
-		l = filenr[rank(l)]
-		# Read all the .pings files, and merge at each time step:
-		cat("Parallel processing on", cores, "cores:\n")
-		# The output 'indices' is not used:
-		indices = parLapply(cl, l, compr.event_oneFile_write, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
-			# Inputs used in compr.TSD:
-			tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, dumpfiles=dumpfiles, keepEmpty=keepEmpty, maxlenb=maxlenb, ...)
-		# End the parallel processing:
-		stopCluster(cl)
-		}
-	else{
-		# The output 'indices' is not used:
-		indices = NAs(length(filenr))
-		for(i in filenr){
-			indices[i] = compr.event_oneFile_write(i=i, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
-			# Inputs used in compr.TSD:
-			tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, keepEmpty=keepEmpty, maxlenb=maxlenb, ...)
-			}
-		}
+	### if(cores>1 || identical(cores, 1L)){
+	### 	# Generate the clusters of time steps:
+	### 	cores = min(cores, length(filenr))
+	### 	cl<-makeCluster(cores, outfile="")
+	### 	# Reorder the files so that they are read as closely in position on the drive as possible:
+	### 	cc = clusterSplit(cl, filenr)
+	### 	corenr = rep(seq_len(cores), sapply(cc, length))
+	### 	l = unlist(lapply(seq_len(cores), function(xx) seq(xx, by=cores, l=length(cc[[xx]]))), use.names=FALSE)
+	### 	corenr[rank(l)] = corenr
+	### 												################# Here we are creating a vector of files which is only as long as the length of filenr, whereas the indt is for all files, which may be unwise. The function will only work for filenr starting from 1 !!!!!!!!!!!!!!!!!!!!!!!!
+	### 	dumpfiles = NAs(length(indt))
+	### 	dumpfiles[filenr] = file.path(dirname(event_compr), paste0(basename(event_compr), "_core_", corenr, ".txt"))
+	### 	l = filenr[rank(l)]
+	### 	# Read all the .pings files, and merge at each time step:
+	### 	cat("Parallel processing on", cores, "cores:\n")
+	### 	# The output 'indices' is not used:
+	### 	indices = parLapply(cl, l, compr.event_oneFile_write, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
+	### 		# Inputs used in compr.TSD:
+	### 		tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, dumpfiles=dumpfiles, keepEmpty=keepEmpty, maxlenb=maxlenb, ...)
+	### 	# End the parallel processing:
+	### 	stopCluster(cl)
+	### 	}
+	### else{
+	### 	# The output 'indices' is not used:
+	### 	indices = NAs(length(filenr))
+	### 	for(i in filenr){
+	### 		indices[i] = compr.event_oneFile_write(i=i, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
+	### 		# Inputs used in compr.TSD:
+	### 		tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, keepEmpty=keepEmpty, maxlenb=maxlenb, ...)
+	### 		}
+	### 	}
+	
+	
+	# Move through the list of pings files and read and possibly compress:
+	
+	indices = papply(filenr, compr.event_oneFile_write, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
+		# Inputs used in compr.TSD:
+		tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, keepEmpty=keepEmpty, maxlenb=maxlenb, ..., cores=cores)
+		
+	
 	
 	# If there are files in the final merged directory, move the last file to the temporarily-merged directory (but only if it has 1 time step), and apply merging by time steps:
 	x_final = list.files(event_compr_final, full.names=TRUE)
@@ -201,14 +210,19 @@ compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rr
 		}
 	
 	# Merge the last file of the current file number and the first file of the next:
-	pingsfiles = merge_TSD_by_Time(unlist(lapply(pingsfiles[1:3], "[", filenr), use.names=FALSE), fun=weighted.mean)
-	beamsfiles = merge_TSD_by_Time(unlist(lapply(beamsfiles[1:3], "[", filenr), use.names=FALSE), fun=head1)
-	vesselfiles = merge_TSD_by_Time(unlist(lapply(vesselfiles[1:3], "[", filenr), use.names=FALSE), fun=head1)
+	# Sort the files by name to keep the time ordered (changed on 2018-03-08):
+	pingsfiles_filenr <- sort(unlist(lapply(pingsfiles[1:3], "[", filenr), use.names=FALSE))
+	beamsfiles_filenr <- sort(unlist(lapply(beamsfiles[1:3], "[", filenr), use.names=FALSE))
+	vesselfiles_filenr <- sort(unlist(lapply(vesselfiles[1:3], "[", filenr), use.names=FALSE))
+	pingsfiles = merge_TSD_by_Time(pingsfiles_filenr, fun=weighted.mean)
+	beamsfiles = merge_TSD_by_Time(beamsfiles_filenr, fun=head1)
+	vesselfiles = merge_TSD_by_Time(vesselfiles_filenr, fun=head1)
 	#indt = seq_len(sum(read.TSDs(pingsfiles, var="numt", merge=TRUE, cores=cores)$numt))
 	
 	# Then merge the files using the linked option:
 	#merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), adds=list(indt=indt), clear_along=TRUE)
-	merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along, skipLast=TRUE)
+	# merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along, skipLast=TRUE) # WHY SKIPLAST?????????????????
+	merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along)
 	
 	# Rename all files by removing "_1" just before the file extension:
 	l = list.files(event_compr_final, full.names=TRUE)

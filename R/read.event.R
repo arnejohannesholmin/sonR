@@ -54,7 +54,7 @@
 #' @export
 #' @rdname read.event
 #'
-read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds=NULL, esnm="MS70", TVG=TRUE, TVG.exp=2, ideal=TRUE, cs="g", seabed=-12000, rot=2, compensation=c("pitch", "roll"), exact=FALSE, origin=1, dir.data=NULL, drop.out=TRUE, strip.out=TRUE, dir.out=FALSE, mask=TRUE, Paout=TRUE, bgns=TRUE, pdns=TRUE, nrns=TRUE, hins=TRUE, kern=NULL, merge=TRUE, msg=TRUE, segpar=NULL, pamkpar=list(), nsind=0.75, hins_add=10, pdns_scale=1e-14, TOV=0, allow.old=FALSE, ggsz=10, pad=TRUE, split=TRUE, cal=1, fanWidth="b2", onestep=TRUE, other=FALSE, fill=NA, ...){
+read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds=NULL, esnm="MS70", TVG=TRUE, TVG.exp=2, ideal=TRUE, cs="g", seabed=-12000, rot=2, compensation=c("pitch", "roll"), exact=FALSE, origin=1, dir.data=NULL, drop.out=TRUE, strip.out=TRUE, dir.out=FALSE, mask=TRUE, Paout=TRUE, bgns=TRUE, pdns=TRUE, nrns=TRUE, hins=TRUE, kern=NULL, merge=TRUE, msg=TRUE, segpar=NULL, pamkpar=list(), nsind=0.75, hins_add=10, pdns_scale=1e-14, TOV=0, allow.old=FALSE, ggsz=10, pad=TRUE, split=TRUE, cal=1, fanWidth="b2", onestep=TRUE, other=FALSE, fill=NA, info.out=FALSE, ...){
 	
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -143,39 +143,39 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	##################################################
 	##################################################
 	##### Preparation #####
-	filetypes = c("school", "beams", "ctd", "vessel", "pings", "seg", "tsd")
-	filetypeslist = setNames(as.list(filetypes), filetypes)
+	filetypes <- c("school", "beams", "ctd", "vessel", "pings", "seg", "tsd")
+	filetypeslist <- setNames(as.list(filetypes), filetypes)
 	
 	##########
 	# Store the arguments to be passed on to pplot3d.TSD():
-	ll = list(...)
+	ll <- list(...)
 	# Functions for reading noise data:
-	getbgns = function(bgns){
+	getbgns <- function(bgns){
 		if(length(bgns)>1){
-			type = 0
-			bgns = bgns[1]
+			type <- 0
+			bgns <- bgns[1]
 		}
 		else{
-			type = "s"
+			type <- "s"
 		}
-		varname = paste("bgn", type, sep="")
+		varname <- paste("bgn", type, sep="")
 		suppressWarnings(read.TSDs(bgns, var=varname, msg=FALSE))
 	}
-	getpdns = function(pdns, relevantpdnsvar){
+	getpdns <- function(pdns, relevantpdnsvar){
 		suppressWarnings(read.TSDs(pdns, var=relevantpdnsvar, msg=FALSE))
 	}
-	getnrns = function(nrns, mode=c("p", "a")){
-		varname = paste("nr0", substr(mode[1], 1, 1), sep="")
+	getnrns <- function(nrns, mode=c("p", "a")){
+		varname <- paste("nr0", substr(mode[1], 1, 1), sep="")
 		suppressWarnings(read.TSDs(nrns, var=varname, msg=FALSE))
 	}
-	gethins = function(hins){
+	gethins <- function(hins){
 		suppressWarnings(read.TSDs(hins, var=labl.TSD("hins"), msg=FALSE))
 	}
 	if(isTRUE(TIME)){
-		TIMEout = TRUE
+		TIMEout <- TRUE
 	}
 	else{
-		TIMEout = FALSE
+		TIMEout <- FALSE
 	}
 	##########
 	
@@ -183,19 +183,19 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	##########
 	# If not given, set the data directory containing data (structured in the directory structure specified in the documentation of echoIBM) as the string Acoustics_datasets_directory():
 	if(is.null(dir.data)){
-		dir.data = Acoustics_datasets_directory()
+		dir.data <- Acoustics_datasets_directory()
 	}
 	# Locate the event:
 	if(length(event) && identical(file.info(event[1])$isdir, FALSE)){
-		filelist = event
-		event=dirname(event[1])
+		filelist <- event
+		event <- dirname(event[1])
 	}
 	else{
-		filelist = NULL
+		filelist <- NULL
 	}
-	event = event.path(event=event[1], cruise=cruise, esnm=esnm, dir.data=dir.data)
-	esnm = event$esnm
-	event = event$event
+	event <- event.path(event=event[1], cruise=cruise, esnm=esnm, dir.data=dir.data)
+	esnm <- event$esnm
+	event <- event$event
 	
 	# If the event does not exist, NULL is returned:
 	if(!file.exists(event)){
@@ -211,59 +211,59 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	
 	##########
 	# Accept strings with leading "-" or "+":
-	pm = substr(var, 1, 1) %in% c("+", "-")
+	pm <- substr(var, 1, 1) %in% c("+", "-")
 	if(any(pm)){
-		var[pm] = substr(var[pm], 2, 5)
+		var[pm] <- substr(var[pm], 2, 5)
 	}
 	
 	# If regenerated uniformly distributed points reflecting the vbsc, or if the volume backscattering coefficient in grid cells ("vbsC") are requested, read also voxel and vessel variables:
-	psr = c("psxr", "psyr", "pszr")
-	readpsr = any(var %in% c(psr, "vbsC", "vbsA"))
+	psr <- c("psxr", "psyr", "pszr")
+	readpsr <- any(var %in% c(psr, "vbsC", "vbsA"))
 	if(readpsr){
-		var = c("vbsc", "vessel", "voxels", "beams0", var)
+		var <- c("vbsc", "vessel", "voxels", "beams0", var)
 	}
 	
 	# Are sv values to be read:
-	readsv = any(var %in% c("vbsc", "mvbs", "pings", psr))
+	readsv <- any(var %in% c("vbsc", "mvbs", "pings", psr))
 	# Define various variable chategories:
-	staticschoolnames = labl.TSD("ss")
-	dynschoolnames = labl.TSD("ds")
-	beamsnames = labl.TSD("b")
-	ctdnames = labl.TSD("ctd")
-	vesselnames = labl.TSD("v")
-	relevantbeamsvar = labl.TSD("rb")
-	relevantctdvar = labl.TSD("rc")
-	relevantpdnsvar = labl.TSD("rp")
-	segvar = labl.TSD("sg")
-	voxelvar = labl.TSD("vx")
-	#timevar = labl.TSD("t")
-	timevar = c("utim","mtim","indt")
+	staticschoolnames <- labl.TSD("ss")
+	dynschoolnames <- labl.TSD("ds")
+	beamsnames <- labl.TSD("b")
+	ctdnames <- labl.TSD("ctd")
+	vesselnames <- labl.TSD("v")
+	relevantbeamsvar <- labl.TSD("rb")
+	relevantctdvar <- labl.TSD("rc")
+	relevantpdnsvar <- labl.TSD("rp")
+	segvar <- labl.TSD("sg")
+	voxelvar <- labl.TSD("vx")
+	#timevar <- labl.TSD("t")
+	timevar <- c("utim","mtim","indt")
 	
 	# Insert school variables and voxel variables to 'var', and store the unaltered 'var':
-	oldvar = var
+	oldvar <- var
 	if("school" %in% var){
-		var = setdiff(c(var, staticschoolnames, dynschoolnames), "school")
+		var <- setdiff(c(var, staticschoolnames, dynschoolnames), "school")
 	}
 	if("voxels" %in% var){
-		var = setdiff(c(var, voxelvar), "voxels")
+		var <- setdiff(c(var, voxelvar), "voxels")
 	}
 	if("beams0" %in% var){
-		var = setdiff(c(var, relevantbeamsvar), "beams0")
+		var <- setdiff(c(var, relevantbeamsvar), "beams0")
 	}
 	if("seg" %in% var){
-		var = setdiff(c(var, segvar), "seg")
+		var <- setdiff(c(var, segvar), "seg")
 	}
-		if("time" %in% var || TOV != 0){
-		timevar_present = timevar
+	if("time" %in% var || TOV != 0){
+		timevar_present <- timevar
 	}
 	else{
-		timevar_present = intersect(timevar, var)
+		timevar_present <- intersect(timevar, var)
 	}
 	
 	# Only the header is read if t == "none" or var == "none" (or none of the elements of 'var' are available):
 	if(identical(t, "none") || identical(var, "none")){
-		var = NULL
-		t = 0
+		var <- NULL
+		t <- 0
 	}
 	if(length(t) == 0 || is.na(t)){
 		return()
@@ -275,7 +275,7 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	# The list of files in the tsd-directory inside the case:
 	if(length(filelist) == 0){
 		# Using recursive=TRUE discards empty directories:
-		filelist = list.files_caseInsensitive(event, full.names=TRUE, recursive=TRUE)
+		filelist <- list.files_caseInsensitive(event, full.names=TRUE, recursive=TRUE)
 	}
 	if(length(filelist) == 0){
 		warning("The event is empty")
@@ -283,92 +283,98 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	}
 	
 	# Remove the file "UNIX_time.tsd" from the list if it is present, as this only contains information about the unix time points of the other files:
-	#filelist = filelist[basename(filelist) != "UNIX_time.tsd"]
-	filelist = rmUnix_Sgpm(filelist)
+	#filelist <- filelist[basename(filelist) != "UNIX_time.tsd"]
+	filelist <- rmUnix_Sgpm(filelist)
 	# Selecting only files with valid extensions:
-	ext = tolower(file_ext(filelist))
-	fInd = lapply(filetypeslist, function(xx) which(ext==xx))
+	ext <- tolower(file_ext(filelist))
+	fInd <- lapply(filetypeslist, function(xx) which(ext==xx))
 	
 	# Discard the files that are not relevant to the requested variables:
-	relevantFiles = NULL
+	relevantFiles <- NULL
 	# 'tempvar' is only used here to reduce the number of files read.
-	tempvar = var
+	tempvar <- var
 	
 	if("seg" %in% var || any(segvar %in% var)){
-		relevantFiles = c(relevantFiles, fInd$seg)
-		tempvar = setdiff(tempvar, segvar)
+		relevantFiles <- c(relevantFiles, fInd$seg)
+		tempvar <- setdiff(tempvar, segvar)
 	}
 	# If any time variables are requested, all files are relevant:
 	if(any(c(timevar, "time") %in% timevar_present)){
 		# If a clean list of time steps is requested, only read one time step, which will include the 'I000' and 'U000' variables:
 		if(merge){
-			relevantFiles = c(relevantFiles, fInd$vessel)
+			relevantFiles <- c(relevantFiles, fInd$vessel)
 		}
 		else{
-			relevantFiles = c(relevantFiles, seq_along(filelist))
+			relevantFiles <- c(relevantFiles, seq_along(filelist))
 		}
-		tempvar = setdiff(tempvar, c(timevar, "time"))
+		tempvar <- setdiff(tempvar, c(timevar, "time"))
 	}
 	if("beams" %in% var || any(var %in% beamsnames) && length(fInd$beams)>0){
-		relevantFiles = c(relevantFiles, fInd$beams)
-		tempvar = setdiff(tempvar, c("beams", beamsnames))
+		relevantFiles <- c(relevantFiles, fInd$beams)
+		tempvar <- setdiff(tempvar, c("beams", beamsnames))
 	}
 	if("ctd" %in% var || any(var %in% ctdnames) && length(fInd$ctd)>0){
-		relevantFiles = c(relevantFiles, fInd$ctd)
-		tempvar = setdiff(tempvar, c("ctd", ctdnames))
+		relevantFiles <- c(relevantFiles, fInd$ctd)
+		tempvar <- setdiff(tempvar, c("ctd", ctdnames))
 	}
 	# Allways keep the vesselfiles in order to read the vessel information (needed if 't' is given as "HHMMSS" and when voxel positions are needed)
-	relevantFiles = c(relevantFiles, fInd$vessel)
-	tempvar = setdiff(tempvar, "vessel")
+	relevantFiles <- c(relevantFiles, fInd$vessel)
+	tempvar <- setdiff(tempvar, "vessel")
 	if(any(var %in% vesselnames) && length(fInd$vessel)>0){
-		relevantFiles = c(relevantFiles, fInd$vessel)
-		tempvar = setdiff(tempvar, vesselnames)
+		relevantFiles <- c(relevantFiles, fInd$vessel)
+		tempvar <- setdiff(tempvar, vesselnames)
 	}
 	if(any(c("psxx", "psyx", "pszx") %in% var) || any(c("volx", "harx") %in% var)){
-		relevantFiles = c(relevantFiles, fInd$beams, fInd$ctd, fInd$vessel)
-		tempvar = setdiff(tempvar, voxelvar)
+		relevantFiles <- c(relevantFiles, fInd$beams, fInd$ctd, fInd$vessel)
+		tempvar <- setdiff(tempvar, voxelvar)
 	}
 	if("seg" %in% var || any(segvar %in% var)){
-		relevantFiles = c(relevantFiles, fInd$seg)
-		tempvar = setdiff(tempvar, segvar)
+		relevantFiles <- c(relevantFiles, fInd$seg)
+		tempvar <- setdiff(tempvar, segvar)
 	}
 	if(readsv){
-		relevantFiles = c(relevantFiles, fInd$pings, fInd$beams, fInd$ctd)
-		tempvar = setdiff(tempvar, c("vbsc", "mvbs", "pings", "psxr", "psyr", "pszr"))
+		relevantFiles <- c(relevantFiles, fInd$pings, fInd$beams, fInd$ctd)
+		tempvar <- setdiff(tempvar, c("vbsc", "mvbs", "pings", "psxr", "psyr", "pszr"))
 	}
 	if(any(c("angl", "angt") %in% var)){
-		relevantFiles = c(relevantFiles, fInd$pings)
-		tempvar = setdiff(tempvar, c("angl", "angt"))
+		relevantFiles <- c(relevantFiles, fInd$pings)
+		tempvar <- setdiff(tempvar, c("angl", "angt"))
 	}
 	if(any(var %in% c(staticschoolnames, dynschoolnames))){
-		relevantFiles = c(relevantFiles, fInd$school)
-		tempvar = setdiff(tempvar, c(staticschoolnames, dynschoolnames))
+		relevantFiles <- c(relevantFiles, fInd$school)
+		tempvar <- setdiff(tempvar, c(staticschoolnames, dynschoolnames))
 	}
 	if(length(tempvar)>0){
-		relevantFiles = c(relevantFiles, c(fInd$vessel, fInd$beams, fInd$ctd, fInd$school, fInd$seg, fInd$tsd))
+		relevantFiles <- c(relevantFiles, c(fInd$vessel, fInd$beams, fInd$ctd, fInd$school, fInd$seg, fInd$tsd))
 	}
 		
 	# Add the files with file extension tsd, if TOV != 0:
 	if(TOV != 0 && strff("ms70", esnm)){
-		relevantFiles = c(relevantFiles, fInd$tsd)
+		relevantFiles <- c(relevantFiles, fInd$tsd)
 	}
 	
 	# Discard the irrelevant files, and re-extract the file extensions and file types:
-	relevantFiles = unique(relevantFiles)
+	relevantFiles <- unique(relevantFiles)
 	# Selecting only files with valid extensions:
-	filelist = filelist[relevantFiles]
-	ext = tolower(file_ext(filelist))
-	fInd = lapply(filetypeslist, function(xx) which(ext==xx))
+	filelist <- filelist[relevantFiles]
+	ext <- tolower(file_ext(filelist))
+	fInd <- lapply(filetypeslist, function(xx) which(ext==xx))
 	##########
 	
 	
 	##########
 	# Read UNIX_time file if not given as input:
 	if(is.list(TIME)){
-		TIME[c("f000", "i000", "u000", "l000", "t000")] = lapply(TIME[c("f000", "i000", "u000", "l000", "t000")],function(x) x[relevantFiles])
+		matchRelevantFiles <- match(path.expand(filelist), TIME$f000)
+		TIME[c("f000", "i000", "u000", "l000", "t000")] <- lapply(TIME[c("f000", "i000", "u000", "l000", "t000")], function(x) x[matchRelevantFiles])
 	}
 	else{
-		TIME <- UNIX_time(event=event, file=TRUE, var="all", t=relevantFiles, msg=msg, allow.old=allow.old)
+		#TIME <- UNIX_time(event=event, file=TRUE, var="all", t=relevantFiles, msg=msg, allow.old=allow.old)
+		TIME <- UNIX_time(event=event, file=TRUE, var="all", t="all", msg=msg, allow.old=allow.old)
+		# Select only the relevant files:
+		matchRelevantFiles <- match(path.expand(filelist), TIME$f000)
+		TIME[c("f000", "i000", "u000", "l000", "t000")] <- lapply(TIME[c("f000", "i000", "u000", "l000", "t000")], function(x) x[matchRelevantFiles])
+		
 		# Sone check for the success of reading the UNIX time (unclear why):
 		if(length(TIME$I000[[1]]) == 0 || length(TIME$U000[[1]]) == 0){
 			TIME <- UNIX_time(event=event, file=TRUE, fresh=TRUE, msg=msg, allow.old=allow.old)
@@ -394,117 +400,152 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	
 	##########
 	# Get the number of unique time point:
-	numt = length(TIME$I000)
+	numt <- length(TIME$I000)
 	
 	# 't' may be given as formated time "yyyymmddHHMMSS.FFF" or "yyyymmddSSSSS.FFF":
-	nchart = nchar(t)
+	nchart <- nchar(t)
 	if(is.character(t) && length(nchart)>0 && min(nchart)>5){
 		# Extract formated time if 't' is given as formated time:
 		if(!"ftim" %in% names(TIME) && "ftim" %in% timevar_present){
-			TIME$ftim = ftim.TSD(TIME[setdiff(names(TIME),"indt")])
+			TIME$ftim <- ftim.TSD(TIME[setdiff(names(TIME),"indt")])
 		}
 			
-		t = as.character(t)
+		t <- as.character(t)
 		# If the time is given in the classic as.POSIXlt format "yyyy-mm-dd HH:MM:SS", or with any other separating characters ":", "/", "-" or " ", strip 't' of these, and continue:
 		if(length(grep(":", t))>0){
-			t = strsplit(t, ".", fixed=TRUE)
+			t <- strsplit(t, ".", fixed=TRUE)
 			for(i in seq_along(t)){
 				# Strip 't' of the separating characters, assuming that the time is given in the order of year, month, day, hour, minute, second:
-				t[[i]][1] = gsub("[[:punct:] || [:blank:]]", "", t[[i]][1])
-				#t[[i]][1] = gsub(":", "", t[[i]][1])
-				#t[[i]][1] = gsub(";", "", t[[i]][1])
-				#t[[i]][1] = gsub("/", "", t[[i]][1])
-				#t[[i]][1] = gsub("-", "", t[[i]][1])
-				#t[[i]][1] = gsub(" ", "", t[[i]][1])
-				t[[i]] = paste(t[[i]], collapse=".")
+				t[[i]][1] <- gsub("[[:punct:] || [:blank:]]", "", t[[i]][1])
+				#t[[i]][1] <- gsub(":", "", t[[i]][1])
+				#t[[i]][1] <- gsub(";", "", t[[i]][1])
+				#t[[i]][1] <- gsub("/", "", t[[i]][1])
+				#t[[i]][1] <- gsub("-", "", t[[i]][1])
+				#t[[i]][1] <- gsub(" ", "", t[[i]][1])
+				t[[i]] <- paste(t[[i]], collapse=".")
 			}
-			t = unlist(t)	
+			t <- unlist(t)	
 		}
 		# Constructing the unix time range based on 't':
-		nchart = nchar(strsplit(t, ".", fixed=TRUE)[[1]][1])
+		nchart <- nchar(strsplit(t, ".", fixed=TRUE)[[1]][1])
 		if(length(nchart)>0 && all(nchart == 6)){
-			day = substr(read.TSD(filelist[fInd$vessel[1]], var="ftim", t=1)$ftim, 1, 8)[[1]]
-			userutim = ftim2utim(paste(day, t, sep=""))
+			day <- substr(read.TSD(filelist[fInd$vessel[1]], var="ftim", t=1)$ftim, 1, 8)[[1]]
+			userutim <- ftim2utim(paste(day, t, sep=""))
 		}
 		else if(length(nchart)>0 && all(nchart == 14)){
-			userutim = ftim2utim(t)
+			userutim <- ftim2utim(t)
 		}
 		else{
 			stop("Invalid input 't'. Must be integers, \"none\", \"all\" or a 6-digit or 12 digit numbers giving the time as \"HHMMSS.FFF\" or \"yyyymmddHHMMSS.FFF\"")
 		}
 		# Selecting only the time points within the range of 't', or the closest if only one time point is given:
 		if(length(userutim) == 1){
-			t = which.min(abs(TIME$U000-userutim))
+			t <- which.min(abs(TIME$U000-userutim))
 		}
 		else{
-			t = which(TIME$U000>min(userutim) & TIME$U000<max(userutim))
+			t <- which(TIME$U000>min(userutim) & TIME$U000<max(userutim))
 		}
 		cat("Time points nr.", prettyIntegers(t), "selected\n")
 	}
-	else if(!is.numeric(t) && !identical(t, "all")){
+	else if(!is.numeric(t) && length(grep("all", t))==0){
 		warning("Time input 't' must be numeric or \"none\", \"all\" or as formated time \"yyyymmddHHMMSS.FFF\" or \"yyyymmddSSSSS.FFF\" ('t' set to 0)")
-		var = 0
+		var <- 0
 	}
+	
+	# Whether to apply the indp information:
+	hasindp <- which(sapply(TIME$labl, function(x) any(x=="indp")))
+	hasfreq <- which(sapply(TIME$labl, function(x) any(x=="freq")))
+	t_isallp <- is.character(t) && length(grep("allp", t))
+	t_isnum <- is.numeric(t)
+	indp <- length(hasindp)>0 && (t_isallp || t_isnum) 
+	
+	
 	# If t == "all", all time points are read:
-	if(identical(t, "all")){
-		t = TIME$I000
+	#if(identical(t, "all")){
+	if(is.character(t) && length(grep("all", t))){
+		t <- TIME$I000
 	}
 	# Give a warning and discard any non-positive time step indices:
 	if(any(t<= 0)){
-		t = t[t>0]
+		t <- t[t>0]
 	}
 	
 	# 'tlist' is a list of one vector for each file in 'filelist' holding the time step number in the files:
-	tlist = vector("list", length(filelist))
+	tlist <- vector("list", length(filelist))
 	for(i in seq_along(filelist)){
-		thisindt = match(as.numeric(t), TIME$indt[[i]])
-		thisindt = thisindt[!is.na(thisindt)]
+		thisindt <- match(as.numeric(t), TIME$indt[[i]])
+		thisindt <- thisindt[!is.na(thisindt)]
 		if(length(thisindt)>0){
-			tlist[[i]] = thisindt[!is.na(thisindt)]
+			tlist[[i]] <- thisindt[!is.na(thisindt)]
 		}
 	}
 	# Add ones to 'tlist' for the files with only one time step:
 	if(onestep){
-		onestep = unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext != "pings"
+		onestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext != "pings"
 	}
-	tlist[onestep] = as.list(ones(sum(onestep)))
+	tlist[onestep] <- as.list(ones(sum(onestep)))
+	
+	# If the variable 'indp' is present in a beams file, this implies that the indp values in this file should be matched with the time steps in a different beams file, namely that with 'freq':
+	if(length(hasindp)){
+		if(length(hasindp)>1){
+			warning(paste0("Multiple files containing the reserved variable 'indp', which is used to link the time steps with the beams configuration file. The first selected: ", TIME$f000[hasindp[1]]))
+			hasindp <- hasindp[1]
+		}
+		if(length(hasindp)>1){
+			warning(paste0("Multiple files containing the frequency. This may lead to unwanted behavior. The first selected: ", TIME$f000[hasfreq[1]]))
+			hasfreq <- hasfreq[1]
+		}
+		# Apply the indp information only if t = "allp":
+		if(indp){
+			tlist[[hasfreq]] <- read.TSD(TIME$f000[hasindp], t=tlist[[hasindp]])$indp
+		}
+		# Remove the indp-file:
+		tlist[hasindp] <- list(NULL)
+	}
 	
 	# Supply the 'fInd$school' with files that contain relevant variables, as these may be contained in other files than the ones with ".school" as file extension:
 	if(!all(onestep) && any(var %in% c(staticschoolnames, dynschoolnames))){
 		# For loop through the files:
 		for(i in seq_along(filelist)){
 			if(any(c(staticschoolnames, dynschoolnames) %in% TIME$labl[[i]])){
-				fInd$school = c(fInd$school, i)
+				fInd$school <- c(fInd$school, i)
 			}
 		}
 		# Clean the schoolfile indexes:
-		fInd$school = unique(fInd$school)
+		fInd$school <- unique(fInd$school)
 	}
 	
 	# Keep only files with positive length in 'tlist', and re-extract the file extensions and file types:
-	relevantFiles = which(sapply(tlist, length)>0)
+	relevantFiles <- which(sapply(tlist, length)>0)
 	# Selecting only files with valid extensions:
-	tlist = tlist[relevantFiles]
-	filelist = filelist[relevantFiles]
-	ext = tolower(file_ext(filelist))
-	fInd = lapply(filetypeslist, function(xx) which(ext==xx))
+	tlist <- tlist[relevantFiles]
+	filelist <- filelist[relevantFiles]
+	ext <- tolower(file_ext(filelist))
+	fInd <- lapply(filetypeslist, function(xx) which(ext==xx))
 	
 	
 	# Merging the list of .vessel-files and other files to obtain the list of files that are not .pings-files so that the .vessel-files are sorted first in the list. (At the end of the function list elements of duplicated names are removed so that only the first of the duplicated elements is chosen.)??? Why are vessel files mentioned?
-	fInd$notpings = unlist(fInd[names(fInd)!="pings"])
-	#fInd$notpings = unique(match(fInd$notpings, filelist))
+	fInd$notpings <- unlist(fInd[names(fInd)!="pings"])
+	#fInd$notpings <- unique(match(fInd$notpings, filelist))
 	
 	
 	##### Execution and output #####
-	out = list()
+	out <- list()
+	
+	if(identical(var, "all")){
+		out <- read.event_read_files(files=filelist, filesind=seq_along(filelist), tlist=tlist, var="all")
+	}
+	
+	
+	
 	#############################################
 	### (0) Reading the number of time steps: ###
 	#############################################
 	# The number of time steps is alreaddy read:
 	if("numt" %in% var){
-		out$numt = numt
+		out$numt <- numt
 		# Remove "numt" from 'var':
-		var = setdiff(var, "numt")
+		var <- setdiff(var, "numt")
 	}
 	#############################################
 	#############################################
@@ -517,47 +558,47 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	### (1a) Read indt:
 	if("indt" %in% timevar_present){
 		if(merge){
-			out$indt = TIME$I000[t[t <= length(TIME$U000)]]
+			out$indt <- TIME$I000[t[t <= length(TIME$U000)]]
 		}
 		else{
-			out$indt = TIME$indt
+			out$indt <- TIME$indt
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("time", "indt"))
+		var <- setdiff(var, c("time", "indt"))
 	}
 	### (1b) Read utim:	
 	if("utim" %in% timevar_present){
 		if(merge){
-			out$utim = TIME$U000[t[t <= length(TIME$U000)]]
+			out$utim <- TIME$U000[t[t <= length(TIME$U000)]]
 		}
 		else{
-			out$utim = TIME$utim
+			out$utim <- TIME$utim
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("time", "utim"))
+		var <- setdiff(var, c("time", "utim"))
 	}
 	### (1c) Read mtim:
 	if("mtim" %in% timevar_present){
 		if(merge){
-			out$mtim = utim2mtim(TIME$U000[t[t <= length(TIME$U000)]])
+			out$mtim <- utim2mtim(TIME$U000[t[t <= length(TIME$U000)]])
 		}
 		else{
-			out$mtim = mtim.TSD(TIME)
+			out$mtim <- mtim.TSD(TIME)
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("time", "mtim"))
+		var <- setdiff(var, c("time", "mtim"))
 	}
 	### (1d) Read ftim:
 	if("ftim" %in% var){
 		if(merge){
-			#out$ftim = utim2ftim(TIME$U000[t])
-			out$ftim = ftim.TSD(list(utim=TIME$U000[t[t <= length(TIME$U000)]]), ...)
+			#out$ftim <- utim2ftim(TIME$U000[t])
+			out$ftim <- ftim.TSD(list(utim=TIME$U000[t[t <= length(TIME$U000)]]), ...)
 		}
 		else{
-			out$ftim = ftim.TSD(TIME, ...)
+			out$ftim <- ftim.TSD(TIME, ...)
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("time", "ftim"))
+		var <- setdiff(var, c("time", "ftim"))
 	}
 	###################################
 	###################################
@@ -566,20 +607,20 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	### (2) Reading beams-variables: ###
 	####################################
 	### (2a) Read all the beams-files:
-	beamsvar = NULL
+	beamsvar <- NULL
 	if("beams" %in% var){
-		beamsvar = "all"
-		var = setdiff(var, "beams")
+		beamsvar <- "all"
+		var <- setdiff(var, "beams")
 	}
 	else if(any(var %in% beamsnames) && length(fInd$beams)>0){
-		beamsvar = intersect(var, beamsnames)
+		beamsvar <- intersect(var, beamsnames)
 	}
 	if(length(beamsvar)){
 		temp <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
-		#out[names(temp)] = temp
+		#out[names(temp)] <- temp
 		addnames <- setdiff(names(temp), names(out))
-		out[addnames] = temp[addnames]
-		var = setdiff(var, beamsvar)
+		out[addnames] <- temp[addnames]
+		var <- setdiff(var, beamsvar)
 	}
 	####################################
 	####################################
@@ -590,20 +631,20 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	### (3a) Read all the ctd-files:
 	if("ctd" %in% var){
 		suppressWarnings(temp <- read.TSDs(filelist[fInd$ctd], msg=FALSE))
-		#out[names(temp)] = temp
+		#out[names(temp)] <- temp
 		addnames <- setdiff(names(temp), names(out))
-		out[addnames] = temp[addnames]
+		out[addnames] <- temp[addnames]
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, "ctd")
+		var <- setdiff(var, "ctd")
 	}
 	### (3b) Read other ctd-variables:
 	if(any(var %in% ctdnames) && length(fInd$ctd)>0){
-		temp = read.event_read_other_ctd(var, ctdfiles=filelist[fInd$ctd], ctdfilesind=fInd$beams, TIME=TIME)
-		#out[names(temp)] = temp
+		temp <- read.event_read_other_ctd(var, ctdfiles=filelist[fInd$ctd], ctdfilesind=fInd$beams, TIME=TIME)
+		#out[names(temp)] <- temp
 		addnames <- setdiff(names(temp), names(out))
-		out[addnames] = temp[addnames]
+		out[addnames] <- temp[addnames]
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, ctdnames)
+		var <- setdiff(var, ctdnames)
 	}
 	##################################
 	##################################
@@ -612,26 +653,26 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	### (4) Reading vessel-variables: ###
 	#####################################
 	### (4a) Read all vessel information:
-	vesselvar = NULL
+	vesselvar <- NULL
 	if("vessel" %in% var){
-		vesselvar = "all"
-		var = setdiff(var, "vessel")
+		vesselvar <- "all"
+		var <- setdiff(var, "vessel")
 	}
 	else if(any(var %in% vesselnames) && length(fInd$vessel)>0){
-		vesselvar = intersect(var, vesselnames)
+		vesselvar <- intersect(var, vesselnames)
 	}
 	if(length(vesselvar)){
-		temp = read.event_read_files(files=filelist, filesind=fInd$vessel, tlist=tlist, var=vesselvar, origin=origin)
-		#out[names(temp)] = temp
+		temp <- read.event_read_files(files=filelist, filesind=fInd$vessel, tlist=tlist, var=vesselvar, origin=origin)
+		#out[names(temp)] <- temp
 		addnames <- setdiff(names(temp), names(out))
-		out[addnames] = temp[addnames]
-		var = setdiff(var, vesselvar)
+		out[addnames] <- temp[addnames]
+		var <- setdiff(var, vesselvar)
 	}
 	
 	# If the time offset 'TOV' is given different from 0, extract any of "rtzv", "lonv", "latv", or "ispv" located in the raw dynamic vessel file:
 	if(TOV != 0 && strff("ms70", esnm)){
-		correctout = correctVessel(names(out), out[c("mtim", "utim")], filelist[fInd$tsd], TOV=TOV)
-		out[names(correctout)] = correctout
+		correctout <- correctVessel(names(out), out[c("mtim", "utim")], filelist[fInd$tsd], TOV=TOV)
+		out[names(correctout)] <- correctout
 	}
 	#####################################
 	#####################################
@@ -644,29 +685,29 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	# Read vessel dynamic variables, beams variables and ctd-data, in the case that voxels positions (psxx, psyx, pszx) or voxel volumes (volx) are requested:
 	if(any(c("psxx", "psyx", "pszx", "rngx", "volx", "harx") %in% var)){
 		if("vessel" %in% oldvar){
-			vessel = out[vesselnames]
+			vessel <- out[vesselnames]
 		}
 		else{
-			vessel = read.event_read_files(files=filelist, filesind=fInd$vessel, tlist=tlist, var="all", origin=origin)
+			vessel <- read.event_read_files(files=filelist, filesind=fInd$vessel, tlist=tlist, var="all", origin=origin)
 		}
 		# If the time offset 'TOV' is given different from 0, extract any of "rtzv", "lonv", "latv", or "ispv" located in the raw dynamic vessel file:
 		if(TOV != 0 && strff("ms70", esnm)){
-			correctout = correctVessel(names(vessel), out[c("mtim", "utim")], filelist[fInd$tsd], TOV=TOV)
-			vessel[names(correctout)] = correctout
+			correctout <- correctVessel(names(vessel), out[c("mtim", "utim")], filelist[fInd$tsd], TOV=TOV)
+			vessel[names(correctout)] <- correctout
 		}
 		
 		# Read beams-files and ctd-files:
 		if(all(relevantbeamsvar %in% names(out))){
-			beams = out[relevantbeamsvar]
+			beams <- out[relevantbeamsvar]
 		}
 		else{
-			beams = read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var="all")
+			beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var="all")
 		}
 		if(all(relevantctdvar %in% names(out))){
-			ctd = out[relevantctdvar]
+			ctd <- out[relevantctdvar]
 		}
 		else{
-			ctd = read.TSDs(filelist[fInd$ctd], var=relevantctdvar, t="all", msg=FALSE)
+			ctd <- read.TSDs(filelist[fInd$ctd], var=relevantctdvar, t="all", msg=FALSE)
 		}
 	}
 	### (5b) Read the voxels positions:	
@@ -674,20 +715,20 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 		# Midpoints of voxels:
 		out[c("psxx", "psyx", "pszx")] <- psx.TSD(c(adds, vessel, beams, ctd), cs=cs, seabed=seabed, rot=rot, compensation=compensation, ideal=ideal, drop.out=drop.out, pad=pad, split=split)
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("psxx", "psyx", "pszx"))
+		var <- setdiff(var, c("psxx", "psyx", "pszx"))
 }
 	### (5c) Read the voxel volumes:
 	if(any(c("volx", "harx") %in% var)){
-		volxharxrequested = intersect(c("volx", "harx"), var)
-		out[volxharxrequested] = volx.TSD(c(adds, beams, ctd, vessel), esnm=esnm, var=var, fanWidth=fanWidth)[volxharxrequested]
+		volxharxrequested <- intersect(c("volx", "harx"), var)
+		out[volxharxrequested] <- volx.TSD(c(adds, beams, ctd, vessel), esnm=esnm, var=var, fanWidth=fanWidth)[volxharxrequested]
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("volx", "harx"))
+		var <- setdiff(var, c("volx", "harx"))
 }
 	### (5c) Read the ranges to the voxel centers (only for one beam):
 	if("rngx" %in% var){
 		out$rngx <- soundbeam_range(beams, pos="mid")
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, "rngx")
+		var <- setdiff(var, "rngx")
 }
 	################################################
 	################################################
@@ -700,26 +741,26 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	if(any(segvar %in% var)){
 		# Special case where only 'sgPM' is requested:
 		if(sum(segvar %in% var) == 1 && "sgPM" %in% var){
-			out["sgPM"] = list(sgPM(filelist[fInd$seg]))
+			out["sgPM"] <- list(sgPM(filelist[fInd$seg]))
 	}
 		else{
 			# Read the segementation data:
-			thisout = read.event_read_sgsc(filelist=filelist, var=c(var,"indt"), filesind=fInd$seg, segpar=segpar, TIME=TIME, tlist=tlist, merge=merge, msg=msg)
+			thisout <- read.event_read_sgsc(filelist=filelist, var=c(var,"indt"), filesind=fInd$seg, segpar=segpar, TIME=TIME, tlist=tlist, merge=merge, msg=msg)
 			# Add empty list elements where no data were present:
 			if(merge){
-				thisout = read.event_insertNA(thisout, TIME, fInd$seg[thisout$segfilenr], filelist, t, tlist, var, segvar)
+				thisout <- read.event_insertNA(thisout, TIME, fInd$seg[thisout$segfilenr], filelist, t, tlist, var, segvar)
 			}
-			out[names(thisout)] = thisout
+			out[names(thisout)] <- thisout
 			
 			# Get clusters:
 			if("clsz" %in% var){
-				thisout = read.event_get.clsz(out["sgsc"], filelist[fInd$beams], fInd$beams, tlist, pamkpar, esnm)
-				out$sgsc = thisout$sgsc
-				out$clsz = thisout$clsz
+				thisout <- read.event_get.clsz(out["sgsc"], filelist[fInd$beams], fInd$beams, tlist, pamkpar, esnm)
+				out$sgsc <- thisout$sgsc
+				out$clsz <- thisout$clsz
 			}
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, segvar)
+		var <- setdiff(var, segvar)
 	}
 	######################################
 	######################################
@@ -734,17 +775,17 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 		if(length(t)>0){
 			# We need the number of beams 'numb':
 			#suppressWarnings(numb <- read.TSD(filelist[fInd$pings][1], var=c("numb", "lenb"), t=1, dimension=FALSE))
-			#lenb = numb$lenb
-			#numb = numb$numb
+			#lenb <- numb$lenb
+			#numb <- numb$numb
 			
 			# Read the acoustic data, and the voxel indices "vxIX" giving the voxels holding data if present:
 			suppressWarnings(temp <- read.TSDs(filelist[fInd$pings], t=tlist[fInd$pings], var=c("vbsc", "vxIX", "numb", "lenb", "utim"), dimension=TRUE, merge=merge, indt=FALSE, drop.out=FALSE, msg=FALSE))
 			
 			#if(length(temp$vbsc)>0){
-			#	out$vbsc = temp$vbsc
+			#	out$vbsc <- temp$vbsc
 			#}
 			#if(length(temp$vxIX)>0){
-			#	out$vxIX = temp$vxIX
+			#	out$vxIX <- temp$vxIX
 			#}
 			# Unzip compressed vbsc:
 			tempNotPresentInOut <- !names(temp) %in% names(out)
@@ -799,175 +840,175 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 			# Apply TVG:
 			if(!TVG || TVG.exp != 2){
 				if(!TVG){
-					TVG.exp = 0
+					TVG.exp <- 0
 				}
 				# Read beams-files and ctd-files:
 				if(all(relevantbeamsvar %in% names(out))){
-					beams = out[relevantbeamsvar]
+					beams <- out[relevantbeamsvar]
 				}
 				else{
-					beams = read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
+					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
 				}
 				if(all(relevantctdvar %in% names(out))){
-					ctd = out[relevantctdvar]
+					ctd <- out[relevantctdvar]
 				}
 				else{
-					ctd = read.TSDs(filelist[fInd$ctd], var=relevantctdvar, msg=FALSE)
+					ctd <- read.TSDs(filelist[fInd$ctd], var=relevantctdvar, msg=FALSE)
 				}
 				
-				out$vbsc = apply.TVG(out$vbsc, beams=c(beams, ctd), rm=TRUE, TVG.exp=2)
-				out$vbsc = apply.TVG(out$vbsc, beams=c(beams, ctd), rm=FALSE, TVG.exp=TVG.exp)
+				out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=TRUE, TVG.exp=2)
+				out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=FALSE, TVG.exp=TVG.exp)
 			}
 				
 			# Remove noise if required:
 			if(any(!isTRUE(bgns), !isTRUE(pdns), !isTRUE(nrns), !isTRUE(hins))){
 				# Read beams-files and ctd-files:
 				if(all(relevantbeamsvar %in% names(out))){
-					beams = out[relevantbeamsvar]
+					beams <- out[relevantbeamsvar]
 				}
 				else{
-					beams = read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
+					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
 				}
 				if(all(relevantctdvar %in% names(out))){
-					ctd = out[relevantctdvar]
+					ctd <- out[relevantctdvar]
 				}
 				else{
-					ctd = read.TSDs(filelist[fInd$ctd], var=relevantctdvar, msg=FALSE)
+					ctd <- read.TSDs(filelist[fInd$ctd], var=relevantctdvar, msg=FALSE)
 				}
 				# Get the noise variables:
-				noisefiles = noise.path(event=event, esnm=esnm, dir.data=dir.data, utim=TIME$U000[t], noisevar=c("bgns","nrnp", "hins"))
-				noise = NULL
+				noisefiles <- noise.path(event=event, esnm=esnm, dir.data=dir.data, utim=TIME$U000[t], noisevar=c("bgns","nrnp", "hins"))
+				noise <- NULL
 				if(!isTRUE(bgns)){
-					bgns = getbgns(if(is.character(bgns)) bgns else noisefiles)
-					noise = c(noise, "bgns")
+					bgns <- getbgns(if(is.character(bgns)) bgns else noisefiles)
+					noise <- c(noise, "bgns")
 				}
 				if(!isTRUE(pdns)){
-					pdns = getpdns(if(is.character(pdns)) pdns else noisefiles, relevantpdnsvar=relevantpdnsvar)
-					noise = c(noise, "pdns")
+					pdns <- getpdns(if(is.character(pdns)) pdns else noisefiles, relevantpdnsvar=relevantpdnsvar)
+					noise <- c(noise, "pdns")
 				}
 				if(!isTRUE(nrns)){
-					nrns = getnrns(if(is.character(nrns)) nrns else noisefiles, mode=c("p", "a"))
-					noise = c(noise, "nrns")
+					nrns <- getnrns(if(is.character(nrns)) nrns else noisefiles, mode=c("p", "a"))
+					noise <- c(noise, "nrns")
 				}
 				if(!isTRUE(hins)){
-					hins = gethins(if(is.character(hins)) hins else noisefiles)
-					noise = c(noise, "hins")
+					hins <- gethins(if(is.character(hins)) hins else noisefiles)
+					noise <- c(noise, "hins")
 				}
 				# Calculate the noise:
-				out$tlns = read.event_generate_noise(c(list(vbsc=out$vbsc), beams, ctd, bgns, pdns, hins, nrns), noise=noise, t=t, nsind=nsind, cruise=cruise, esnm=esnm, dir.data=dir.data, hins_add=hins_add, phase=TRUE, pdns_scale=pdns_scale, TVG=TVG)
+				out$tlns <- read.event_generate_noise(c(list(vbsc=out$vbsc), beams, ctd, bgns, pdns, hins, nrns), noise=noise, t=t, nsind=nsind, cruise=cruise, esnm=esnm, dir.data=dir.data, hins_add=hins_add, phase=TRUE, pdns_scale=pdns_scale, TVG=TVG)
 				# Subtract the noise:
-				out$vbsc = out$vbsc-c(out$tlns)
+				out$vbsc <- out$vbsc-c(out$tlns)
 			}
 				
 			# Smooth along beams, if required:
 			if(length(kern)>0 && kern>0){
 				if(is.integer(kern)){
-					out$vbsc = medSmooth1(out$vbsc, kern, ...)
+					out$vbsc <- medSmooth1(out$vbsc, kern, ...)
 				}
 				else{
-					out$vbsc = kernSmooth1(out$vbsc, kern=kern)
+					out$vbsc <- kernSmooth1(out$vbsc, kern=kern)
 				}
 			}
 				
 			# Generate uniformly distributed points, if required:
 			if(readpsr){
 				# Define the list of variables used as input to pplot3d.TSD(), given in the order used in that function:
-				thisl = list(data=out, var=c(var, oldvar))
+				thisl <- list(data=out, var=c(var, oldvar))
 				# Define the variables present in '...' but not in the list 'thisl':
-				otherl = ll[setdiff(names(ll), names(thisl))]
+				otherl <- ll[setdiff(names(ll), names(thisl))]
 				# Set nlim to Inf:
-				otherl$nlim = Inf
-				thispsr = do.call("pplot3d.TSD", c(thisl, otherl))
+				otherl$nlim <- Inf
+				thispsr <- do.call("pplot3d.TSD", c(thisl, otherl))
 				# Add to the output:
-				sumatlevels = sapply(lapply(dim_all(thispsr$psxr), unlist), sum)
+				sumatlevels <- sapply(lapply(dim_all(thispsr$psxr), unlist), sum)
 				if(all(sumatlevels == 0)){
 					warning("The plotting region contains no regenerated data (possibly 'range' discards all the data, or 'acca' or 'N' is set too high)")
 				}
-				out$psxr = thispsr$psxr[[1]]
-				thispsr$psxr = NULL
-				out$psyr = thispsr$psyr[[1]]
-				thispsr$psyr = NULL
-				out$pszr = thispsr$pszr[[1]]
-				thispsr$pszr = NULL
+				out$psxr <- thispsr$psxr[[1]]
+				thispsr$psxr <- NULL
+				out$psyr <- thispsr$psyr[[1]]
+				thispsr$psyr <- NULL
+				out$pszr <- thispsr$pszr[[1]]
+				thispsr$pszr <- NULL
 			}
 				
 			# Generate sv values in a cartesian grid:
 			if(any(c("vbsC", "vbsA") %in% var)){
 				#numt = length(out$psxr[[1]])
 				####################### HERE THE out$psxr is a simple vector, and numt = length(out$psxr) is WRONG #################
-				numt = length(out$psxr)
-				out[c("psxg", "psyg", "pszg", "nbrp", "vbsC")] = rep(list(vector("list", length(numt))), 5)
+				numt <- length(out$psxr)
+				out[c("psxg", "psyg", "pszg", "nbrp", "vbsC")] <- rep(list(vector("list", length(numt))), 5)
 				#out$psxg = vector("list", length(numt))
 				#out$psyg = vector("list", length(numt))
 				#out$pszg = vector("list", length(numt))
 				#out$nbrp = vector("list", length(numt))
 				#out$vbsC = vector("list", length(numt))
-				out$ggsz = ggsz
+				out$ggsz <- ggsz
 				
 				# Run through the time steps:
 				for(i in seq_len(numt)){
 					# Get the range of psxr, psyr, and pszr:
 					# Midpoints:
-					midGgridx = seq(floor(min(out$psxr[[i]])/ggsz), ceiling(max(out$psxr[[i]])/ggsz))*ggsz
-					midGgridy = seq(floor(min(out$psyr[[i]])/ggsz), ceiling(max(out$psyr[[i]])/ggsz))*ggsz
-					midGgridz = seq(floor(min(out$pszr[[i]])/ggsz), ceiling(max(out$pszr[[i]])/ggsz))*ggsz
+					midGgridx <- seq(floor(min(out$psxr[[i]])/ggsz), ceiling(max(out$psxr[[i]])/ggsz))*ggsz
+					midGgridy <- seq(floor(min(out$psyr[[i]])/ggsz), ceiling(max(out$psyr[[i]])/ggsz))*ggsz
+					midGgridz <- seq(floor(min(out$pszr[[i]])/ggsz), ceiling(max(out$pszr[[i]])/ggsz))*ggsz
 					# Expand the midpoints:
-					midGdrid = as.matrix(expand.grid(midGgridx, midGgridy, midGgridz))
-					out$psxg[[i]] = midGdrid[, 1]
-					out$psyg[[i]] = midGdrid[, 2]
-					out$pszg[[i]] = midGdrid[, 3]
+					midGdrid <- as.matrix(expand.grid(midGgridx, midGgridy, midGgridz))
+					out$psxg[[i]] <- midGdrid[, 1]
+					out$psyg[[i]] <- midGdrid[, 2]
+					out$pszg[[i]] <- midGdrid[, 3]
 					# Create the grid:
-					Ggridx = c(midGgridx[1]-ggsz/2, midGgridx + ggsz/2)
-					Ggridy = c(midGgridy[1]-ggsz/2, midGgridy + ggsz/2)
-					Ggridz = c(midGgridz[1]-ggsz/2, midGgridz + ggsz/2)
+					Ggridx <- c(midGgridx[1]-ggsz/2, midGgridx + ggsz/2)
+					Ggridy <- c(midGgridy[1]-ggsz/2, midGgridy + ggsz/2)
+					Ggridz <- c(midGgridz[1]-ggsz/2, midGgridz + ggsz/2)
 					# Find intervals:
-					inGgridx = findInterval(out$psxr[[i]], Ggridx)
-					inGgridy = findInterval(out$psyr[[i]], Ggridy)
-					inGgridz = findInterval(out$pszr[[i]], Ggridz)
+					inGgridx <- findInterval(out$psxr[[i]], Ggridx)
+					inGgridy <- findInterval(out$psyr[[i]], Ggridy)
+					inGgridz <- findInterval(out$pszr[[i]], Ggridz)
 					# Count the points:
-					flatgridindices = arr.ind2ind(cbind(inGgridx, inGgridy, inGgridz), c(length(midGgridx), length(midGgridy), length(midGgridz)))
-					counts = tabulate(flatgridindices,length(out$psxg[[i]]))
-					counts[counts == 0] = NA
+					flatgridindices <- arr.ind2ind(cbind(inGgridx, inGgridy, inGgridz), c(length(midGgridx), length(midGgridy), length(midGgridz)))
+					counts <- tabulate(flatgridindices,length(out$psxg[[i]]))
+					counts[counts == 0] <- NA
 					# Insert into the count variable:
-					out$nbrp[[i]] = counts
+					out$nbrp[[i]] <- counts
 					# Convert back to sv:
-					out$vbsC[[i]] = out$nbrp[[i]]*thispsr$finalacca[i]/(ggsz^3)
+					out$vbsC[[i]] <- out$nbrp[[i]]*thispsr$finalacca[i]/(ggsz^3)
 				}
 				
 				if("vbsA" %in% var){
 					if(all(c("psxx", "psyx", "pszx") %in% names(ll$range))){
-						dimnamesx = seq(min(ll$range$psxx), max(ll$range$psxx), ggsz)
-						dimnamesy = seq(min(ll$range$psyx), max(ll$range$psyx), ggsz)
-						dimnamesz = seq(min(ll$range$pszx), max(ll$range$pszx), ggsz)
+						dimnamesx <- seq(min(ll$range$psxx), max(ll$range$psxx), ggsz)
+						dimnamesy <- seq(min(ll$range$psyx), max(ll$range$psyx), ggsz)
+						dimnamesz <- seq(min(ll$range$pszx), max(ll$range$pszx), ggsz)
 					}
 					else{
-						dimnamesx = seq(floor(min(unlist(lapply(out$psxg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$psxg,max))) / ggsz) * ggsz, ggsz)
-						dimnamesy = seq(floor(min(unlist(lapply(out$psyg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$psyg,max))) / ggsz) * ggsz, ggsz)
-						dimnamesz = seq(floor(min(unlist(lapply(out$pszg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$pszg,max))) / ggsz) * ggsz, ggsz)
+						dimnamesx <- seq(floor(min(unlist(lapply(out$psxg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$psxg,max))) / ggsz) * ggsz, ggsz)
+						dimnamesy <- seq(floor(min(unlist(lapply(out$psyg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$psyg,max))) / ggsz) * ggsz, ggsz)
+						dimnamesz <- seq(floor(min(unlist(lapply(out$pszg,min))) / ggsz) * ggsz, ceiling(max(unlist(lapply(out$pszg,max))) / ggsz) * ggsz, ggsz)
 					}
-					out$vbsA = zeros(length(dimnamesx), length(dimnamesy), length(dimnamesz), numt)
-					dimnames(out$vbsA) = list(dimnamesx, dimnamesy, dimnamesz, t)
+					out$vbsA <- zeros(length(dimnamesx), length(dimnamesy), length(dimnamesz), numt)
+					dimnames(out$vbsA) <- list(dimnamesx, dimnamesy, dimnamesz, t)
 						
 					# Run through the time steps:
 					for(i in seq_len(numt)){
 						# Discard points outside of the range:
-						validgridcells = out$psxg[[i]] >= min(dimnamesx) & out$psxg[[i]] <= max(dimnamesx)
-						validgridcells = validgridcells & out$psyg[[i]] >= min(dimnamesy) & out$psyg[[i]] <= max(dimnamesy)
-						validgridcells = validgridcells & out$pszg[[i]] >= min(dimnamesz) & out$pszg[[i]] <= max(dimnamesz)
-						indx = (out$psxg[[i]][validgridcells]-min(dimnamesx))/ggsz + 1
-						indy = (out$psyg[[i]][validgridcells]-min(dimnamesy))/ggsz + 1
-						indz = (out$pszg[[i]][validgridcells]-min(dimnamesz))/ggsz + 1
-						out$vbsA[cbind(indx, indy, indz, i)] = out$vbsC[[i]][validgridcells]
+						validgridcells <- out$psxg[[i]] >= min(dimnamesx) & out$psxg[[i]] <= max(dimnamesx)
+						validgridcells <- validgridcells & out$psyg[[i]] >= min(dimnamesy) & out$psyg[[i]] <= max(dimnamesy)
+						validgridcells <- validgridcells & out$pszg[[i]] >= min(dimnamesz) & out$pszg[[i]] <= max(dimnamesz)
+						indx <- (out$psxg[[i]][validgridcells]-min(dimnamesx))/ggsz + 1
+						indy <- (out$psyg[[i]][validgridcells]-min(dimnamesy))/ggsz + 1
+						indz <- (out$pszg[[i]][validgridcells]-min(dimnamesz))/ggsz + 1
+						out$vbsA[cbind(indx, indy, indz, i)] <- out$vbsC[[i]][validgridcells]
 					}
 				}
 			}
 			# Calibration factor:
 			if(cal != 1){
 				if(is.list(out$vbsc)){
-					out$vbsc = lapply(out$vbsc, function(x) x*c(matrix(cal,nrow=nrow(x), ncol=ncol(x))))
+					out$vbsc <- lapply(out$vbsc, function(x) x*c(matrix(cal,nrow=nrow(x), ncol=ncol(x))))
 				}
 				else{
-					out$vbsc = out$vbsc*c(matrix(cal,nrow=nrow(out$vbsc), ncol=ncol(out$vbsc)))
+					out$vbsc <- out$vbsc*c(matrix(cal,nrow=nrow(out$vbsc), ncol=ncol(out$vbsc)))
 				}
 			}
 				
@@ -1030,21 +1071,21 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 			
 			# Extracting a subset if required:
 			if(length(ll$ind)>0){
-				ll$ind = ind.expand(ll$ind, dim_all(out$vbsc))
-				out$vbsc = out$vbsc[ll$ind[[1]], ll$ind[[2]], , drop=FALSE]
+				ll$ind <- ind.expand(ll$ind, dim_all(out$vbsc))
+				out$vbsc <- out$vbsc[ll$ind[[1]], ll$ind[[2]], , drop=FALSE]
 			}
 				
 			# Adding Sv-values to the output list, if required:
 			if("mvbs" %in% var){
-				out$mvbs = 10*log10(out$vbsc)
+				out$mvbs <- 10*log10(out$vbsc)
 			}
 			# Removing the sv-values if required:
 			if(!any(c("vbsc", "pings") %in% var)){
-				out$vbsc = NULL
+				out$vbsc <- NULL
 			}
 		} # End of readsv
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("vbsc", "mvbs", "pings", "psxr", "psyr", "pszr", "psxg", "psyg", "pszg", "nbrp", "vbsC", "vbsA"))
+		var <- setdiff(var, c("vbsc", "mvbs", "pings", "psxr", "psyr", "pszr", "psxg", "psyg", "pszg", "nbrp", "vbsC", "vbsA"))
 	}	
 	##################################
 	##################################
@@ -1062,21 +1103,21 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 			
 			# Check whether the dimensions of each time step are identical:
 			if(is.list(out$angl)){
-				out$angl = mergeListKeepDimensions(out$angl, pad=pad, split=split, add1=length(dim(out$angl[[1]])) == 2)
+				out$angl <- mergeListKeepDimensions(out$angl, pad=pad, split=split, add1=length(dim(out$angl[[1]])) == 2)
 			}
 			else if(length(out$angl) == 0){
-				warning(paste("Volume backscattering coefficient 'angl' not present for time step (s) ", paste(t, collapse=", "), sep=""))
+				warning(paste("Electrical angle along vessel 'angl' not present for time step (s) ", paste(t, collapse=", "), sep=""))
 			}
 			# Check whether the dimensions of each time step are identical:
 			if(is.list(out$angt)){
-				out$angt = mergeListKeepDimensions(out$angt, pad=pad, split=split, add1=length(dim(out$angt[[1]])) == 2)
+				out$angt <- mergeListKeepDimensions(out$angt, pad=pad, split=split, add1=length(dim(out$angt[[1]])) == 2)
 			}
 			else if(length(out$angt) == 0){
-				warning(paste("Volume backscattering coefficient 'angt' not present for time step (s) ", paste(t, collapse=", "), sep=""))
+				warning(paste("Electrical angle athwart vessel 'angt' not present for time step (s) ", paste(t, collapse=", "), sep=""))
 			}
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c("angl", "angt"))
+		var <- setdiff(var, c("angl", "angt"))
 	}
 	####################################
 	####################################
@@ -1088,9 +1129,9 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	# Reading school files:
 	if(any(var %in% c(staticschoolnames, dynschoolnames))){
 		# Obtaining school file types:
-		schooltype = echoIBM.getSchoolfileType(filelist[fInd$school], dynschoolnames, staticschoolnames)
-		fInd$dynschool = schooltype$schooltypeD==1
-		fInd$staticschool = schooltype$schooltypeS==1
+		schooltype <- echoIBM.getSchoolfileType(filelist[fInd$school], dynschoolnames, staticschoolnames)
+		fInd$dynschool <- schooltype$schooltypeD==1
+		fInd$staticschool <- schooltype$schooltypeS==1
 		
 		# Read static school variables:
 		suppressWarnings(out <- c(out, read.TSDs(filelist[fInd$staticschool], var=var, t=1, msg=FALSE)))
@@ -1098,17 +1139,17 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 		# Read dynamic school variables:
 		if(any(dynschoolnames %in% var) && length(filelist[fInd$dynschool])>0){
 			# Adding school-values to the output list:
-			thesevar = intersect(var, dynschoolnames)
-			out[thesevar] = rep(list(vector("list", length(t))), length(thesevar))
+			thesevar <- intersect(var, dynschoolnames)
+			out[thesevar] <- rep(list(vector("list", length(t))), length(thesevar))
 			# Read the school-files using the time step list 'tlist', setting dimension to TRUE to ensure that the data are preserved in time steps, clean = FALSE to ensure that all data is read (as clean = TRUE removes variables read from more than the first file if the same variable is present in more than one file), merge = TRUE to merge the time steps togeather for each variable, and indt = FALSE because of the way 'tlist' is defined:
 			suppressWarnings(thesepings <- read.TSDs(filelist[fInd$dynschool], t=tlist[fInd$dynschool], var=var, dimension=TRUE, merge=merge, indt=FALSE, msg=FALSE))
 			# Remove variables not present in the data and add the ones that are present to the output:
-			out[names(thesepings)] = thesepings
-			out[setdiff(thesevar, names(thesepings))] = NULL
+			out[names(thesepings)] <- thesepings
+			out[setdiff(thesevar, names(thesepings))] <- NULL
 			
 			# If 'rtxf' or 'rtzf' are present in 'var' but not in 'out', an attempt is made to extract these rotation angles from the velocity vectors:
 			if(!any(is.null(out$vlxf), is.null(out$vlyf), is.null(out$vlzf))){
-				out = vl2rt.TSD(out, var=var)
+				out <- vl2rt.TSD(out, var=var)
 			}
 			else if(("rtxf" %in% var && is.null(out$rtxf)) || ("rtzf" %in% var && is.null(out$rtzf))){
 				suppressWarnings(outforrot <- read.TSDs(filelist[fInd$dynschool], t=tlist[fInd$dynschool], var=c("vlxf", "vlyf", "vlzf"), dimension=TRUE, clean=FALSE, merge=merge, indt=FALSE, msg=FALSE))
@@ -1116,15 +1157,15 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 					warning("Fish rotation angles not available")
 				}
 				else{
-					temp = vl2rt.TSD(outforrot, var=var)
-					#out[names(temp)] = temp
+					temp <- vl2rt.TSD(outforrot, var=var)
+					#out[names(temp)] <- temp
 					addnames <- setdiff(names(temp), names(out))
-					out[addnames] = temp[addnames]
+					out[addnames] <- temp[addnames]
 				}
 			}
 		}
 		# Remove from 'var' the variables that have been read:
-		var = setdiff(var, c(staticschoolnames, dynschoolnames))
+		var <- setdiff(var, c(staticschoolnames, dynschoolnames))
 	}
 	#####################################
 	#####################################
@@ -1137,15 +1178,15 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	# merge = merge is needed to comply with the input, and indt = FALSE is a consequence of the way 'tlist' is defined (read.event() always considers general time step indexes and 'tlist' is defined according to this requirement):
 	if(other && length(var)>0){
 		# Read the other variables:
-		otherout = read.TSDs(filelist[fInd$notpings], t=tlist[fInd$notpings], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=FALSE)
+		otherout <- read.TSDs(filelist[fInd$notpings], t=tlist[fInd$notpings], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=FALSE)
 		
 		# Add empty list elements where no data were present:
 		if(merge){
-			otherout = read.event_insertNA(otherout, TIME, fInd$notpings, filelist, t, tlist, var, var)
+			otherout <- read.event_insertNA(otherout, TIME, fInd$notpings, filelist, t, tlist, var, var)
 		}
 		
 		# Add to the output:
-		out[names(otherout)] = otherout
+		out[names(otherout)] <- otherout
 	}
 	#####################################
 	#####################################
@@ -1153,46 +1194,46 @@ read.event<-function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds
 	# Transform from decibar to Pascal:
 	if(Paout){
 		if(!is.null(out$ihpr)){
-			out$ihpr = out$ihpr*10000
+			out$ihpr <- out$ihpr*10000
 		}
 		if(!is.null(out$hpr0)){
-			out$hpr0 = out$hpr0*10000
+			out$hpr0 <- out$hpr0*10000
 		}
 	}
 	
 	# Drop redundant dimensions of the elements of 'out' if required:
 	if(drop.out){
-		#out = lapply(out, drop)
-		out = lapply(out, function(x) if(is.list(x) && length(x) == 1) unlist(x) else drop(x))
+		#out <- lapply(out, drop)
+		out <- lapply(out, function(x) if(is.list(x) && length(x) == 1) unlist(x) else drop(x))
 	}
 			
 	# Stripping the duplicated elements:
 	if(TIMEout){
 		if(strip.out){
-			out = out[!duplicated(names(out))]
-			out["TIME"] = list(TIME)
+			out <- out[!duplicated(names(out))]
+			out["TIME"] <- list(TIME)
 		}
 		else{
-			out["TIME"] = list(TIME)
+			out["TIME"] <- list(TIME)
 		}
 	}
 	else{
 		if(strip.out){
-			out = out[!duplicated(names(out))]
+			out <- out[!duplicated(names(out))]
 		}
 		else{
-			out = out
+			out <- out
 		}
 	}
 	
 	# Add the variables given in 'adds':
 	if(length(adds)>0){
-		out[names(adds)] = adds
+		out[names(adds)] <- adds
 	}
 
 	# Add info and return:
-	if(length(out)){
-		out$info = info.TSD(names(out))
+	if(length(out) && info.out){
+		out$info <- info.TSD(names(out))
 	}
 	out
 	##################################################

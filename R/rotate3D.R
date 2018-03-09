@@ -23,7 +23,7 @@
 #' @export
 #' @rdname rotate3D
 #'
-rotate3D<-function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.out=FALSE, drop.out=TRUE, list.out=NULL, reverse=FALSE, na0=TRUE){
+rotate3D <- function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.out=FALSE, drop.out=TRUE, list.out=NULL, reverse=FALSE, na0=TRUE){
 	
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin

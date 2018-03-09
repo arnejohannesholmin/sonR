@@ -29,8 +29,9 @@ compr.event_oneFile_write <- function(i, indt, filelist, pingsfiles, vesselfiles
 			if(length(dumpfiles)){
 				write(paste("TSD2_", i), dumpfiles[i], append=TRUE)
 				}
-			this = subset_TSD(data[names], ind=list(seq(2, max(2,numt-1))), pad="start", drop=FALSE)
-			TSD::write.TSD(this, files$comprFileNames2[i], numt=numt-2, ...)
+			thisindt <- seq(2, max(2,numt-1))
+			this = subset_TSD(data[names], ind=list(thisindt), pad="start", drop=FALSE)
+			TSD::write.TSD(this, files$comprFileNames2[i], numt=length(thisindt), ...)
 			}
 		# Write the last ping:
 		if(numt>2){
@@ -71,7 +72,9 @@ compr.event_oneFile_write <- function(i, indt, filelist, pingsfiles, vesselfiles
 			write(paste("Compr", i), dumpfiles[i], append=TRUE)
 			}
 		data <- compr.TSD(data, tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, keepEmpty=keepEmpty, ...)
-		}
+		# Update numt for the compressed data:
+		numt = numt.TSD(data)
+	}
 	
 	if(length(dumpfiles)){
 		write(paste("Write", i), dumpfiles[i], append=TRUE)

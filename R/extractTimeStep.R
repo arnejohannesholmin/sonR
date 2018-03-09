@@ -16,7 +16,7 @@
 #' @export
 #' @rdname extractTimeStep
 #'
-extractTimeStep<-function(data, t=1, var="all"){
+extractTimeStep <- function(data, t=1, var="all"){
 		
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -63,8 +63,8 @@ extractTimeStep<-function(data, t=1, var="all"){
 	
 	# Get the number of time steps for each variable
 	var1 = var1[sapply(data[var1], length) > 1]
-	var2 = var2[sapply(data[var2], function(y) length(dim(y))) == 2]
-	var3 = var3[sapply(data[var3], function(y) length(dim(y))) == 3]
+	var2 = var2[sapply(data[var2], function(y) length(dim(y))) == 2 & sapply(data[var2], NCOL) >= t]
+	var3 = var3[sapply(data[var3], function(y) length(dim(y))) == 3 & sapply(data[var3], function(y) dim(y)[3]) >= t]
 	
 	# Extract time steps:
 	data[var1] = lapply(data[var1], function(y) y[t])

@@ -14,6 +14,9 @@
 #' @param split used in psx.TSD().
 #' @param skipAngles  is TRUE to discard electircal angles from the data (saves time).
 #' @param origin  is either the time index of the origin, or the origin itself, given as c(longitude, latitude).
+#' @param z0 is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).
+#' @param keepEmpty is TRUE to keep empty time intervals as filled with NAs.
+#' @param drop is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).
 #' @param ...  further arguments passed to psx.TSD().
 #'
 #' @return
@@ -30,7 +33,7 @@
 #' @export
 #' @rdname compr.TSD
 #'
-compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, keepEmpty=TRUE, ...){
+compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, keepEmpty=TRUE, drop=FALSE, ...){
 		
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -49,12 +52,12 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		# If it begins with a missing, add the first position to the indices:
 		if(is.na(x[1])){
 			ind = c(1, ind)
-			}
+		}
 		# Repeat the values at these indices diffing the indices + length yields how often :
 		x = rep(x[ind], times=diff(c(ind, length(x) + 1) ))
 		dim(x) = olddim
 		x
-		}		
+	}		
 	# Function used for applying the function 'funt':
 	applyFunt <- function(x, tindex, funt, numt=NULL){
 		applyFuntOne = function(xx){
@@ -76,16 +79,16 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 				# Special care for one-dimensional vectors:
 				if(length(olddim)==1){
 					outWithNA[utindex] = out
-					}
+				}
 				else{
 					outWithNA[, utindex] = out
-					}
-				out = repeatNonNA(outWithNA)
 				}
-			out
+				out = repeatNonNA(outWithNA)
 			}
-		lapply(x, applyFuntOne)
+			out
 		}
+		lapply(x, applyFuntOne)
+	}
 	
 	if(length(data$vbsc)==0){
 		return()
@@ -94,9 +97,10 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		# Merge the 'adds' and the data:
 		if(length(adds)>0){
 			data[names(adds)] = adds
-			}
+		}
 		data$utim = utim.TSD(data[labl.TSD("t")])
 
+		# Get the dimensions of the vbsc
 		dimvbsc = c(max(data$lenb), data$numb[1], length(data$utim))
 		outdim = dimvbsc
 		rindex = NULL
@@ -107,7 +111,7 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 			data$psyv = global2car(cbind(c(data$lonv), c(data$latv)), origin=origin)
 			data$psxv = data$psyv[, 1]
 			data$psyv = data$psyv[, 2]
-			}
+		}
 		
 		# Get the names of each category:
 		beamsnames = setdiff(intersect(names(data), labl.TSD("b")), labl.TSD("t"))
@@ -117,26 +121,26 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		if(is.character(funvbsc)){
 			if(strff("mean", funvbsc[1])){
 				funvbsc = function(xx) sum(xx, na.rm=TRUE)/length(xx)
-				}
+			}
 			else if(strff("median", funvbsc[1])){
 				funvbsc = fastMedian
-				}
+			}
 			else{
 				funvbsc = get(funvbsc[1])
-				}
 			}
+		}
 		
 		if(is.character(funt)){
 			if(strff("mean", funt[1])){
 				funt = function(xx) sum(xx, na.rm=TRUE)/length(xx)
-				}
+			}
 			else if(strff("median", funt[1])){
 				funt = fastMedian
-				}
+			}
 			else{
 				funt = get(funt[1])
-				}
 			}
+		}
 		
 		
 		###########################################
@@ -150,85 +154,86 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 				if(length(data$rres)==0){
 					# Get range resolution:
 					data$rres = data$asps[1] * data$sint[1]/2
-					}
+				}
 				# Change rres and lenb to generate range intervals:
 				rindexintervals = soundbeam_range(data[c("lenb", "rres", "asps", "sint")], pos="grid", adds=list(lenb=rep(ceiling(data$lenb[1] * data$rres[1] / rres), data$numb[1]), rres=rep(rres, l=data$numb[1])))
 				#rangeintervals = seq(floor(min(rindex)/rres), ceiling(max(rindex)/rres)) * rres
-				}
+			}
 			else{
 				rindexintervals = rres
-				}
-			rindex = findInterval(rindex, rindexintervals, all.inside=TRUE)
 			}
+			rindex = findInterval(rindex, rindexintervals, all.inside=TRUE)
+		}
 		### 2. ... or compress in depth: ###
 		else if(length(zres)>0){
 			rindex = psx.TSD(data, pad=TRUE, split=split, ...)$psz
 			# Split the data into depth bins:
 			if(length(zres)==1){
 				rindexintervals = seq(floor(min(rindex, na.rm=TRUE)/zres), z0) * zres
-				}
+			}
 			else{
 				rindexintervals = zres
-				}
+			}
 			rindex = findInterval(rindex, rindexintervals, all.inside=TRUE)
 			# Reverse the intervals, since depth is negative:
 			rindex = length(rindexintervals) - rindex
 			# Modify the transducer depth to z0:
-			data$psze = matrix(z0, nrow=dimvbsc[2], ncol=dimvbsc[3])
+			if(length(dim(data$psze))==2){
+				data$psze = matrix(z0, nrow=1, ncol=dimvbsc[3])
 			}
+			else{
+				data$psze = rep(z0, length.out=dimvbsc[3])
+			}
+			
+		}
 		# Alter the dimensions, and change the length of beams and range resolution:
 		if(length(rindex)){
 			outdim[1] = length(rindexintervals)-1
 			# Change the length of the beams and the radial resolution
 			data$lenb = matrix(length(rindexintervals)-1, nrow=dimvbsc[2], ncol=dimvbsc[3])
 			data$rres = rep(tail(diff(rindexintervals),1), l=dimvbsc[3])
-			}
+		}
 		else{
 			rindex = rep(seq_len(dimvbsc[1]), prod(dimvbsc[-1]))
-			}
+		}
 		
 		##########################################
 		########## 3. Compress in time: ##########
 		##########################################
 		if(length(tres)>0){
 			tindex = data$utim
-			#print(tindex)
-			#print(tres)
 			# Split the data into time bins:
 			if(length(tres)==1){
 				tindexintervals = seq(floor(min(tindex, na.rm=TRUE)/tres), ceiling(max(tindex, na.rm=TRUE)/tres)) * tres
-				}
-			#print(tindexintervals)
+			}
 			tindex = findInterval(tindex, tindexintervals, all.inside=TRUE)
-			#print(tindex)
-			
 		}
 		### 4. ... or compress over sailed distance: ###
 		else if(length(xres)>0){
 			# Convert to meters:
-			tindex = data$sadv * 1852
+			tindex = data$utim[1] + (data$sadv - min(data$sadv)) * 1852
 			# Split the data into sailed distance bins:
 			if(length(xres)==1){
 				tindexintervals = seq(floor(min(tindex, na.rm=TRUE)/xres), ceiling(max(tindex, na.rm=TRUE)/xres)) * xres
-				}
-			tindex = findInterval(tindex, tindexintervals, all.inside=TRUE)
 			}
+			tindex = findInterval(tindex, tindexintervals, all.inside=TRUE)
+		}
 		# Alter the dimensions, and subset the beams and vessel data:
 		if(length(tindex)){
 			# Get the unique time steps indices:
 			utindex = unique(tindex)
 			if(keepEmpty){
 				outdim[3] = length(tindexintervals)-1
-				}
+			}
 			else{
 				outdim[3] = length(utindex)
-				}
+			}
 			
 			# Extract beams data. Here the use of numt either fills the empry time intervals with NAs if keepEmpty is TRUE, or discards them if not:
 			if(length(dim(data$freq))==2){
 				beamsToBeChanged = sapply(data[beamsnames], function(xx) if(length(xx)>0) tail(dim_all(xx),1)==dimvbsc[3] else FALSE)
 				data[beamsnames][beamsToBeChanged] = applyFunt(data[beamsnames][beamsToBeChanged], tindex, funt, numt=outdim[3])
-				}
+			}
 			# Extract vessel data:
 			thesevesselnames = setdiff(vesselnames, timenames)
 			data[thesevesselnames] = applyFunt(data[thesevesselnames], tindex, funt, numt=outdim[3])
@@ -241,24 +246,27 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 				# Get the number of time steps in each compressed time bin:
 				data$nmtc = zeros(outdim[3])
 				data$nmtc[unique(tindex)] = table(tindex)
-				}
+			}
 			else{
 				# Discard time intervals without data:
 				data$utim = tindexintervals[utindex] + diffTindexintervals[utindex]/2
 				data$nmtc = table(tindex)
-				}
+			}
 			
 			#data$utim = tindexintervals[presentTindexintervals] + diffTindexintervals[presentTindexintervals]/2
 			##data$utim = tindexintervals[-length(tindexintervals)] + diff(tindexintervals)/2
+			
+			# Add Matalb time (but remove this first and generate from the utim):
+			data$mtim <- NULL
 			data$mtim = mtim.TSD(data)
 			data$indt = NULL
 			#data$tnxi = tindexintervals
 			#data$tndx = tindex
 			tindex = rep(tindex, each=prod(head(dimvbsc,2)))
-			}
+		}
 		else{
 			tindex = rep(seq_len(dimvbsc[3]), each=prod(dimvbsc[1:2]))
-			}
+		}
 		
 		#############################################
 		########## 5. Compress over beams: ##########
@@ -270,10 +278,10 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 			# Split the data into beam bins:
 			if(length(bres)==1){
 				bindexintervals = 0.5 + seq(0, ceiling(max(oldindi)/bres)) * bres
-				}
+			}
 			else{
 				bindexintervals = bres
-				}
+			}
 			# Set the new dira and dire:
 			olddiredirainnew = findInterval(oldindi, bindexintervals, all.inside=TRUE)
 			beamsToBeChanged = sapply(data[beamsnames], function(xx) length(xx)==max(sapply(data[beamsnames], length)))
@@ -281,18 +289,18 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 			data$numb = length(data$dira)
 			bindex = findInterval(bindex, bindexintervals, all.inside=TRUE)
 			outdim[2] = length(bindexintervals)-1
-			}
+		}
 		
 		
 		# Apply the compression
 		if(!skipAngles && length(data$angt)){
 			DT = data.table(vbsc=c(data$vbsc), angt=c(data$angt), angl=c(data$angl))
-			}
+		}
 		else{
 			data$angt = NULL
 			data$angl = NULL
 			DT = data.table(vbsc=c(data$vbsc))
-			}
+		}
 		
 		# Add the indices:
 		presentKeys = NULL
@@ -307,41 +315,47 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		if(length(rindex)){
 			DT[,rindex:=rindex]
 			presentKeys = c(presentKeys, "rindex")
-			}
+		}
 		
 		
 		setkeyv(DT, presentKeys)
 		
 		if(keepEmpty){
+			#temp = DT[, funvbsc(data$vbsc), by=key(DT)] # Error
 			data$vbsc = NAs(outdim)
-			temp = DT[, funvbsc(data$vbsc), by=key(DT)]
+			temp = DT[, funvbsc(vbsc), by=key(DT)]
 			temp2 = as.matrix(temp[, rev(presentKeys), with=FALSE])
 			data$vbsc[temp2] = temp$V1
-			}
+		}
 		else{
 			# Discard time intervals without data:
-			temp = DT[, funvbsc(data$vbsc), by=key(DT)]
+			#temp = DT[, funvbsc(data$vbsc), by=key(DT)] # Error
+			temp = DT[, funvbsc(vbsc), by=key(DT)]
 			data$vbsc = temp$V1
-			}
+		}
 		
 		
 		if(!skipAngles && length(data$angt)){
 			warning("Electric angles are deprecated, and will be returned as if keepEmpty=TRUE")
 			
 			data$angt = NAs(outdim)
-			temp = DT[, funvbsc(data$angt), by=key(DT)]
+			temp = DT[, funvbsc(angt), by=key(DT)]
 			data$angt[as.matrix(temp[, rev(presentKeys), with=FALSE])] = temp$V1
 			
 			data$angl = NAs(outdim)
-			temp = DT[, funvbsc(data$angl), by=key(DT)]
+			temp = DT[, funvbsc(angl), by=key(DT)]
 			data$angl[as.matrix(temp[, rev(presentKeys), with=FALSE])] = temp$V1
-			}
+		}
 		
 		data[c("psxx", "psyx", "pszx")] = psx.TSD(data, pad=TRUE, split=split, ...)
-		}
+	}
 	else{
 		warning("No compression")
-		}
+	}
+	
+	if(drop){
+		data$vbsc <- drop(data$vbsc)
+	}
 		
 	
 	##### Output #####

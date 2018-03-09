@@ -112,7 +112,7 @@ soundbeam.TSD<-function(data, t=1, ind=NULL, cs="g", seabed=-12000, rot=1, compe
 		lenb_out = lenb
 		}
 	else if(substr(rpos[1],1,1)=="e"){
-		lenb_out = lenb+1
+		lenb_out = lenb + 1
 		}
 	else{
 		stop("Wrong value of 'rpos', must be one of \"midp\" (representing the midpoints of the voxels along the beams) or \"edge\" (representing the edges of the voxels along beams giving  )")

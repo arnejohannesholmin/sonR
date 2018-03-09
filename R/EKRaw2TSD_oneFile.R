@@ -244,9 +244,9 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	beams$Ctcr <- temp$Ctcr
 	beams$Ccal <- temp$Ccal
 	# Also add the range offset, either from the calibration (in the raw1 case) or by the raw0 value:
-	beams$rofs <- if(isOmniSonar) cali$rofs else beams$asps * beams$plsl / 4
+	beams$rofs <- rep(if(isOmniSonar) cali$rofs else beams$asps * beams$plsl / 4, length.out=numt)
 	# Get the sample offset due to the range offset:
-	beams$sofs <- getRangeOffsetInUnitsOfSamples(beams)
+	beams$sofs <- rep(getRangeOffsetInUnitsOfSamples(beams), length.out=numt)
 	
 	if(apply.range.offset){
 		# Strip the data of samples by the range offset Ro (for raw=1):

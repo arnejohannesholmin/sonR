@@ -86,6 +86,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			}
 		}
 		
+		
 	### Get the UNIX_time data of the event in memory if present, saving time for large events: ###
 	# Check for the UNIX_time information in memory, and use this if the time of the file in that information equals the time of the current UNIX_time file:
 	# Accept if the difference in time is less than one second:
@@ -133,7 +134,8 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		# Try reading the "UNIX_time.tsd" file:
 		if(!isTRUE(fresh) && length(unixfile)>0){
 			# Read the "UNIX_time.tsd" file:
-			system.time(out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, raw=FALSE))
+			out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, use.raw=FALSE)
+			
 			# If information is given for only one file, re-list the data in 'out' (due to read.TSD, which drops dimensions if only one time step is requested):
 			if(!is.list(out$l000)){
 				out = lapply(out, list)

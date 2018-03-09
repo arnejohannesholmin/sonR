@@ -20,7 +20,7 @@
 merge_TSD_by_Time <- function(files, fun=weighted.mean, msg=FALSE, ...){
 	
 	# See info.TSD("nmtc").
-	mergeUsingNmtc = function(name, data, nmtc){
+	mergeUsingNmtc = function(name, fun, data, nmtc){
 		temp = data[[name]]
 		if(name %in% timevar){
 			apply(temp, seq_len(length(dim(temp))-1), head, n=1)
@@ -29,7 +29,7 @@ merge_TSD_by_Time <- function(files, fun=weighted.mean, msg=FALSE, ...){
 			apply(temp, seq_len(length(dim(temp))-1), fun, w=if(length(nmtc)==0) ones(tail(dim_all(temp)),1) else nmtc, ...)
 			}
 		}
-	
+		
 	files = files[file.exists(files)]
 	timevar = labl.TSD("t")
 	# Read the first time step of each file:
@@ -62,7 +62,7 @@ merge_TSD_by_Time <- function(files, fun=weighted.mean, msg=FALSE, ...){
 		
 		ind = which(commonutim == duputim[i])
 		thisdata = read.TSDs(commonfiles[ind], drop.out=FALSE, clean=FALSE, header=FALSE)
-		# Check that all variables have the same number of list elements (identically structures files):
+		# Check that all variables have the same number of list elements (identically structured files):
 		tableOfNames = table(names(thisdata))
 		unames = setdiff(unique(names(thisdata)), "nmtc")
 		if(!all(tableOfNames==tableOfNames[1])){
@@ -71,7 +71,7 @@ merge_TSD_by_Time <- function(files, fun=weighted.mean, msg=FALSE, ...){
 		nmtc = unlist(thisdata[names(thisdata)=="nmtc"], use.names=FALSE)
 		thisdata = lapply(unames, function(x) mergeListKeepDimensions(thisdata[names(thisdata)==x]))
 		names(thisdata) = unames
-		thisdata = lapply(unames, mergeUsingNmtc, thisdata, nmtc)
+		thisdata = lapply(unames, mergeUsingNmtc, fun=fun, data=thisdata, nmtc=nmtc)
 		names(thisdata) = unames
 		thisdata$nmtc = sum(nmtc)
 		write.TSD(thisdata, commonfiles[ind][1], numt=1, ...)
