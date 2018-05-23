@@ -48,8 +48,14 @@ harx.SH80_oneping<-function(data){
 	
 	##### Execution #####
 	# Get the azimuth angle differences:
-	diffdira = diff(data$dira)
-	diffdira = c(diffdira,tail(diffdira,1))
+	# If only one beams is present in the data, assume that it spans a full circle in azimuth angle (in the x-y-plane):
+	if(length(data$dira)==1){
+		diffdira <- 2 * pi
+	}
+	else{
+		diffdira = diff(data$dira)
+		diffdira = c(diffdira,tail(diffdira,1))
+	}
 	
 	# Calculate the radii of the spheres used in the calculation:
 	spheres = soundbeam_range(data, pos="edge") * cos(data$dire[1]-pi/2)

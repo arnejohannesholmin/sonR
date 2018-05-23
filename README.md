@@ -11,7 +11,7 @@ Installation
 
 ``` r
 # Install the packages that sonR depends on. Note that this updates all the specified packages to the latest (binary) version. To skip installing already installed packages, run install.packages(setdiff(dep.pck, installed.packages()[,"Package"]), repos="http://cran.us.r-project.org") instead:
-dep.pck <- c("devtools", "ccaPP", "data.table", "fpc", "pbapply", "XML")
+dep.pck <- c("devtools", "ccaPP", "data.table", "fpc", "pbapply", "SoDA", "XML")
 install.packages(dep.pck, repos="http://cran.us.r-project.org")
 
 # Install sonR and also the packages that sonR depends on which are on GitHub (by Holmin):

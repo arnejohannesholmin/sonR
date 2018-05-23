@@ -284,11 +284,24 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 			}
 			# Set the new dira and dire:
 			olddiredirainnew = findInterval(oldindi, bindexintervals, all.inside=TRUE)
-			beamsToBeChanged = sapply(data[beamsnames], function(xx) length(xx)==max(sapply(data[beamsnames], length)))
-			data[beamsnames][beamsToBeChanged] = lapply(data[beamsnames][beamsToBeChanged], function(xx) by(xx, olddiredirainnew, funt))
-			data$numb = length(data$dira)
-			bindex = findInterval(bindex, bindexintervals, all.inside=TRUE)
-			outdim[2] = length(bindexintervals)-1
+			
+			# Treat beams data given independent of time (equal for all pings):
+			if(length(dim(data$dira))==0){
+				beamsToBeChanged = sapply(data[beamsnames], function(xx) length(xx)==max(sapply(data[beamsnames], length)))
+				data[beamsnames][beamsToBeChanged] = lapply(data[beamsnames][beamsToBeChanged], function(xx) by(xx, olddiredirainnew, funt))
+				data$numb = length(data$dira)
+				bindex = findInterval(bindex, bindexintervals, all.inside=TRUE)
+				outdim[2] = length(bindexintervals)-1
+			}
+			# Treat beams data given per ping:
+			else{
+				beamsToBeChanged = sapply(data[beamsnames], function(xx) NROW(xx)==max(sapply(data[beamsnames], NROW)))
+				data[beamsnames][beamsToBeChanged] = lapply(data[beamsnames][beamsToBeChanged], function(xx) do.call(rbind, by(xx, olddiredirainnew, function(yy) apply(yy, 2, funt))))
+				data$numb = apply(data$dira, 2, length)
+				dim(data$numb) <- c(1, length(data$numb))
+				bindex = findInterval(bindex, bindexintervals, all.inside=TRUE)
+				outdim[2] = length(bindexintervals)-1
+			}
 		}
 		
 		

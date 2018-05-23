@@ -101,6 +101,8 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 		numt = ncol(data$dire)
 		# Get the indices of vertical beam mode:
 		vertical = data$bmmd==2
+		printt(vertical)
+		printt(data$dire)
 				
 		if(strff("harx",var)){
 			# Get the pings with identical settings, and consider only the horizontal mode:
@@ -116,7 +118,9 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 				out$harx = NAs(max(data$lenb), max(data$numb), numt)
 				for(i in seq_along(settings)){
 					# Get the beams data for the first ping of the current settings:
+					printt(dim_all(data))
 					thisdata = getPingBeams(data, settings[[i]][1])
+					printt(dim_all(thisdata))
 					thisdata = get.specs.esnm(thisdata, esnm=esnm)
 					thisharx = harx.SH80_oneping(thisdata)
 					out$harx[seq_len(nrow(thisharx)),,settings[[i]]] = harx.SH80_oneping(thisdata)

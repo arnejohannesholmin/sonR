@@ -40,7 +40,7 @@ extractBeams <- function(data, beams=1, var="all", drop=FALSE){
 	var = setdiff(var, emptyvar)
 	# Get the list variables, and extract the time step from the lists here:
 	listvar = intersect(var, which(sapply(data, is.list)))
-	data[listvar] = lapply(data[listvar], function(y) y[[t]])
+	data[listvar] = lapply(data[listvar], function(y) y[[beams]])
 	# Update 'var' to exclude the list variables:
 	var = setdiff(var, listvar)
 	
