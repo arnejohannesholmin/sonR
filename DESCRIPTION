@@ -1,6 +1,6 @@
 Package: sonR
 Title: Library for reading, processing and converting sonar data to the TSD format
-Version: 1.1
+Version: 1.2
 Authors@R: c(
   person("Arne Johannes", "Holmin", role = c("aut","cre"), email = "arnejh@imr.no"))
 Author: Arne Johannes Holmin [aut, cre],
