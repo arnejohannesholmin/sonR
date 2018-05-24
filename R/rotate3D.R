@@ -117,6 +117,13 @@ rotate3D <- function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.o
 	#if(na0){
 	#	ang[is.na(ang)] <- 0
 	#}
+	# Assure that 'ang' has length equal to the number of rows of 'x':
+	if(length(ang) != nrow(x)){
+		warning("The length of 'ang' must equal the number of rows of 'x'. Ang padded with NAs.")
+		ang <- c(ang, NAs(nrow(x) - length(ang)))
+	}
+	
+	
 	isNAang <- is.na(ang)
 	ang[isNAang] <- 0
 	
@@ -139,12 +146,6 @@ rotate3D <- function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.o
 	# Allow for NAs:
 	isNAx <- is.na(x)
 	x[isNAx] <- 0
-	
-	# Assure that 'ang' has length equal to the number of rows of 'x':
-	if(length(ang) != nrow(x)){
-		warning("The length of 'ang' must equal the number of rows of 'x'. Ang padded with NAs.")
-		ang <- c(ang, NAs(nrow(x) - length(ang)))
-	}
 	
 	# Call the c++ function:
 	U <- .C("rotate3d", x, Npoints, by, Lby, ang, A, Nrot, as.integer(paired), rep(x,if(paired) 1 else Nrot), PACKAGE="sonR")
