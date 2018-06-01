@@ -13,7 +13,7 @@ plotProfosPP(x, ind = c(1, 2), col = list(ship = c("black", "purple"),
   0.9), ...)
 
 readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
-  compensateCurrent = TRUE, sparfact = 1, spar0 = 0.5, ...)
+  compensateCurrent = TRUE, sparfact = 1, spar0 = 0.5, byId = TRUE, ...)
 }
 \arguments{
 \item{x}{The output from \code{readProfosPP}.}

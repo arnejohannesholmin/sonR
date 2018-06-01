@@ -21,7 +21,7 @@
 #' @export
 #' @rdname readProfosPP
 #'
-readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurrent=TRUE, sparfact=1, spar0=0.5, ...){
+readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurrent=TRUE, sparfact=1, spar0=0.5, byId=TRUE, ...){
 	
 	# TODO:
 	#- Plot degrees 
