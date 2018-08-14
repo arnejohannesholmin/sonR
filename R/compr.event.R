@@ -9,7 +9,7 @@
 #' @param rres  The range resolution of the compressed data in meters.
 #' @param bres  The beam resolution of the compressed data in integer number.
 #' @param cores  is an integer specifying the number of cores to run the compression over in parallel (should be lower than the number of cores in the computer).
-#' @param funvbsc  is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively).
+#' @param funvbsc  is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively). Default is mean, which is recommended for volume backscattering coefficient (sv) data, which are by nature exponentially distributed (backscattering from multiple targets), and using median will underestmate the true backscatter.
 #' @param funt  is the same as funvbsc, but used for averaging vessel data in the new time/distance bins.
 #' @param adds  is a list of additional data overriding corresponding variables in 'data'
 #' @param split used in psx.TSD().
@@ -32,7 +32,7 @@
 #' @export
 #' @rdname compr.TSD
 #'
-compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, cores=1, funvbsc=c("median","mean"), funt=c("median","mean"), adds=NULL, split=TRUE, skipAngles=TRUE, origin=1, z0=0, cruise=NULL, esnm="EK60", event_compr=NULL, ow=TRUE, msg=TRUE, write=TRUE, filesize=3e8, chunksize=3e8, keepEmpty=TRUE, clear_individual=TRUE, clear_along=FALSE, maxlenb=NULL, ...){
+compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, cores=1, funvbsc=c("mean","median"), funt=c("median","mean"), adds=NULL, split=TRUE, skipAngles=TRUE, origin=1, z0=0, cruise=NULL, esnm="EK60", event_compr=NULL, ow=TRUE, msg=TRUE, write=TRUE, filesize=3e8, chunksize=3e8, keepEmpty=TRUE, clear_individual=TRUE, clear_along=FALSE, maxlenb=NULL, ...){
 		
 	########## Preparation ##########
 	# Used in merge_TSD_by_Time():

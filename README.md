@@ -15,7 +15,13 @@ dep.pck <- c("devtools", "ccaPP", "data.table", "fpc", "pbapply", "SoDA", "XML")
 install.packages(dep.pck, repos="http://cran.us.r-project.org", type="binary")
 
 # Install sonR and also the packages that sonR depends on which are on GitHub (by Holmin):
-# On Windows you will need Rtools to complete the installations. Check if you have this by running Sys.getenv('PATH'), and go to https://cran.r-project.org/bin/windows/Rtools/ to install Rtools if not. Note that if you need to run R as administrator due to security settings, it is advised to install the pakcages in plain R, and not using Rstudio. Close Rstudio, open R and run the installation, and reopen Rstudio.
+# On Windows you will need Rtools to complete the installations.
+# Check whether you have Rtools by running Sys.getenv('PATH'),
+#   and go to https://cran.r-project.org/bin/windows/Rtools/ to install Rtools if not.
+# Be sure to check the box "Add rstools to system PATH" when installing Rtools.
+# Note that if you need to run R as administrator due to security settings,
+#   it is advised to install the pakcages in plain R, and NOT using Rstudio.
+# Close Rstudio, open R and run the installation, and reopen Rstudio.
 
 dep.pck.git <- c("arnejohannesholmin/TSD", "arnejohannesholmin/SimradRaw", "arnejohannesholmin/sonR")
 # If you want to install the lastest development versions, run devtools::install_github(dep.pck.git, ref="develop") instead:

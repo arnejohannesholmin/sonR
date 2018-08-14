@@ -39,14 +39,18 @@ generate.event<-function(event="Event1", cruise="Cruise1", esnm=NULL, dir.type=c
 	##################################################
 	##################################################
 	##### Preparation #####
-	if(is.null(dir.data)){
-		dir.data=Acoustics_datasets_directory()
-		}
+	if(!file.exists(cruise)){
+		cruise <- Acoustics_datasets_directory()
+	}
+	#if(is.null(dir.data)){
+	#	dir.data=Acoustics_datasets_directory()
+	#	}
 	
 	
 	##### Execution and output #####
 	if(length(cruise>0)){
-		event = c(outer(file.path(dir.data, cruise, "Events", event, esnm), dir.type, file.path))
+		#event = c(outer(file.path(dir.data, cruise, "Events", event, esnm), dir.type, file.path))
+		event = c(outer(file.path(cruise, "Events", event, esnm), dir.type, file.path))
 		}
 	suppressWarnings(lapply(event, dir.create, recursive=TRUE, ...))
 	event

@@ -37,7 +37,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		
 		# Interpolate the raw vessel data to the ping times:
 		#vessel[c("rtzv", "latv", "lonv", "ispv", "sadv")] <- lapply(rawvessel[c("irzv", "iltv", "ilnv", "iisv", "isdv")], function(xx) if(length(xx)) Hmisc::approxExtrap(rawvessel$imtm, xx, vessel$mtim)$y else NAs(length(vessel$mtim)))
-		vessel[c("rtzv", "latv", "lonv", "ispv", "sadv")] <- lapply(rawvessel[c("irzv", "iltv", "ilnv", "iisv", "isdv")], function(xx) if(length(xx)) approx(rawvessel$imtm, xx, vessel$mtim, rule=2)$y else NAs(length(vessel$mtim)))
+		vessel[c("rtzv", "latv", "lonv", "ispv", "sadv")] <- lapply(rawvessel[c("irzv", "iltv", "ilnv", "iisv", "isdv")], function(xx) if(length(xx)==1) rep(xx, length.out=length(vessel$mtim)) else if(length(xx)>1) approx(rawvessel$imtm, xx, vessel$mtim, rule=2)$y else NAs(length(vessel$mtim)))
 		
 		## Get positions of the time points in the data:
 		#imtmIntervals <- c(rawvessel$imtm[1]-imtmDiff[1]/2, rawvessel$imtm[-length(rawvessel$imtm)] + imtmDiff/2, rawvessel$imtm[length(rawvessel$imtm)]+imtmDiff[length(imtmDiff)]/2)

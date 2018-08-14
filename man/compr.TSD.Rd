@@ -13,7 +13,7 @@ compr.TSD(data = NULL, tres = NULL, xres = NULL, zres = NULL,
 
 compr.event(event, filenr = "all", tres = NULL, xres = NULL,
   zres = NULL, rres = NULL, bres = NULL, cores = 1,
-  funvbsc = c("median", "mean"), funt = c("median", "mean"), adds = NULL,
+  funvbsc = c("mean", "median"), funt = c("median", "mean"), adds = NULL,
   split = TRUE, skipAngles = TRUE, origin = 1, z0 = 0, cruise = NULL,
   esnm = "EK60", event_compr = NULL, ow = TRUE, msg = TRUE,
   write = TRUE, filesize = 3e+08, chunksize = 3e+08, keepEmpty = TRUE,
@@ -68,7 +68,7 @@ compr.event(event, filenr = "all", tres = NULL, xres = NULL,
 
 \item{bres}{The beam resolution of the compressed data in integer number.}
 
-\item{funvbsc}{is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively).}
+\item{funvbsc}{is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively). Default is mean, which is recommended for volume backscattering coefficient (sv) data, which are by nature exponentially distributed (backscattering from multiple targets), and using median will underestmate the true backscatter.}
 
 \item{funt}{is the same as funvbsc, but used for averaging vessel data in the new time/distance bins.}
 

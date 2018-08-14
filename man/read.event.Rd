@@ -85,7 +85,7 @@ read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
 
 \item{allow.old}{is a TRUE if old UNIX_time file is accepted (still with the correct list of files).}
 
-\item{onestep}{is TRUE to allow for files with only one time step to be read regardless of 't'.}
+\item{onestep}{is TRUE or 1 to allow for files with only one time step to be read regardless of 't'. If set to 2, the single time step is repeated to the number of time steps requested by \code{t}.}
 
 \item{...}{are inputs used in ftim.TSD(), but more importantly in pplot3d.TSD(). Particularly, 'ind', 'range', and 'subset' can be used to subset the data in pplot3d.TSD(), but 'ind' can also be used to subset the acoustic data.}
 

@@ -37,7 +37,7 @@
 #' @param pdns_scale  is used in get.pdns_phase.event() to scale the noise in order to allow the optimization to work.
 #' @param TOV  is the time offset of the vessel information, discovered by Holmin and Korneliussen in 2013. The default is found in "/Applications/echoIBM/Documentation/Error in yaw MS70/Error in yaw MS70.R".
 #' @param allow.old  is a TRUE if old UNIX_time file is accepted (still with the correct list of files).
-#' @param onestep  is TRUE to allow for files with only one time step to be read regardless of 't'.
+#' @param onestep  is TRUE or 1 to allow for files with only one time step to be read regardless of 't'. If set to 2, the single time step is repeated to the number of time steps requested by \code{t}.
 #' @param ...  are inputs used in ftim.TSD(), but more importantly in pplot3d.TSD(). Particularly, 'ind', 'range', and 'subset' can be used to subset the data in pplot3d.TSD(), but 'ind' can also be used to subset the acoustic data.
 #'
 #' @return
@@ -417,11 +417,6 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			for(i in seq_along(t)){
 				# Strip 't' of the separating characters, assuming that the time is given in the order of year, month, day, hour, minute, second:
 				t[[i]][1] <- gsub("[[:punct:] || [:blank:]]", "", t[[i]][1])
-				#t[[i]][1] <- gsub(":", "", t[[i]][1])
-				#t[[i]][1] <- gsub(";", "", t[[i]][1])
-				#t[[i]][1] <- gsub("/", "", t[[i]][1])
-				#t[[i]][1] <- gsub("-", "", t[[i]][1])
-				#t[[i]][1] <- gsub(" ", "", t[[i]][1])
 				t[[i]] <- paste(t[[i]], collapse=".")
 			}
 			t <- unlist(t)	
@@ -480,10 +475,16 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		}
 	}
 	# Add ones to 'tlist' for the files with only one time step:
-	if(onestep){
-		onestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext != "pings"
+	fIndOnestep <- FALSE
+	if(onestep>0){
+		# onestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext != "pings"
+		# 2018-08-10: Changed this to apply both for pings and beams files:
+		fIndOnestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext %in% c("pings", "beams")
+		
+		#tlist[onestep] <- as.list(ones(sum(onestep)))
+		# This is a simple solution to reading file with only one step. 
+		tlist[fIndOnestep] <- if(onestep==1) as.list(ones(sum(fIndOnestep))) else rep(list(ones(length(t))), sum(fIndOnestep))
 	}
-	tlist[onestep] <- as.list(ones(sum(onestep)))
 	
 	# If the variable 'indp' is present in a beams file, this implies that the indp values in this file should be matched with the time steps in a different beams file, namely that with 'freq':
 	if(length(hasindp)){
@@ -504,7 +505,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	}
 	
 	# Supply the 'fInd$school' with files that contain relevant variables, as these may be contained in other files than the ones with ".school" as file extension:
-	if(!all(onestep) && any(var %in% c(staticschoolnames, dynschoolnames))){
+	if(!all(fIndOnestep) && any(var %in% c(staticschoolnames, dynschoolnames))){
 		# For loop through the files:
 		for(i in seq_along(filelist)){
 			if(any(c(staticschoolnames, dynschoolnames) %in% TIME$labl[[i]])){
@@ -526,6 +527,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	
 	# Merging the list of .vessel-files and other files to obtain the list of files that are not .pings-files so that the .vessel-files are sorted first in the list. (At the end of the function list elements of duplicated names are removed so that only the first of the duplicated elements is chosen.)??? Why are vessel files mentioned?
 	fInd$notpings <- unlist(fInd[names(fInd)!="pings"])
+	
 	#fInd$notpings <- unique(match(fInd$notpings, filelist))
 	
 	

@@ -16,12 +16,12 @@
 #' \dontrun{}
 #'
 #' @importFrom SoDA geoXY
-#' @importFrom TSD ang2rot
+#' @importFrom TSD ang2rot papply
 #'
 #' @export
 #' @rdname readProfosPP
 #'
-readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurrent=TRUE, sparfact=1, spar0=0.5, byId=TRUE, ...){
+readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurrent=TRUE, sparfact=1, spar0=0.5, byId=TRUE, rm.duplicates=FALSE, filter=NULL, cores=1, nrows=-1, smooth=TRUE, ...){
 	
 	# TODO:
 	#- Plot degrees 
@@ -140,9 +140,36 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 		acos( rowSums(x * y) / (lx * ly)) * 180/pi
 	}
 	
+	dist2d <- function(x, p1, p2) {
+		# Function for the distance between a point and a line between two points:
+		dist2dOne <- function(x, p1, p2) {
+			x <- unlist(x, use.names=FALSE)
+			p1 <- unlist(p1, use.names=FALSE)
+			p2 <- unlist(p2, use.names=FALSE)
+			v1 <- p1 - p2
+			v2 <- x - p1
+			m <- cbind(v1,v2)
+			abs(det(m))/sqrt(sum(v1*v1))
+		} 
+		#browser()
+		#if(ncol(p1)==2){
+		#	p2 <- p1[-1,]
+		#	p1 <- p1[-nrow(p1),]
+		#}
+		if(nrow(p1) == nrow(x)-1){
+			p1 <- rbind(p1, p1[nrow(p1),])
+			p2 <- rbind(p2, p2[nrow(p2),])
+		}
+		if(nrow(p1) < nrow(x) || nrow(p1)==1){
+			p1 <- matrix(p1, ncol=2, nrow=nrow(x), byrow=TRUE)
+			p2 <- matrix(p2, ncol=2, nrow=nrow(x), byrow=TRUE)
+		}
+		sapply(seq_len(nrow(x)), function(i) dist2dOne(x[i,], p1[i,], p2[i,]))
+	} 
+	
 	
 	##### 0. Read the data: #####
-	x <- read.table(x, sep="", header=TRUE)
+	x <- read.table(x, sep="", header=TRUE, stringsAsFactors=FALSE, nrows=nrows)
 
 
 	##### 1. Time: #####
@@ -150,10 +177,12 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 	x$UNIXtime <- unclass(as.POSIXct(paste(x$Date, x$Time), format="%Y-%m-%d %H:%M:%OS", tz="GMT"))
 	# Convert to POSIX:
 	x$DateTime<-as.POSIXct(x$UNIXtime, origin="1970-01-01", tz="GMT")
-	# Sort the sonar data by time
-	x <- x[order(x$UNIXtime), ]
+	# Sort the sonar data by ID and time
+	x <- x[order(x$Id, x$UNIXtime), ]
 	# Remove duplicates:
-	x <- x[!duplicated(x$UNIXtime), ]
+	if(rm.duplicates){
+		x <- x[!duplicated(x$UNIXtime), ]
+	}
 	
 	
 	##### 2. X,Y: #####
@@ -166,6 +195,9 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 	shipXY <- geoXY(x$Ship.lat, x$Ship.lon, lat0, lon0, unit=1) #distance (m) for each detection to mean postion
 	x$Ship.x <- shipXY[,1]
 	x$Ship.y <- shipXY[,2]
+	
+	# Add the range from the vessel:
+	x$Center.range <- sqrt( (x$Center.x - x$Ship.x)^2 + (x$Center.y - x$Ship.y)^2 )
 	
 	
 	# Add the current information:
@@ -180,30 +212,102 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 	}
 	
 	
+	##### 3. Filter: #####
+	applyFilter <- function(x, filter){
+		applyFilterOne <- function(var, x, filter){
+			if(length(x[[var]]) && length(filter[[var]])==2){
+				x[[var]] >= filter[[var]][1] & x[[var]] <= filter[[var]][2]
+			}
+			else{
+				!logical(nrow(x))
+			}
+		}
+		filter <- filter[names(filter) %in% names(x)]
+		if(length(filter) && is.list(filter)){
+			valid <- sapply(names(filter), applyFilterOne, x=x, filter=filter)
+			valid <- apply(valid, 1, all)
+			x <- x[valid, ]
+		}
+		
+		return(x)
+	}
+	
+	# Apply the filters before smoothing:
+	x <- applyFilter(x, filter)
+	#if(length(filter) && is.list(filter)){
+	#	valid <- sapply(names(filter), applyFilter, filter=filter, x=x)
+	#	valid <- apply(valid, 1, all)
+	#	x <- x[valid, ]
+	#}
+	
+	numPings <- table(x$Id)
+	numPings <- rep(numPings, numPings)
+	x$numPings <- numPings
+	
+	# Apply any numPings filter before smoothing:
+	x <- applyFilter(x, filter)
+	
+	
 	##### 3. Spline smooth: #####
-	# Smooth the school positions using spline:
-	x <- smooth.spline_xy(x, sparfact=sparfact[1], spar0=spar0, xynames=c("Center.x_spline", "Center.y_spline"))
+	runSmoothing <- function(Id=NULL, data, sparfact, spar0){
+		# Get the current school:
+		if(length(Id)){
+			data <- data[data$Id==Id, ]
+		}
+		
+		# Smooth the school positions using spline:
+		data <- smooth.spline_xy(data, sparfact=sparfact[1], spar0=spar0, xynames=c("Center.x_spline", "Center.y_spline"))
 	
-	# For the vessel, using only the default smoothing here:
-	x <- smooth.spline_xy(x, sparfact=NULL, spar0=spar0, var=c("Ship.x", "Ship.y"), xynames=c("Ship.x_spline", "Ship.y_spline"))
-	
-	
-	##### 4. Lowess smooth: #####
-	x <- lowess_xy(x, xynames=c("Center.x_lowess", "Center.y_lowess"), ...)
-	
-	# For the vessel, using 10 values:
-	f <- 10/nrow(x)
-	x <- lowess_xy(x, var=c("Ship.x", "Ship.y"), xynames=c("Ship.x_lowess", "Ship.y_lowess"), f=f)
+		# For the vessel, using only the default smoothing here:
+		data <- smooth.spline_xy(data, sparfact=NULL, spar0=spar0, var=c("Ship.x", "Ship.y"), xynames=c("Ship.x_spline", "Ship.y_spline"))
 	
 	
-	##### 5. Heading and speed from diffing the smoothed positions: #####
-	x <- getDiffHeadingSpeed(x, var="Center", type="")
-	x <- getDiffHeadingSpeed(x, var="Ship", type="")
+		##### 4. Lowess smooth: #####
+		data <- lowess_xy(data, xynames=c("Center.x_lowess", "Center.y_lowess"), ...)
 	
-	x <- getDiffHeadingSpeed(x, var="Center", type="spline")
-	x <- getDiffHeadingSpeed(x, var="Ship", type="spline")
+		# For the vessel, using 10 values:
+		f <- 10/nrow(data)
+		data <- lowess_xy(data, var=c("Ship.x", "Ship.y"), xynames=c("Ship.x_lowess", "Ship.y_lowess"), f=f)
 	
-	x <- getDiffHeadingSpeed(x, var="Center", type="lowess")
+	
+		##### 5. Heading and speed from diffing the smoothed positions: #####
+		data <- getDiffHeadingSpeed(data, var="Center", type="")
+		data <- getDiffHeadingSpeed(data, var="Ship", type="")
+	
+		data <- getDiffHeadingSpeed(data, var="Center", type="spline")
+		data <- getDiffHeadingSpeed(data, var="Ship", type="spline")
+	
+		data <- getDiffHeadingSpeed(data, var="Center", type="lowess")
+		
+		
+		seq1 <- c(seq_len(nrow(data)-1), nrow(data)-1)
+		seq2 <- seq1 + 1
+		d <- dist2d(data[c("Center.x", "Center.y")], p1=data[seq1, c("Ship.x_spline", "Ship.y_spline")], p2=data[seq2, c("Ship.x_spline", "Ship.y_spline")])
+		#data$DistToTrack <- median(d)
+		data$DistToTrack <- d
+		
+		
+		
+		return(data)
+	}
+	
+	if(smooth){
+		if(byId){
+			uId <- unique(x$Id)
+			temp <- TSD::papply(uId, runSmoothing, data=x, sparfact=sparfact, spar0=spar0, cores=cores)
+			#x <- do.call(rbind, temp)
+			x <- as.data.frame(data.table::rbindlist(temp))
+		}
+		else{
+			x <- runSmoothing(data=x, sparfact=sparfact, spar0=spar0)
+		}
+	}
+	else{
+		return(x)
+	}
+	
+	# Apply the filters after smoothing:
+	x <- applyFilter(x, filter)
 	
 	
 	##### 6. Incidence angle: #####

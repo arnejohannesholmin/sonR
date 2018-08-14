@@ -65,6 +65,11 @@ read.event_unzip_vbsc <- function(x, pad=TRUE, split=TRUE, filename=NULL, t=NULL
 	if(is.list(x$vbsc)){
 		x$vbsc = lapply(x$vbsc, function(x) if(length(dim(x)) == 2) array(x, dim=c(dim(x),1)) else x)
 		}
+	else{
+		lenb <- x$lenb[1]
+		numb <- x$numb[1]
+		dim(x$vbsc) <- c(lenb, numb, length(x$vbsc) / (lenb*numb))
+	}
 	# Check whether the dimensions of each time step are identical:
 	if(is.list(x$vbsc)){
 		x$vbsc = mergeListKeepDimensions(x$vbsc, pad=pad, split=split, add1=length(dim(x$vbsc[[1]])) == 2)

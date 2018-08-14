@@ -117,14 +117,22 @@ rotate3D <- function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.o
 	#if(na0){
 	#	ang[is.na(ang)] <- 0
 	#}
-	# Assure that 'ang' has length equal to the number of rows of 'x':
-	if(length(ang) != nrow(x)){
-		warning("The length of 'ang' must equal the number of rows of 'x'. Ang padded with NAs.")
-		ang <- c(ang, NAs(nrow(x) - length(ang)))
+	
+	# In the case of paired rotations (i.e., one set of rotation angles per row of data in 'x'), assure that 'ang' has length equal to the number of rows of 'x':
+	if(paired && Nrot != nrow(x)){
+		if(Nrot==1){
+			ang <- matrix(ang, nrow=nrow(x), ncol=NCOL(ang), byrow=TRUE)
+		}
+		else{
+			stop("The length of 'ang' must equal the number of rows of 'x'.")
+		}
+		#warning("The length of 'ang' must equal the number of rows of 'x'. Ang padded with NAs.")
+		#ang <- c(ang, NAs(nrow(x) - Nrot))
 	}
 	
 	
 	isNAang <- is.na(ang)
+	isNARowang <- if(length(dim(ang))==2) apply(is.na(ang), 1, any) else isNAang
 	ang[isNAang] <- 0
 	
 	if(reverse){
@@ -157,12 +165,12 @@ rotate3D <- function(x, by, ang, paired=FALSE, radians=TRUE, sph.in=FALSE, sph.o
 	if(paired){
 		dim(U[[9]]) <- c(Npoints,3)
 		# Re-insert the NAs in the angle 'ang', corresponding to the data 'x' if paired=TRUE:
-		U[[9]][isNAang,] <- NA
+		U[[9]][isNARowang,] <- NA
 	}
 	else{
 		dim(U[[9]]) <- c(Npoints,3,Nrot)
 		# Re-insert the NAs in the angle 'ang':
-		U[[9]][,,isNAang] <- NA
+		U[[9]][,,isNARowang] <- NA
 	}
 	
 	# If 'paired' is FALSE an array of three dimensions is returned:

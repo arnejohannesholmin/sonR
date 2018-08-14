@@ -102,7 +102,7 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 	kd$w[seq_len(atmaxkd)]=2*maxkd-kd$y[seq_len(atmaxkd)]
 	# Create a function for locating the half value:
 	f=function(x){
-		approx(kd$x,kd$w,x)$y-0.5*maxkd
+		approx(kd$x, kd$w, x)$y - 0.5 * maxkd
 		}
 	# Locate the value of Sv at the half value:
 	Svhalf=uniroot(f,c(kd$x[atmaxkd],max(kd$x)))$root

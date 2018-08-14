@@ -12,7 +12,7 @@
 #' @export
 #' @rdname Simrad_dir
 #'
-Simrad_dir<-function(data, dira_offset=0){
+Simrad_dir <- function(data, dira_offset=0){
 	
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -66,7 +66,7 @@ Simrad_dir<-function(data, dira_offset=0){
 			data$dire=pi/2 + data$dirx*pi/180
 			}
 		else{
-			stop(paste("Unknown acoustical instrument specified by 'esnm' (",data$esnm[1],")",sep=""))
+			stop(paste0("Unknown acoustical instrument specified by 'esnm' (", data$esnm[1], ")"))
 			}
 		}
 	data
