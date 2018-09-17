@@ -23,7 +23,7 @@ compr.event_oneFile_write(i, indt, filelist, pingsfiles, vesselfiles,
   bres = NULL, funvbsc = c("median", "mean"), funt = c("median", "mean"),
   adds = list(), split = TRUE, skipAngles = TRUE, origin = 1, z0 = 0,
   pingsnames = NULL, vesselnames = NULL, beamsnames = NULL,
-  dumpfiles = NULL, keepEmpty = TRUE, maxlenb = NULL, ...)
+  dumpfiles = NULL, maxlenb = NULL, ...)
 }
 \value{
 

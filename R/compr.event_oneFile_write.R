@@ -14,7 +14,7 @@
 #' 
 compr.event_oneFile_write <- function(i, indt, filelist, pingsfiles, vesselfiles, beamsfiles, t="all", drop=TRUE, compress=FALSE, TIME=NULL, write=TRUE, 
 	# Inputs used in compr.TSD:
-	tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, pingsnames=NULL, vesselnames=NULL, beamsnames=NULL, dumpfiles=NULL, keepEmpty=TRUE, maxlenb=NULL, ...){
+	tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, pingsnames=NULL, vesselnames=NULL, beamsnames=NULL, dumpfiles=NULL, maxlenb=NULL, ...){
 
 	# Function used for writing the first, last and the rest of the time steps in three separate files:
 	write.TSD123 <- function(data, names, files, i, numt, ...){
@@ -72,7 +72,7 @@ compr.event_oneFile_write <- function(i, indt, filelist, pingsfiles, vesselfiles
 		if(length(dumpfiles)){
 			write(paste("Compr", i), dumpfiles[i], append=TRUE)
 		}
-		data <- compr.TSD(data, tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, keepEmpty=keepEmpty, ...)
+		data <- compr.TSD(data, tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, ...)
 		# Update numt for the compressed data:
 		numt = numt.TSD(data)
 	}

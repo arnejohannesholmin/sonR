@@ -228,6 +228,9 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	# Define various variable chategories:
 	staticschoolnames <- labl.TSD("ss")
 	dynschoolnames <- labl.TSD("ds")
+	# Changed added on 2018-09-17 for including compact school names to the dyn names:
+	compactschoolnames <- labl.TSD("cs")
+	dynschoolnames <- c(dynschoolnames, compactschoolnames)
 	beamsnames <- labl.TSD("b")
 	ctdnames <- labl.TSD("ctd")
 	vesselnames <- labl.TSD("v")
@@ -478,8 +481,8 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	fIndOnestep <- FALSE
 	if(onestep>0){
 		# onestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext != "pings"
-		# 2018-08-10: Changed this to apply both for pings and beams files:
-		fIndOnestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext %in% c("pings", "beams")
+		# 2018-08-10: Changed this to apply both for pings and beams files and school files:
+		fIndOnestep <- unlist(lapply(TIME$indt, function(x) length(x) == 1)) & ext %in% c("pings", "beams", "school")
 		
 		#tlist[onestep] <- as.list(ones(sum(onestep)))
 		# This is a simple solution to reading file with only one step. 
@@ -782,62 +785,10 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			
 			# Read the acoustic data, and the voxel indices "vxIX" giving the voxels holding data if present:
 			suppressWarnings(temp <- read.TSDs(filelist[fInd$pings], t=tlist[fInd$pings], var=c("vbsc", "vxIX", "numb", "lenb", "utim"), dimension=TRUE, merge=merge, indt=FALSE, drop.out=FALSE, msg=FALSE))
-			
-			#if(length(temp$vbsc)>0){
-			#	out$vbsc <- temp$vbsc
-			#}
-			#if(length(temp$vxIX)>0){
-			#	out$vxIX <- temp$vxIX
-			#}
 			# Unzip compressed vbsc:
 			tempNotPresentInOut <- !names(temp) %in% names(out)
 			out[names(temp)[tempNotPresentInOut]] <- temp[tempNotPresentInOut]
 			out <- read.event_unzip_vbsc(out, pad=pad, split=split, t=t, fill=fill)
-			
-			
-			# # If the voxel indices of compressed acosutic data are present, uncompress:
-			# if(length(temp$vxIX)>0){
-			# 	out <- read.event_unzip_vbsc(out, pad=pad, split=split, t=t, fill=fill)
-			# }
-			# # Otherwise simply return the acsoutic data:
-			# else{
-			# 	
-			# }
-			# 
-			
-			### # Filling in for compressed acoustic data:
-			### if(length(out$vbsc)>0 && length(out$vxIX)>0){
-			### 	# In the unlikely event that all time steps have equal number of positive voxels in the compressed mode, split into a list:
-			### 	if(!is.list(out$vbsc)){
-			### 		thisnumt = ncol(out$vbsc)
-			### 		#out$vbsc = split(out$vbsc, rep(seq_len(thisnumt), each=length(thisnumt)/thisnumt))
-			### 		#out$vxIX = split(out$vxIX, rep(seq_len(thisnumt), each=length(thisnumt)/thisnumt))
-			### 		out$vbsc = as.data.frame(out$vbsc)
-			### 		out$vxIX = as.data.frame(out$vxIX)
-			### 	}
-			### 	# Create a list of vbsc, where each ping is represented in each element of the list, and fill inn the non-empty values indicated by 'vxIX':
-			### 	for(i in seq_along(out$vbsc)){
-			### 		tempvbsc = NAs(max(temp$lenb[,i]), temp$numb[i])
-			### 		tempvbsc[out$vxIX[[i]]] = out$vbsc[[i]]
-			### 		out$vbsc[[i]] = tempvbsc
-			### 	}
-			### }
-			### 	
-			### # Rearranging sv-values in a 3 dimensional array [lenb, numb, numt]:
-			### if(is.list(out$vbsc)){
-			### 	out$vbsc = lapply(out$vbsc, function(x) if(length(dim(x)) == 2) array(x, dim=c(dim(x),1)) else x)
-			### }
-			### #else{
-			### #	dim(out$vbsc) = c(length(out$vbsc)/500, 500)
-			### #}
-			### 		
-			### # Check whether the dimensions of each time step are identical:
-			### if(is.list(out$vbsc)){
-			### 	out$vbsc = mergeListKeepDimensions(out$vbsc, pad=pad, split=split, add1=length(dim(out$vbsc[[1]])) == 2)
-			### }
-			### else if(length(out$vbsc) == 0){
-			### 	warning(paste("Volume backscattering coefficient 'vbsc' not present for time step (s) ", paste(t, collapse=", "), sep=""))
-			### }
 			
 			# Apply TVG:
 			if(!TVG || TVG.exp != 2){
@@ -1130,21 +1081,26 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	#####################################
 	# Reading school files:
 	if(any(var %in% c(staticschoolnames, dynschoolnames))){
+		
+		# Fixed bug here on 2018-09-17, where the indices in 'schooltype' were on only the school files, whereas extraction was done on all files:
 		# Obtaining school file types:
-		schooltype <- echoIBM.getSchoolfileType(filelist[fInd$school], dynschoolnames, staticschoolnames)
-		fInd$dynschool <- schooltype$schooltypeD==1
+		schoolFiles <- filelist[fInd$school]
+		schoolTlist <- tlist[fInd$school]
+		
+		schooltype <- echoIBM.getSchoolfileType(schoolFiles, dynschoolnames, staticschoolnames)
+		fInd$dynschool <- schooltype$schooltypeD==1 | schooltype$schooltypeB==1
 		fInd$staticschool <- schooltype$schooltypeS==1
 		
 		# Read static school variables:
-		suppressWarnings(out <- c(out, read.TSDs(filelist[fInd$staticschool], var=var, t=1, msg=FALSE)))
+		suppressWarnings(out <- c(out, read.TSDs(schoolFiles[fInd$staticschool], var=var, t=1, msg=FALSE)))
 			
 		# Read dynamic school variables:
-		if(any(dynschoolnames %in% var) && length(filelist[fInd$dynschool])>0){
+		if(any(dynschoolnames %in% var) && length(schoolFiles[fInd$dynschool])>0){
 			# Adding school-values to the output list:
 			thesevar <- intersect(var, dynschoolnames)
 			out[thesevar] <- rep(list(vector("list", length(t))), length(thesevar))
 			# Read the school-files using the time step list 'tlist', setting dimension to TRUE to ensure that the data are preserved in time steps, clean = FALSE to ensure that all data is read (as clean = TRUE removes variables read from more than the first file if the same variable is present in more than one file), merge = TRUE to merge the time steps togeather for each variable, and indt = FALSE because of the way 'tlist' is defined:
-			suppressWarnings(thesepings <- read.TSDs(filelist[fInd$dynschool], t=tlist[fInd$dynschool], var=var, dimension=TRUE, merge=merge, indt=FALSE, msg=FALSE))
+			suppressWarnings(thesepings <- read.TSDs(schoolFiles[fInd$dynschool], t=schoolTlist[fInd$dynschool], var=var, dimension=TRUE, merge=merge, indt=FALSE, msg=FALSE))
 			# Remove variables not present in the data and add the ones that are present to the output:
 			out[names(thesepings)] <- thesepings
 			out[setdiff(thesevar, names(thesepings))] <- NULL
@@ -1154,7 +1110,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 				out <- vl2rt.TSD(out, var=var)
 			}
 			else if(("rtxf" %in% var && is.null(out$rtxf)) || ("rtzf" %in% var && is.null(out$rtzf))){
-				suppressWarnings(outforrot <- read.TSDs(filelist[fInd$dynschool], t=tlist[fInd$dynschool], var=c("vlxf", "vlyf", "vlzf"), dimension=TRUE, clean=FALSE, merge=merge, indt=FALSE, msg=FALSE))
+				suppressWarnings(outforrot <- read.TSDs(schoolFiles[fInd$dynschool], t=schoolTlist[fInd$dynschool], var=c("vlxf", "vlyf", "vlzf"), dimension=TRUE, clean=FALSE, merge=merge, indt=FALSE, msg=FALSE))
 				if(any(is.null(outforrot$vlxf), is.null(outforrot$vlyf), is.null(outforrot$vlzf))){
 					warning("Fish rotation angles not available")
 				}

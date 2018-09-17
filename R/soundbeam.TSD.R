@@ -158,11 +158,11 @@ soundbeam.TSD<-function(data, t=1, ind=NULL, cs="g", seabed=-12000, rot=1, compe
 		# x-rotation of the beams is the elevation angle subtracted pi/2 to equal 0 at the x-axis:
 		phi = data$dire-pi/2
 		
-		if(substring(tolower(cs),1,1)=="v"){
+		if(startsWith(tolower(cs), "v")){
 			# Get the positions along the beams:
 			xyz = rotate3D(r, ang=cbind(-phi,-theta), by="yz", list.out=TRUE)
 			}
-		else if(substring(tolower(cs),1,1)=="g"){
+		else if(startsWith(tolower(cs), "g")){
 			# z-rotation of the beams added the z-rotation of the vessel:
 			# c() around data$rtzv avoids the new warning message in R 3.4: "Recycling array of length 1 in vector-array arithmetic is deprecated. Use c() or as.vector() instead."
 			theta = data$dira + c(data$rtzv)

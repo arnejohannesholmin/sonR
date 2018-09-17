@@ -8,15 +8,14 @@
 compr.TSD(data = NULL, tres = NULL, xres = NULL, zres = NULL,
   rres = NULL, bres = NULL, funvbsc = c("median", "mean"),
   funt = c("median", "mean"), adds = list(), split = TRUE,
-  skipAngles = TRUE, origin = 1, z0 = 0, keepEmpty = TRUE,
-  drop = FALSE, ...)
+  skipAngles = TRUE, origin = 1, z0 = 0, drop = FALSE, ...)
 
 compr.event(event, filenr = "all", tres = NULL, xres = NULL,
   zres = NULL, rres = NULL, bres = NULL, cores = 1,
   funvbsc = c("mean", "median"), funt = c("median", "mean"), adds = NULL,
   split = TRUE, skipAngles = TRUE, origin = 1, z0 = 0, cruise = NULL,
   esnm = "EK60", event_compr = NULL, ow = TRUE, msg = TRUE,
-  write = TRUE, filesize = 3e+08, chunksize = 3e+08, keepEmpty = TRUE,
+  write = TRUE, filesize = 3e+08, chunksize = 3e+08,
   clear_individual = TRUE, clear_along = FALSE, maxlenb = NULL, ...)
 }
 \arguments{
@@ -45,8 +44,6 @@ compr.event(event, filenr = "all", tres = NULL, xres = NULL,
 \item{origin}{is either the time index of the origin, or the origin itself, given as c(longitude, latitude).}
 
 \item{z0}{is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).}
-
-\item{keepEmpty}{is TRUE to keep empty time intervals as filled with NAs.}
 
 \item{drop}{is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).}
 

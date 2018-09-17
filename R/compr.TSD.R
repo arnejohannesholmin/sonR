@@ -15,7 +15,6 @@
 #' @param skipAngles  is TRUE to discard electircal angles from the data (saves time).
 #' @param origin  is either the time index of the origin, or the origin itself, given as c(longitude, latitude).
 #' @param z0 is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).
-#' @param keepEmpty is TRUE to keep empty time intervals as filled with NAs.
 #' @param drop is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).
 #' @param ...  further arguments passed to psx.TSD().
 #'
@@ -33,7 +32,7 @@
 #' @export
 #' @rdname compr.TSD
 #'
-compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, keepEmpty=TRUE, drop=FALSE, ...){
+compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, drop=FALSE, ...){
 		
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -201,35 +200,50 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		########## 3. Compress in time: ##########
 		##########################################
 		if(length(tres)>0){
-			tindex = data$utim
+			vec = data$utim
 			# Split the data into time bins:
 			if(length(tres)==1){
-				tindexintervals = seq(floor(min(tindex, na.rm=TRUE)/tres), ceiling(max(tindex, na.rm=TRUE)/tres)) * tres
+				tindexintervals = seq(floor(min(vec, na.rm=TRUE)/tres), ceiling(max(vec, na.rm=TRUE)/tres)) * tres
 			}
-			tindex = findInterval(tindex, tindexintervals, all.inside=TRUE)
+			tindex = findInterval(vec, tindexintervals, all.inside=TRUE)
 		}
 		### 4. ... or compress over sailed distance: ###
 		else if(length(xres)>0){
 			# Convert to meters:
-			tindex = data$utim[1] + (data$sadv - min(data$sadv)) * 1852
+			#tindex = data$utim[1] + (data$sadv - min(data$sadv)) * 1852
+			# The above added time to distance, which does not make sense:
+			vec = data$sadv * 1852
 			# Split the data into sailed distance bins:
 			if(length(xres)==1){
-				tindexintervals = seq(floor(min(tindex, na.rm=TRUE)/xres), ceiling(max(tindex, na.rm=TRUE)/xres)) * xres
+				tindexintervals = seq(floor(min(vec, na.rm=TRUE)/xres), ceiling(max(vec, na.rm=TRUE)/xres)) * xres
 			}
-			tindex = findInterval(tindex, tindexintervals, all.inside=TRUE)
+			tindex = findInterval(vec, tindexintervals, all.inside=TRUE)
 		}
 		# Alter the dimensions, and subset the beams and vessel data:
 		if(length(tindex)){
-			# Get the unique time steps indices:
-			utindex = unique(tindex)
-			if(keepEmpty){
-				outdim[3] = length(tindexintervals)-1
-			}
-			else{
-				outdim[3] = length(utindex)
-			}
 			
-			# Extract beams data. Here the use of numt either fills the empry time intervals with NAs if keepEmpty is TRUE, or discards them if not:
+			# Add log, lon, lat and time start and end:
+			start_t <- which(!duplicated(tindex))
+			end_t <- c(start_t[-1], length(tindex))
+			
+			#data$start_t <- start_t
+			#data$end_t <- end_t
+			
+			data$log1 <- data$sadv[start_t]
+			data$lon1 <- data$lonv[start_t]
+			data$lat1 <- data$latv[start_t]
+			data$utm1 <- data$utim[start_t]
+			
+			data$log2 <- data$sadv[end_t]
+			data$lon2 <- data$lonv[end_t]
+			data$lat2 <- data$latv[end_t]
+			data$utm2 <- data$utim[end_t]
+			
+			
+			# Get the unique time steps indices:
+			outdim[3] = length(tindexintervals) - 1
+			
+			# Extract beams data. Here the use of numt either fills the empty time intervals with NAs:
 			if(length(dim(data$freq))==2){
 				beamsToBeChanged = sapply(data[beamsnames], function(xx) if(length(xx)>0) tail(dim_all(xx),1)==dimvbsc[3] else FALSE)
 				data[beamsnames][beamsToBeChanged] = applyFunt(data[beamsnames][beamsToBeChanged], tindex, funt, numt=outdim[3])
@@ -239,19 +253,22 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 			data[thesevesselnames] = applyFunt(data[thesevesselnames], tindex, funt, numt=outdim[3])
 			#data[thesevesselnames] = lapply(data[thesevesselnames], function(xx) tapply(xx, tindex, funt))
 			
-			# Extract the time information, either using the unique time intervals, or all intervals if keepEmpty is TRUE:
-			diffTindexintervals = diff(tindexintervals)
-			if(keepEmpty){
-				data$utim = tindexintervals[-length(tindexintervals)] + diffTindexintervals/2
-				# Get the number of time steps in each compressed time bin:
-				data$nmtc = zeros(outdim[3])
-				data$nmtc[unique(tindex)] = table(tindex)
-			}
-			else{
-				# Discard time intervals without data:
-				data$utim = tindexintervals[utindex] + diffTindexintervals[utindex]/2
-				data$nmtc = table(tindex)
-			}
+							# Extract the time information using all intervals:
+							diffTindexintervals = diff(tindexintervals)
+							temp <- tindexintervals[-length(tindexintervals)] + diffTindexintervals/2
+							if(length(tres)>0){
+								data$utim <- temp
+								#data$sadv <- 
+							}
+							### 4. ... or compress over sailed distance: ###
+							else if(length(xres)>0){
+								data$utim = (data$utm1 + data$utm1) / 2
+								data$sadv <- temp
+							}
+							
+							# Get the number of time steps in each compressed time bin:
+							data$nmtc = zeros(outdim[3])
+							data$nmtc[unique(tindex)] = table(tindex)
 			
 			#data$utim = tindexintervals[presentTindexintervals] + diffTindexintervals[presentTindexintervals]/2
 			##data$utim = tindexintervals[-length(tindexintervals)] + diff(tindexintervals)/2
@@ -333,23 +350,14 @@ compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bre
 		
 		setkeyv(DT, presentKeys)
 		
-		if(keepEmpty){
-			#temp = DT[, funvbsc(data$vbsc), by=key(DT)] # Error
-			data$vbsc = NAs(outdim)
-			temp = DT[, funvbsc(vbsc), by=key(DT)]
-			temp2 = as.matrix(temp[, rev(presentKeys), with=FALSE])
-			data$vbsc[temp2] = temp$V1
-		}
-		else{
-			# Discard time intervals without data:
-			#temp = DT[, funvbsc(data$vbsc), by=key(DT)] # Error
-			temp = DT[, funvbsc(vbsc), by=key(DT)]
-			data$vbsc = temp$V1
-		}
+		data$vbsc = NAs(outdim)
+		temp = DT[, funvbsc(vbsc), by=key(DT)]
+		temp2 = as.matrix(temp[, rev(presentKeys), with=FALSE])
+		data$vbsc[temp2] = temp$V1
 		
 		
 		if(!skipAngles && length(data$angt)){
-			warning("Electric angles are deprecated, and will be returned as if keepEmpty=TRUE")
+			warning("Electric angles are deprecated")
 			
 			data$angt = NAs(outdim)
 			temp = DT[, funvbsc(angt), by=key(DT)]

@@ -181,7 +181,8 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			### 	identicalnames = FALSE
 			### 	}
 			
-			identicalnames <- all(names_unixfile==names_filelist)
+			#identicalnames <- identical(names_unixfile==names_filelist)
+			identicalnames <- identical(names_unixfile, names_filelist)
 			latestfile = !any(difftime(mtime_unixfile, mtime_event[t])<0)
 			
 			# Determine whether a new UNIX time file should be written:

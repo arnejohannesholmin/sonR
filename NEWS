@@ -7,7 +7,7 @@ Library for reading, processing (noise estimation, segmentation) and converting 
 
 Changed read.event() to return a matrix of the segmentation mask, containing voxel indices, positions and sv.
 
-Moved development to GitHub
+Moved development to GitHub.
 
 
 ########## Version 1.2 ##########
@@ -15,3 +15,7 @@ Moved development to GitHub
 Added the functions readProfosPP() and plotProfosPP() for reading/processing and plotting per ping output files from profos (one line per ping per school.
 
 Minor change in rotate3D(), where NAs in the rotation angles now result in NAs in the output (before these resulted in no rotation by default).
+
+Fixed bug in read.event_unzip_vbsc(), where setting dimension to vbsc failed when lenb and numb were missing. Now setting dimension is only done if these are present.
+
+Fixed bug in compr.event().
