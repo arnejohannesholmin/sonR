@@ -20,7 +20,7 @@ EKRaw2TSD_oneFile_write(i, filelist, pingsfiles, vesselfiles, rawvesselfiles,
 compr.event_oneFile_write(i, indt, filelist, pingsfiles, vesselfiles,
   beamsfiles, t = "all", drop = TRUE, compress = FALSE, TIME = NULL,
   write = TRUE, tres = NULL, xres = NULL, zres = NULL, rres = NULL,
-  bres = NULL, funvbsc = c("median", "mean"), funt = c("median", "mean"),
+  bres = NULL, funvbsc = c("mean", "median"), funt = c("median", "mean"),
   adds = list(), split = TRUE, skipAngles = TRUE, origin = 1, z0 = 0,
   pingsnames = NULL, vesselnames = NULL, beamsnames = NULL,
   dumpfiles = NULL, maxlenb = NULL, ...)

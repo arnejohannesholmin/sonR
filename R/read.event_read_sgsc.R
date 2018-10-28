@@ -1,6 +1,6 @@
 #*********************************************
 #*********************************************
-#' Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.
+#' Reads segmentation indices 'sgsc'.
 #'
 #' @param filelist  is a vector of all file names.
 #' @param filesind  is a vector of the indexes of the segmentation files in the list of files.

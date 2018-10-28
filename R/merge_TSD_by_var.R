@@ -72,7 +72,7 @@ merge_TSD_by_var <- function(files, var="utim", ind=NULL, fun=weighted.mean, msg
 	}
 	# If ind is already given, merge the files:
 	else{
-		temp <- papply(ind, mergeOneGroup, files=files, fun=fun, msg=msg)
+		temp <- papply(ind, mergeOneGroup, files=files, fun=fun, msg=msg, pb=FALSE)
 		toRemove <- unlist(lapply(ind, "[", -1))
 		outfiles <- files[-toRemove]
 		outfiles

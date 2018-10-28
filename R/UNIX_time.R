@@ -134,7 +134,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		# Try reading the "UNIX_time.tsd" file:
 		if(!isTRUE(fresh) && length(unixfile)>0){
 			# Read the "UNIX_time.tsd" file:
-			out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, use.raw=FALSE)
+			out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, raw=FALSE)
 			
 			# If information is given for only one file, re-list the data in 'out' (due to read.TSD, which drops dimensions if only one time step is requested):
 			if(!is.list(out$l000)){

@@ -6,7 +6,7 @@
 \title{This funciton compresses the data stored in 'x' by averaging (either mean, trimmed mean or median) in depth and time bins. This is designed primarily for echosounder beams.}
 \usage{
 compr.TSD(data = NULL, tres = NULL, xres = NULL, zres = NULL,
-  rres = NULL, bres = NULL, funvbsc = c("median", "mean"),
+  rres = NULL, bres = NULL, funvbsc = c("mean", "median"),
   funt = c("median", "mean"), adds = list(), split = TRUE,
   skipAngles = TRUE, origin = 1, z0 = 0, drop = FALSE, ...)
 
@@ -14,45 +14,11 @@ compr.event(event, filenr = "all", tres = NULL, xres = NULL,
   zres = NULL, rres = NULL, bres = NULL, cores = 1,
   funvbsc = c("mean", "median"), funt = c("median", "mean"), adds = NULL,
   split = TRUE, skipAngles = TRUE, origin = 1, z0 = 0, cruise = NULL,
-  esnm = "EK60", event_compr = NULL, ow = TRUE, msg = TRUE,
-  write = TRUE, filesize = 3e+08, chunksize = 3e+08,
-  clear_individual = TRUE, clear_along = FALSE, maxlenb = NULL, ...)
+  esnm = "EK60", msg = TRUE, write = TRUE, filesize = 3e+08,
+  chunksize = 3e+08, clear_individual = TRUE, clear_along = FALSE,
+  maxlenb = NULL, ow = FALSE, ...)
 }
 \arguments{
-\item{data}{is the list of inputs variables as returned from EKRaw2TSD().}
-
-\item{tres}{The time resolution of the compressed data in seconds.}
-
-\item{xres}{The sailed distance resolution of the compressed data in meters.}
-
-\item{zres}{The depth resolution of the compressed data in meters.}
-
-\item{rres}{The range resolution of the compressed data in meters.}
-
-\item{bres}{The beam resolution of the compressed data in integer number.}
-
-\item{funvbsc}{is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively).}
-
-\item{funt}{is the same as funvbsc, but used for averaging vessel data in the new time/distance bins.}
-
-\item{adds}{is a list of additional data overriding corresponding variables in 'data'}
-
-\item{split}{used in psx.TSD().}
-
-\item{skipAngles}{is TRUE to discard electircal angles from the data (saves time).}
-
-\item{origin}{is either the time index of the origin, or the origin itself, given as c(longitude, latitude).}
-
-\item{z0}{is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).}
-
-\item{drop}{is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).}
-
-\item{...}{further arguments passed to psx.TSD().}
-
-\item{cores}{is an integer specifying the number of cores to run the compression over in parallel (should be lower than the number of cores in the computer).}
-
-\item{write}{is FALSE to only return the data and not write to TSD file.}
-
 \item{data}{is the list of inputs variables as returned from EKRaw2TSD().}
 
 \item{tres}{The time resolution of the compressed data in seconds.}
@@ -78,10 +44,14 @@ compr.event(event, filenr = "all", tres = NULL, xres = NULL,
 \item{origin}{is either the time index of the origin, or the origin itself, given as c(longitude, latitude).}
 
 \item{...}{further arguments passed to psx.TSD().}
+
+\item{cores}{is an integer specifying the number of cores to run the compression over in parallel (should be ler than the number of cores in the computer).}
+
+\item{write}{is FALSE to only return the data and not write to TSD file.}
+
+\item{Logical:}{If TRUE, overwrite the latest compression (directory).}
 }
 \value{
-
-
 
 }
 \description{
@@ -90,8 +60,6 @@ This funciton compresses the data stored in 'x' by averaging (either mean, trimm
 This funciton compresses the data stored in 'x' by averaging (either mean, trimmed mean or median) in depth and time bins. This is designed primarily for echosounder beams.
 }
 \examples{
-\dontrun{}
-
 \dontrun{}
 
 }

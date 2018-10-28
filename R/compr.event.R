@@ -8,7 +8,7 @@
 #' @param zres  The depth resolution of the compressed data in meters.
 #' @param rres  The range resolution of the compressed data in meters.
 #' @param bres  The beam resolution of the compressed data in integer number.
-#' @param cores  is an integer specifying the number of cores to run the compression over in parallel (should be lower than the number of cores in the computer).
+#' @param cores  is an integer specifying the number of cores to run the compression over in parallel (should be ler than the number of cores in the computer).
 #' @param funvbsc  is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively). Default is mean, which is recommended for volume backscattering coefficient (sv) data, which are by nature exponentially distributed (backscattering from multiple targets), and using median will underestmate the true backscatter.
 #' @param funt  is the same as funvbsc, but used for averaging vessel data in the new time/distance bins.
 #' @param adds  is a list of additional data overriding corresponding variables in 'data'
@@ -16,6 +16,7 @@
 #' @param skipAngles  is TRUE to discard electircal angles from the data (saves time).
 #' @param origin  is either the time index of the origin, or the origin itself, given as c(longitude, latitude).
 #' @param write  is FALSE to only return the data and not write to TSD file.
+#' @param   Logical: If TRUE, overwrite the latest compression (directory).
 #' @param ...  further arguments passed to psx.TSD().
 #'
 #' @return
@@ -32,7 +33,8 @@
 #' @export
 #' @rdname compr.TSD
 #'
-compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, cores=1, funvbsc=c("mean","median"), funt=c("median","mean"), adds=NULL, split=TRUE, skipAngles=TRUE, origin=1, z0=0, cruise=NULL, esnm="EK60", event_compr=NULL, ow=TRUE, msg=TRUE, write=TRUE, filesize=3e8, chunksize=3e8, clear_individual=TRUE, clear_along=FALSE, maxlenb=NULL, ...){
+compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, cores=1, funvbsc=c("mean","median"), funt=c("median","mean"), adds=NULL, split=TRUE, skipAngles=TRUE, origin=1, z0=0, cruise=NULL, esnm="EK60", msg=TRUE, write=TRUE, filesize=3e8, chunksize=3e8, clear_individual=TRUE, clear_along=FALSE, maxlenb=NULL, ow=FALSE, ...){
+	#compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, cores=1, funvbsc=c("mean","median"), funt=c("median","mean"), adds=NULL, split=TRUE, skipAngles=TRUE, origin=1, z0=0, cruise=NULL, esnm="EK60", event_compr=NULL, msg=TRUE, write=TRUE, filesize=3e8, chunksize=3e8, clear_individual=TRUE, clear_along=FALSE, maxlenb=NULL, ow=FALSE, ...){
 		
 	########## Preparation ##########
 	# Used in merge_TSD_by_Time():
@@ -57,22 +59,39 @@ compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rr
 	event <- event.path(event=event, cruise=cruise, esnm=esnm)
 	eventname <- event$eventname
 	
-	if(length(event_compr)==0){
+	#if(length(event_compr)==0){
 		# Get existing compression directories:
 		comprDir <- list.files(dirname(event$event), full.names=TRUE)
 		comprDir <- comprDir[grep("compr", basename(comprDir))]
 		comprNr <- suppressWarnings(as.numeric(gsub("(^.+compr_+)(\\d+)(_.+$)", "\\2", comprDir)))
+		
+		if(length(comprNr) == 0){
+			comprNr <- 1
+		}
+		else{
+			comprNr <- max(comprNr, na.rm=TRUE) + if(!ow) 1 else 0
+		}
+		
 		#comprNr <- comprNr[!is.na(comprNr)]
 		resAdd <- list(tres, xres, zres, rres, bres)
 		names(resAdd) <- c("tres", "xres", "zres", "rres", "bres")
 		resAdd <- resAdd[sapply(resAdd, length)>0]
 		resAdd <- paste(names(resAdd), resAdd, sep="_", collapse="_")
-		event_compr_final <- file.path(dirname(event$event), paste0("tsd_compr_", max(comprNr, 0, na.rm=TRUE)+1, "_", resAdd))
+		event_compr_final <- file.path(dirname(event$event), paste0("tsd_compr_", comprNr, "_", resAdd))
 		event_compr <- paste0(event_compr_final, "_", "individual")
-	}
-	else{
-		event_compr_final <- NULL
-	}
+		if(ow){
+			if(file.exists(event_compr_final)){
+				unlink(event_compr_final, force=TRUE, recursive=TRUE)
+			}
+			if(file.exists(event_compr)){
+				unlink(event_compr, force=TRUE, recursive=TRUE)
+			}
+			
+		}
+	#}
+	#else{
+	#	event_compr_final <- NULL
+	#}
 	
 	# List of raw files of the event. Accept a list of files, and not only a directory:
 	TIME <- UNIX_time(event$event)
@@ -138,24 +157,26 @@ compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rr
 		pingsnames <- setdiff(pingsnames, c("angl", "angt"))
 	}
 	
-	# Check if all the files are present in the tsd-directory, in which case the function is terminated:
-	if(!ow){
-		existingfiles <- list.files(event, recursive=TRUE, full.names=TRUE)
-		if(length(existingfiles)){
-			#cat("Existing files: \n",paste0(existingfiles, collapse="\n"), "\n")
-			#cat("New files: \n",paste0(c(pingsfiles[[4]], beamsfile, vesselfile, ctdfile), collapse="\n"), "\n")
-			ans <- readline("Overwrite existing files? (y/n)")
-			if(!tolower(ans)=="y"){
-				cat("Files already exist. Not overwriting\n")
-				return()
-			}
-		}
-	}
+	## Check if all the files are present in the tsd-directory, in which case the function is terminated:
+	#if(!ow){
+	#	existingfiles <- list.files(event, recursive=TRUE, full.names=TRUE)
+	#	if(length(existingfiles)){
+	#		#cat("Existing files: \n",paste0(existingfiles, collapse="\n"), "\n")
+	#		#cat("New files: \n",paste0(c(pingsfiles[[4]], beamsfile, vesselfile, ctdfile), collapse="\n"), "\n")
+	#		ans <- readline("Overwrite existing files? (y/n)")
+	#		if(!tolower(ans)=="y"){
+	#			cat("Files already exist. Not overwriting\n")
+	#			return()
+	#		}
+	#	}
+	#}
 	
 	# Move through the list of pings files and read and possibly compress:
-	indices <- papply(filenr, compr.event_oneFile_write, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
-	# Inputs used in compr.TSD:
-	tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, maxlenb=maxlenb, ..., cores=cores)
+	indices <- papply(
+		filenr, compr.event_oneFile_write, indt=indt, filelist=filelist, pingsfiles=pingsfiles, vesselfiles=vesselfiles, beamsfiles=beamsfiles, t="all", compress=compress, TIME=TIME, write=write, 
+		# Inputs used in compr.TSD:
+		tres=tres, xres=xres, zres=zres, rres=rres, bres=bres, funvbsc=funvbsc, funt=funt, adds=adds, split=split, skipAngles=skipAngles, origin=origin, z0=z0, pingsnames=pingsnames, vesselnames=vesselnames, beamsnames=beamsnames, maxlenb=maxlenb, ..., cores=cores
+	)
 		
 	
 	
@@ -205,7 +226,10 @@ compr.event <- function(event, filenr="all", tres=NULL, xres=NULL, zres=NULL, rr
 	#merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), adds=list(indt=indt), clear_along=TRUE)
 	# merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along, skipLast=TRUE) # WHY SKIPLAST?????????????????
 	#merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along)
-	merge_TSD(vesselfiles, dir=event_compr_final, linked=list(beamsfiles, pingsfiles), clear_along=clear_along)
+	
+	# 2018-09-19:
+	#merge_TSD(vesselfiles, dir=event_compr_final, linked=list(beamsfiles, pingsfiles), clear_along=clear_along)
+	merge_TSD(pingsfiles, dir=event_compr_final, linked=list(beamsfiles, vesselfiles), clear_along=clear_along)
 	
 	# Rename all files by removing "_1" just before the file extension:
 	l <- list.files(event_compr_final, full.names=TRUE)

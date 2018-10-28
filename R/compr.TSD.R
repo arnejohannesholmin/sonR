@@ -2,27 +2,6 @@
 #*********************************************
 #' This funciton compresses the data stored in 'x' by averaging (either mean, trimmed mean or median) in depth and time bins. This is designed primarily for echosounder beams.
 #'
-#' @param data  is the list of inputs variables as returned from EKRaw2TSD().
-#' @param tres  The time resolution of the compressed data in seconds.
-#' @param xres  The sailed distance resolution of the compressed data in meters.
-#' @param zres  The depth resolution of the compressed data in meters.
-#' @param rres  The range resolution of the compressed data in meters.
-#' @param bres  The beam resolution of the compressed data in integer number.
-#' @param funvbsc  is the function to apply in the compression, either given as function or as a string, in which case the strings "mean" and "median" represents fast versions of the functions with the corresponding names (sum()/length() and fastMedian(), respectively).
-#' @param funt  is the same as funvbsc, but used for averaging vessel data in the new time/distance bins.
-#' @param adds  is a list of additional data overriding corresponding variables in 'data'
-#' @param split used in psx.TSD().
-#' @param skipAngles  is TRUE to discard electircal angles from the data (saves time).
-#' @param origin  is either the time index of the origin, or the origin itself, given as c(longitude, latitude).
-#' @param z0 is the upper depth of the compression in z direction (vertically), defaulted to 0 (the sea surface).
-#' @param drop is TRUE to drop dimensions of the output vbsc (useful if only one frequency is included in the input vbsc (and the dimensions of the vbsc has been dropped)).
-#' @param ...  further arguments passed to psx.TSD().
-#'
-#' @return
-#'
-#' @examples
-#' \dontrun{}
-#'
 #' @importFrom ccaPP fastMedian
 #' @importFrom data.table := data.table key setkeyv
 #' @importFrom SimradRaw soundbeam_range
@@ -32,7 +11,7 @@
 #' @export
 #' @rdname compr.TSD
 #'
-compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, drop=FALSE, ...){
+compr.TSD <- function(data=NULL, tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("mean","median"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, z0=0, drop=FALSE, ...){
 		
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin

@@ -24,7 +24,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		beams <- Simrad_dir(beams, dira_offset=dira_offset)
 		beams <- Simrad_bwt(beams)
 		beams
-		}
+	}
 	# Function for treating the vessel dynamics:
 	EKRwa2TSD_treat_vessel <- function(vessel, rawvessel){
 		# Discard time steps which does not follow chronologically:
@@ -52,7 +52,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		#vessel$ispv <- rawvessel$iisv[atpingstime]
 		#vessel$sadv <- rawvessel$isdv[atpingstime]
 		vessel
-		}
+	}
 	
 	# Declare lists (except rawvessel, which is directly deduced from the NMEA string):
 	pings <- list()
@@ -68,11 +68,11 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	if(length(thisd)==1 && is(thisd)=="try-error"){
 		warning(paste0("Error when reading the Simrad raw file using readEKRaw(). Empty data returned: \"", thisd, "\""))
 		return(NULL)
-		}
+	}
 	# If nothing was read, return empty lists:
 	if(length(thisd)==0 || sum(unlist(lapply(thisd$data$pings, length)))==0){
 		return(NULL)
-		}
+	}
 	
 	# Correct the ping time with the offset between the first NMEA time and the first ping time:
 	timediff=NA
@@ -82,25 +82,25 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 			# This addition was found ad hoc for the MS70 data using the script "Time error in MS70 .R":
 			if(strff("ms70", EKRaw2TSD_getesnm(thisd, numt=1))){
 				TOV_offset <- -0.25/86400
-			}
+		}
 			else{
 				TOV_offset <- 0
-			}
+		}
 			timediff <- NMEA2vessel(thisd$data$NMEA$string, cleanNMEA=cleanNMEA)$imtm[1] - thisd$data$pings$time[1] + TOV_offset
 			thisd$data$pings$time <- thisd$data$pings$time + timediff
-			}
 		}
+	}
 	
 	# If specified, split the channels into separate time steps with beam modes. This is only applied if 'bmmd' is given ???????? When is this ever used ??????? (2016-12-12):
 	if(length(bmmd) == thisd$header$transceivercount){
 		head2 <- function(x, n=1, N=2){
 			if(NCOL(x)==N){
 				head(t(x), n)
-				}
+			}
 			else{
 				head(x, n)
-				}
 			}
+		}
 		numb <- thisd$header$transceivercount
 		thisd <- lapply(thisd$data, function(x1) lapply(x1, function(x2) if(is.list(x2)) lapply(x2, head2, 1, numb) else head2(x2, 1, numb)))
 	}
@@ -130,10 +130,10 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	# (2.12) plsl - sound pulse duration:
 	if(length(thisd$data$pings$transducerdepth) && all(thisd$data$pings$transducerdepth!=0)){
 		beams$psze <- -thisd$data$pings$transducerdepth[1,]
-		}
+	}
 	else{
 		beams$psze <- rep(psze, numt)
-		}
+	}
 	# (2.12) lenb - lengths of the beams:
 	beams$lenb <- thisd$data$pings$count
 
@@ -165,7 +165,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		beams$gai2 <- thisd$data$pings$gainrx
 		# (2.29) gain - gain:
 		beams$gain <- beams$gaintx + beams$gainrx
-		}
+	}
 	# Raw0:
 	else{
 		# Get the position in the pulselengthtable:
@@ -199,8 +199,8 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		if(any(beams$bmmd != bmmdFromDira)){
 			warning(paste("Some beam modes (bmmd) did not agree with the beam angles, and were changed:\n",paste(which(beams$bmmd != bmmdFromDira), collapse=", ")))
 			beams$bmmd <- bmmdFromDira
-			}
 		}
+	}
 	
 						
 	########## (2) Store raw vessel variables: ##########
@@ -227,13 +227,15 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	# (3.4) angl - Electrical angle along ship:
 	if(!skipAngles && length(thisd$data$pings$alongship_e)){
 		pings$angl <- thisd$data$pings$alongship_e
-		pings$angl <- TSD::listOfEqual2array(pings$angl)
-		}
+		# No longer used, since the new readEKRaw() outputs an array [#samples, #beams, #pings] padded with NAs.
+		#pings$angl <- TSD::listOfEqual2array(pings$angl)
+	}
 	# (3.5) angt - Electrical angle athwart ship:
 	if(!skipAngles && length(thisd$data$pings$alongship_e)){
 		pings$angt <- thisd$data$pings$alongship_e
-		pings$angt <- TSD::listOfEqual2array(pings$angt)
-		}
+		# No longer used, since the new readEKRaw() outputs an array [#samples, #beams, #pings] padded with NAs.
+		#pings$angt <- TSD::listOfEqual2array(pings$angt)
+	}
 	
 	# (3.3) vbsc - Volume backscattering coefficient:
 	isOmniSonar <- tolower(beams$esnm[[1]]) %in% c("sx80", "sh80", "su80", "sx90", "sh90", "su90")
@@ -275,13 +277,13 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		beams <- lapply(beams, readEKRaw_stripNA, valid)
 		vessel <- lapply(vessel, readEKRaw_stripNA, valid)
 		pings <- lapply(pings, readEKRaw_stripNA, valid)
-		}
+	}
 	
 	beams <- EKRwa2TSD_treat_beams(beams, dira_offset)
 	
 	if(length(rawvessel$imtm)){
 		vessel <- EKRwa2TSD_treat_vessel(vessel, rawvessel)
-		}
+	}
 	# Output the data read from the Simrad raw file:
 	c(pings, beams, vessel, rawvessel)
-	}
+}

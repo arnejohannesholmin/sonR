@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.event_read_sgsc.R
 \name{read.event_read_sgsc}
 \alias{read.event_read_sgsc}
-\title{Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.}
+\title{Reads segmentation indices 'sgsc'.}
 \usage{
 read.event_read_sgsc(filelist, var, filesind, segpar, TIME, tlist, merge,
   msg = TRUE)
@@ -22,7 +22,7 @@ read.event_read_sgsc(filelist, var, filesind, segpar, TIME, tlist, merge,
 
 }
 \description{
-Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.
+Reads segmentation indices 'sgsc'.
 }
 \examples{
 \dontrun{}
