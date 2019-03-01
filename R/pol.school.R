@@ -18,23 +18,9 @@
 #'
 pol.school=function(x,type=c("Huth","Couzin","sd","azimuth","elevation")){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2011-06-21 - Clean version
-	########### DESCRIPTION: ###########
-	# Cacluates the polarization of a school as one of the following methods: (1) The mean angle deviation between the individual directions and the mean direction of the school, given in radians (Huth and Wissel 1992, Parrish et al 2002). (2) The norm of the average direction unit vectors (Couzin et al 2002). (3) The simple standard deviation of the azimuth and elevation angles of the fish (Holmin et al 2011 (Seattle meeting)).
-	########## DEPENDENCIES: ###########	
-	#
-	############ VARIABLES: ############
-	# ---x--- is either a list of elements 'vlxf', 'vlyf' and 'vlzf', or 'rtzf' and 'rtxf', or a matrix of vectors along the rows.
-	# ---type--- is a string representing the type of polarization estimate. Currently implemented are: (1) The mean angle deviation between the individual directions and the mean direction of the school (Huth and Wissel 1992, Parrish et al 2002). (2) The norm of the average direction unit vectors (Couzin et al 2002). (3) The simple standard deviation of the azimuth and elevation angles of the fish (Holmin et al 2011 (Seattle meeting)).
 	
-	
-	##################################################
-	##################################################
 	########## Preparation ##########
 	getHuth=function(x,type="h"){
 		meandir=colMeans(x)
@@ -101,6 +87,4 @@ pol.school=function(x,type=c("Huth","Couzin","sd","azimuth","elevation")){
 	else{
 		stop("Invalid type (legal are \"Huth\", \"Couzin\" and \"sd\")")
 		}
-	##################################################
-	##################################################
-	}
+}

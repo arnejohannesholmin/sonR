@@ -10,6 +10,8 @@ medSmooth1_runmed(x, w = 3, ...)
 \item{x}{is an array to be median smoothed along the first dimension.}
 
 \item{w}{is the width of median filter (odd number).}
+
+\item{...}{Used for robustness.}
 }
 \value{
 

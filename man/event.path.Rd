@@ -4,8 +4,8 @@
 \alias{event.path}
 \title{Returns a list of the following strings: (1) the path to the event, (2) the event name, (3) the event number, (4) the path to the cruise, and (5) the cruise name.}
 \usage{
-event.path(event = 1, cruise = 2009116, esnm = "MS70", dir.type = "tsd",
-  ...)
+event.path(event = 1, cruise = 2009116, eventName = 1,
+  esnm = "MS70", dir.type = "tsd", up = 0, ...)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}
@@ -15,6 +15,8 @@ event.path(event = 1, cruise = 2009116, esnm = "MS70", dir.type = "tsd",
 \item{esnm}{is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
 
 \item{dir.type}{is the name of the directory holding the data files (usually one of "tsd" and "raw")}
+
+\item{up}{An integer value specifying how many directories the funciton should jump up before finding the event. With up=2 it is possible to change esnm in a full path to an directory ending with 'dir.type', e.g., "tsd" or "raw".}
 
 \item{...}{is used in agrep() for locating events based on approximate string matching.}
 }

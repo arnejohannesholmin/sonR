@@ -23,10 +23,6 @@
 #'
 subset_TSD <- function(data, ind=list(), range=list(), subset=NULL, ind.out=FALSE, drop=TRUE, strict=TRUE, insert.NA=FALSE, only.match=FALSE, pad=c("end","start")){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2010-03-23 - Clean version.
 	# Update: 2010-03-23 - Updated to only change the elements named "vbsc" or "mvbs, and "psx*", "psy*" and "psz*" (and oprionally "volx) Previously the other elements of the input 'data' were lost.
@@ -36,24 +32,7 @@ subset_TSD <- function(data, ind=list(), range=list(), subset=NULL, ind.out=FALS
 	# Update: 2011-05-20 - Added the option 'only.match' for subsetting only the arrays of the same length as 'subset'.
 	# Update: 2013-04-02 - Removed 'affect' and fixed bugs.
 	# Last: 2013-08-07 - Implemented the function extract.range.TSD().
-	########### DESCRIPTION: ###########
-	# Extracts a subset of TSD data according to the array subset 'ind' and/or the cartesian subset 'range' and/or the logical/numeric vector of subscripts 'subset'. 
-	########## DEPENDENCIES: ###########
-	# extractIndSubset(), extract.range.TSD()
-	############ VARIABLES: ############
-	# ---data--- is a list of elements named according to the TSD file format.
-	# ---ind--- is a list of indexes, as typed into the [] of an array, where 0 and NULL denotes all indexes.
-	# ---range--- is a list of elements with names matching names if 'data', specifying the range of the corresponding elements.
-	# ---subset--- is a numeric or logical vector/expression indicating elements or rows to keep (as used in subset()). Missing values are taken as false, and subset=0 or subset=NULL indicates no subsetting.
-	# ---ind.out--- is TRUE if the indexes for the elements segmented are to be returned.
-	# ---drop--- is TRUE if dimensions of only one level is to be removed from the output.
-	# ---strict--- is TRUE if strict inequality is to be used when subsetting according to 'range'.
-	# ---insert.NA--- is TRUE if the discarded data are to be kept as NA.
-	# ---only.match--- is TRUE if only the arrays of length equal to the length of 'subset' are to be subsetted using 'subset'.
 		
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# 'strict' is used when subsetting according to 'range':
 	if(strict){
@@ -126,6 +105,4 @@ subset_TSD <- function(data, ind=list(), range=list(), subset=NULL, ind.out=FALS
 	
 	# Extract the subset given by 'range' and return:
 	extract.range.TSD(data=data, range=range, this=this, treated=treated, ineq=ineq, ind.out=ind.out, insert.NA=insert.NA)
-	##################################################
-	##################################################
-	}
+}

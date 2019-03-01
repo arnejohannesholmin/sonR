@@ -4,8 +4,25 @@
 \alias{ellipse}
 \title{Returns a matrix of two columns representing x- and y-values of positions on an ellipse of horizontal axis 'a', vertical axis 'b' and origin 'origin', defined by the angles given by 'ang' in a polar coordinate system centered at 'origin', or by 'x' or 'y' in a cartesian coordinate system.}
 \usage{
-ellipse(origin = c(0, 0), a = 2, b = 1, ang = seq(0, 2 * pi, length.out
-  = n), x = NULL, y = NULL, n = 100, aspectcomp = FALSE)
+ellipse(origin = c(0, 0), a = 2, b = 1, ang = seq(0, 2 * pi,
+  length.out = n), x = NULL, y = NULL, n = 100, aspectcomp = FALSE)
+}
+\arguments{
+\item{origin}{The origin of the ellipse.}
+
+\item{a}{The horizontal axis of the ellipse.}
+
+\item{b}{The vertical axis of the ellipse.}
+
+\item{ang}{A vector of angles defining the points on the ellipse, as seen in a polar coordinate system centered at 'origin'.}
+
+\item{x}{A vector of x-values at which the ellipse is caclulated.}
+
+\item{y}{A vector of y-values at which the ellipse is caclulated.}
+
+\item{n}{The length of 'ang' (if different from NULL) as a sequence between the first and the second element of 'ang'.}
+
+\item{aspectcomp}{Logical: If TRUE the points are attempted to be positioned evenly along the curve of the ellipse, and not by even angle increments.}
 }
 \value{
 

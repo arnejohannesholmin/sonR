@@ -14,6 +14,8 @@ echoIBM.getSchoolfileType(schoolfiles, dynschoolnames, staticschoolnames,
 \item{dynschoolnames}{is a vector of four character strings representing dynamic school valiable names.}
 
 \item{staticschoolnames}{is a vector of four character strings representing static school valiable names.}
+
+\item{thr}{A treshold value in [0, 1], with defaultvalue 0.5 indicating that at least half of the variables read from the \code{schoolfiles} must be dynamic or static for the files to be labeled accoringly.}
 }
 \value{
 

@@ -11,32 +11,18 @@
 #'
 #' @importFrom TSD read.TSD strff write.TSD
 #' @importFrom tools file_ext
-
 #'
 #' @export
 #' @rdname sgPM
 #'
-sgPM<-function(segfiles){
+sgPM <- function(segfiles){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2012-09-19 - Clean version.
 	# Update: 2012-10-02 - Changed to return 9 columns, where column 8 is the size of the file and column 9 is the file index in the sorted list of files. Column 9 is used to coordinate reading and the sgPM.
 	# Update: 2012-10-10 - Changed to return 11 columns, adding the relative lower and upper schooling threshold.
 	# Last: 2013-07-16 - Changed to the new format of variable names and values enclosed in <>. This can accept any variable name.
-	########### DESCRIPTION: ###########
-	# Reads the ordered matrix of segmentation parameters from the files given in 'segfiles', or attempts to read the variable 'sgPM' directly if 'segfiles' is a directory. If 'segfiles' is a directory, and the variable 'sgPM' is not present, a file is written with the matrix of segmentation parameters ("sgPM.tsd").
-	########## DEPENDENCIES: ###########
-	# read.TSD(), write.TSD()
-	############ VARIABLES: ############
-	# ---segfiles--- is a string or vector of strings representing the path to the files or the directory from which to obtain the UNIX_time information, either by reading the UNIX_time file or by generating new information.
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Vector of the variable names formerly used in the file names of segmentation files:
 	used=c("bwG1", "bwG2", "bwG3", "bwGp", "lsth", "usth", "rlst", "rust", "sgth", "sgt0", "misM", "MSVS", "code", "mdf1", "mdf2", "mdf3", "mdft", "nsTh", "dBan", "dBb1", "dBb2", "dBb3", "dBbs", "smty", "sfnr")
@@ -149,6 +135,4 @@ sgPM<-function(segfiles){
 		}
 	
 	out
-	##################################################
-	##################################################
-	}
+}

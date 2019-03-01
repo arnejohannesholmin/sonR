@@ -12,6 +12,8 @@ extractBeams(data, beams = 1, var = "all", drop = FALSE)
 \item{beams}{is an integer vectir giving the beams to extract.}
 
 \item{var}{is a vector of the TSD-names og the variable to extract the time step from. Variables that are not present in 'var' are returned unaltered. The default var='all' select all variables.}
+
+\item{drop}{Logical: If TRUE drop empty dimensionsof the output.}
 }
 \value{
 

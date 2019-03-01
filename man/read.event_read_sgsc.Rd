@@ -10,6 +10,8 @@ read.event_read_sgsc(filelist, var, filesind, segpar, TIME, tlist, merge,
 \arguments{
 \item{filelist}{is a vector of all file names.}
 
+\item{var}{is a vector of the variables to read.}
+
 \item{filesind}{is a vector of the indexes of the segmentation files in the list of files.}
 
 \item{segpar}{is a list of elements named "bwGp", "lsth"/"rlst", "usth"/"rust", or "sgth"/"sgt0" specifying the parameters of the segmentation data to read.}
@@ -17,6 +19,10 @@ read.event_read_sgsc(filelist, var, filesind, segpar, TIME, tlist, merge,
 \item{TIME}{is the list returned from UNIX_time().}
 
 \item{tlist}{is the list of time indexes to be read for each file.}
+
+\item{merge}{is TRUE to merge the segmentation data from multiple files.}
+
+\item{msg}{is TRUE to pring messages to the console.}
 }
 \value{
 

@@ -4,17 +4,17 @@
 \alias{get.nrns.event}
 \title{Estimates the mean over time steps of close range noise for each voxel of an underwater acoustic system, using mean() or meanexp.quantile() depending on whether the periodic noise is in effect, and writes the result to file in the TSD format if 'con' is given. The near range noise estimates are smoothed with a kernel smoother given by 'filter'. The variance of the Nadaraya-Watson estimator can be derived straight forward by
   var( sum( w_i * x_i ) )
-= sum( var( w_i * x_i ) )
-= sum( w_i^2 * var( x_i ) )
-= sum( w_i^2 * s^2 )
-= sum( w_i^2 ) * s^2 
-= sum( (k_i / sum(k_i))^2 ) * s^2 
-= sum( k_i^2 / sum(k_i)^2 ) * s^2 
-= sum( k_i^2 ) / sum(k_i)^2 * s^2}
+<- sum( var( w_i * x_i ) )
+<- sum( w_i^2 * var( x_i ) )
+<- sum( w_i^2 * s^2 )
+<- sum( w_i^2 ) * s^2 
+<- sum( (k_i / sum(k_i))^2 ) * s^2 
+<- sum( k_i^2 / sum(k_i)^2 ) * s^2 
+<- sum( k_i^2 ) / sum(k_i)^2 * s^2}
 \usage{
 get.nrns.event(con = NULL, event = NULL, cruise = NULL, t = NULL,
-  bgns = NULL, filter = dnorm(-20:20, sd = 4), nsdn = 1000, farv = 1000,
-  surface = 451:500, esnm = "MS70", ...)
+  bgns = NULL, filter = dnorm(-20:20, sd = 4), nsdn = 1000,
+  farv = 1000, surface = 451:500, esnm = "MS70", ...)
 }
 \arguments{
 \item{con}{is the connection object or a character string naming the output file.}
@@ -35,6 +35,8 @@ get.nrns.event(con = NULL, event = NULL, cruise = NULL, t = NULL,
 
 \item{surface}{is a vector of indexes for the beams affected by the surface noise (extrapolated in the near range noise estimation).}
 
+\item{esnm}{Deprecated, use full path instead. Specifies the acoustical instrument to use.}
+
 \item{...}{variables used in write.TSD() (such as 'ow' for overwriting existing files).}
 }
 \value{
@@ -43,13 +45,13 @@ get.nrns.event(con = NULL, event = NULL, cruise = NULL, t = NULL,
 \description{
 Estimates the mean over time steps of close range noise for each voxel of an underwater acoustic system, using mean() or meanexp.quantile() depending on whether the periodic noise is in effect, and writes the result to file in the TSD format if 'con' is given. The near range noise estimates are smoothed with a kernel smoother given by 'filter'. The variance of the Nadaraya-Watson estimator can be derived straight forward by
   var( sum( w_i * x_i ) )
-= sum( var( w_i * x_i ) )
-= sum( w_i^2 * var( x_i ) )
-= sum( w_i^2 * s^2 )
-= sum( w_i^2 ) * s^2 
-= sum( (k_i / sum(k_i))^2 ) * s^2 
-= sum( k_i^2 / sum(k_i)^2 ) * s^2 
-= sum( k_i^2 ) / sum(k_i)^2 * s^2
+<- sum( var( w_i * x_i ) )
+<- sum( w_i^2 * var( x_i ) )
+<- sum( w_i^2 * s^2 )
+<- sum( w_i^2 ) * s^2 
+<- sum( (k_i / sum(k_i))^2 ) * s^2 
+<- sum( k_i^2 / sum(k_i)^2 ) * s^2 
+<- sum( k_i^2 ) / sum(k_i)^2 * s^2
 }
 \examples{
 \dontrun{}

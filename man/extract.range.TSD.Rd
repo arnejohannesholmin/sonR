@@ -14,6 +14,8 @@ extract.range.TSD(data = list(), range = list(), this = list(),
 
 \item{this}{is an optional previously generated list of indexes as returned from extract().}
 
+\item{treated}{A vector of variable names already treated.}
+
 \item{ineq}{is a string giving the inequality function to apply to the selection ("<" or "<=").}
 
 \item{ind.out}{is TRUE if the indexes for the elements segmented are to be returned.}

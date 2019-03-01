@@ -7,14 +7,14 @@
 write.noise.cruise(con = NULL, cruise = NULL, esnm = NULL,
   treat = c("bgns", "pdns", "nrns", "hins"), dir.data = NULL,
   event_p = NULL, t_p = NULL, noise = NULL, fftthreshold = 0.145,
-  nsind = 0.75, acfq = 100, prob = 0.2, type = 6, tries = c(10, 10),
-  thr = 0.001, trim = 0.1, search = 4, kurtosis = c(0.1, 3),
+  nsind = 0.75, acfq = 100, prob = 0.2, type = 6, tries = c(10,
+  10), thr = 0.001, trim = 0.1, search = 4, kurtosis = c(0.1, 3),
   reffan = 16, scale = 1e-14, lowerpar = c(0.001, 0.001, -2 * pi),
   startpar = c(1, 2, 3), upperpar = c(1000, 6, 4 * pi), kern = NULL,
-  high = Inf, event_a = NULL, t_a = NULL, filter = dnorm(-20:20, sd =
-  4), nsdn = 1000, farv = 1000, surface = 451:500, turns = 114, k = 5,
-  q = c(1000, 100), beta_school = 2e-04, ind = list(-(1:100), NULL),
-  max.memory = 2e+09, ...)
+  high = Inf, event_a = NULL, t_a = NULL, filter = dnorm(-20:20, sd
+  = 4), nsdn = 1000, farv = 1000, surface = 451:500, turns = 114,
+  k = 5, q = c(1000, 100), beta_school = 2e-04,
+  ind = list(-(1:100), NULL), max.memory = 2e+09, ...)
 }
 \arguments{
 \item{con}{is the path to the file to which the noise estimates schould be written. If con==NULL, no data is written to file (only returned from the function). If con==TRUE, the data is written to the default file located in the directory "Noise/Main" in the cruise directory, and named with the cruise name and the events used to estimate the various noise types.}

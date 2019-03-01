@@ -10,7 +10,7 @@ extrapolate.matrix(x, a = NULL, b = NULL, along = 0, grid = FALSE,
 \arguments{
 \item{x}{is the input vector or matrix/data.frame. If 'x' is a vector, it is interpreted as a matrix/data.frame of one column}
 
-\item{a}{and 'b' give the range to which the column given by 'along' is extrapolated/shrinked. If along is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns (negative values imply shrinkage). If b==NULL and 'a' has length > 1, the second element of 'a' is interpreted as 'b'.}
+\item{a, b}{give the range to which the column given by 'along' is extrapolated/shrinked. If along is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns (negative values imply shrinkage). If b==NULL and 'a' has length > 1, the second element of 'a' is interpreted as 'b'.}
 
 \item{along}{is the column along which the extrapolation is specified.}
 

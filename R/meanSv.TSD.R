@@ -2,7 +2,14 @@
 #*********************************************
 #' Locates the point at which the kernel desity estimate of the Sv of the subset is equal to half its maximum, and uses Paper III of the PhD of Holmin to estimate the mean Sv from this. The output variables all start with X, denoting the SX90 segmentation method, but are applicable to all segmentation methods.
 #'
-#' @param data  is a list containing the acoustic data eihter given as 'vbss' for a segment of the data or as 'vbsc'.
+#' @param data			A list containing the acoustic data eihter given as 'vbss' for a segment of the data or as 'vbsc'.
+#' @param plot.hist		Logical: If TRUE plot the histogram of the Sv.
+#' @param allow.vbsc	?
+#' @param list.out		Use a list as output.
+#' @param minlen		The minimum length of the data, at and below which NA is returned.
+#' @param type			A single character denoting the type of segmentation to label the output with.
+#' @param enlarged		Logical: If TRUE add "E" to the variable names and remove the last character.
+#' @param ...			Passed on to \code{\link{density}} and \code{\link{hist}}.
 #'
 #' @return
 #'
@@ -15,7 +22,7 @@
 #' @export
 #' @rdname meanSv.TSD
 #'
-meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, minlen=1, type="H", enlarged=FALSE, ...){
+meanSv.TSD <- function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, minlen=1, type="H", enlarged=FALSE, ...){
 	
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin
@@ -42,7 +49,7 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 	if(length(data$vbss)>1){
 		suppressWarnings(x <- 10*log10(data$vbss))
 		if(length(x)>1){
-			suppressWarnings(kd<-density(x,na.rm=TRUE,...))
+			suppressWarnings(kd<-density(x, na.rm=TRUE, ...))
 			}
 		else{
 			kd=x
@@ -51,7 +58,7 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 	else if(length(data$sgsc)>1 && length(data$vbsc)>1){
 		suppressWarnings(x <- 10*log10(data$vbsc[data$sgsc]))
 		if(length(x)>1){
-			suppressWarnings(kd<-density(x,na.rm=TRUE,...))
+			suppressWarnings(kd<-density(x, na.rm=TRUE, ...))
 			}
 		else{
 			kd=x
@@ -60,7 +67,7 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 	else if(allow.vbsc && length(data$vbsc)>1){
 		suppressWarnings(x <- 10*log10(data$vbsc))
 		if(length(x)>1){
-			suppressWarnings(kd<-density(x,na.rm=TRUE,...))
+			suppressWarnings(kd<-density(x, na.rm=TRUE, ...))
 			}
 		else{
 			kd=x
@@ -69,7 +76,7 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 	else if(allow.vbsc && length(data$mvbs)>1){
 		suppressWarnings(x <- data$mvbs)
 		if(length(x)>1){
-			suppressWarnings(kd<-density(x,na.rm=TRUE,...))
+			suppressWarnings(kd<-density(x, na.rm=TRUE, ...))
 			}
 		else{
 			kd=x
@@ -163,10 +170,10 @@ meanSv.TSD<-function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, min
 
 	# Return:
 	if(list.out){
-		out = list(Hasv, HaSv, Hdsv, HdSv, Hmsv, HmSv, Hpsv, HpSv, Hhsv, HhSv, HGsv, HGSv)
+		out = list(Hasv=Hasv, HaSv=HaSv, Hdsv=Hdsv, HdSv=HdSv, Hmsv=Hmsv, HmSv=HmSv, Hpsv=Hpsv, HpSv=HpSv, Hhsv=Hhsv, HhSv=HhSv, HGsv=HGsv, HGSv=HGSv)
 		}
 	else{
-		out = c(Hasv, HaSv, Hdsv, HdSv, Hmsv, HmSv, Hpsv, HpSv, Hhsv, HhSv, HGsv, HGSv)
+		out = c(Hasv=Hasv, HaSv=HaSv, Hdsv=Hdsv, HdSv=HdSv, Hmsv=Hmsv, HmSv=HmSv, Hpsv=Hpsv, HpSv=HpSv, Hhsv=Hhsv, HhSv=HhSv, HGsv=HGsv, HGSv=HGSv)
 		}
 	# Add names:
 	namesend = c("asv", "aSv", "dsv", "dSv", "msv", "mSv", "psv", "pSv", "hsv", "hSv", "Gsv", "GSv")

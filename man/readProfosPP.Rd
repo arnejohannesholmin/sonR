@@ -6,11 +6,11 @@
 \title{Plot output from readProfosPP.}
 \usage{
 plotProfosPP(x, ind = c(1, 2), col = list(ship = c("black", "purple"),
-  school = c("black", "brown", "orange"), link = "green4"), pch = list(ship =
-  "*", school = 1), cex = list(ship = c(1, 0.5), school = c(1, 0.5, 0.5), link
-  = 1), lwd = list(track = 0.5, link = 1, sv = 1), plotlink = TRUE,
-  linkvar = "lowess", every = NULL, use = c("sv", "Sv"), svQ = c(0.1,
-  0.9), ...)
+  school = c("black", "brown", "orange"), link = "green4"),
+  pch = list(ship = "*", school = 1), cex = list(ship = c(1, 0.5),
+  school = c(1, 0.5, 0.5), link = 1), lwd = list(track = 0.5, link = 1,
+  sv = 1), plotlink = TRUE, linkvar = "lowess", every = NULL,
+  use = c("sv", "Sv"), svQ = c(0.1, 0.9), ...)
 
 readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
   compensateCurrent = TRUE, sparfact = 1, spar0 = 0.5, byId = TRUE,
@@ -59,8 +59,6 @@ readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
 }
 \description{
 This function creates two plots, (1) one showing the raw and spline smoothed track of the vessel (ship) and the raw and spline and lowess smoothed track of the school, and (2) a related plot showing the mean volume backscattering coefficient/strength of the school as a function of incidence angle rotation (increasing along the unit circle).
-
-Read per-ping-output file from Profos (one line per ping per school).
 }
 \examples{
 \dontrun{}

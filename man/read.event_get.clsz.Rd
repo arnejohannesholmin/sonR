@@ -13,11 +13,11 @@ read.event_get.clsz(out, beamsfiles, beamsfilesind, tlist, pamkpar, esnm)
 
 \item{beamsfilesind}{is a vector of the indexes of the beams-files in the list of files.}
 
+\item{tlist}{a list of time step indices.}
+
 \item{pamkpar}{is a list of parameters ('krange', 'criterion', 'alpha' and 'mindist') used pamk() when clustering the segmented voxels 'sgsc'. The voxels 'sgsc' are also ordered so that the voxels belonging to the largest cluster lead and the second to largest cluster follows. A suggested set of parameters are pamkpar=list(krange=1:4,criterion="asw",alpha=0.05,N=1e2,mindist=100).}
 
 \item{esnm}{is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
-
-\item{TIME}{is the list returned from UNIX_time().}
 }
 \value{
 

@@ -3,10 +3,13 @@
 #' Reads segmentation indices 'sgsc'.
 #'
 #' @param filelist  is a vector of all file names.
+#' @param var  is a vector of the variables to read.
 #' @param filesind  is a vector of the indexes of the segmentation files in the list of files.
 #' @param segpar  is a list of elements named "bwGp", "lsth"/"rlst", "usth"/"rust", or "sgth"/"sgt0" specifying the parameters of the segmentation data to read.
 #' @param TIME  is the list returned from UNIX_time().
 #' @param tlist  is the list of time indexes to be read for each file.
+#' @param merge  is TRUE to merge the segmentation data from multiple files.
+#' @param msg  is TRUE to pring messages to the console.
 #'
 #' @return
 #'
@@ -18,12 +21,8 @@
 #' @export
 #' @rdname read.event_read_sgsc
 #'
-read.event_read_sgsc<-function(filelist, var, filesind, segpar, TIME, tlist, merge, msg=TRUE){
+read.event_read_sgsc <- function(filelist, var, filesind, segpar, TIME, tlist, merge, msg=TRUE){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2012-08-28 - Clean version.
 	# Update: 2012-08-29 - Changed to select the value of the segmentation parameters that is closest to the one given in 'segpar'.
@@ -31,21 +30,11 @@ read.event_read_sgsc<-function(filelist, var, filesind, segpar, TIME, tlist, mer
 	# Update: 2012-10-10 - Changed according to the change in sgPM.
 	# Update: 2012-10-14 - Fixed bug when inputing segpar as a numeric index.
 	# Last: 2013-10-09 - Included removeDuplicated_tlist() in read.event_read_sgsc() in order to avoid warnings associated with duplicated time steps before the selection of segmentation files is done.
-	########### DESCRIPTION: ###########
-	# Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---filelist--- is a vector of all file names.
-	# ---filesind--- is a vector of the indexes of the segmentation files in the list of files.
-	# ---segpar--- is a list of elements named "bwGp", "lsth"/"rlst", "usth"/"rust", or "sgth"/"sgt0" specifying the parameters of the segmentation data to read.
-	# ---TIME--- is the list returned from UNIX_time().
-	# ---tlist--- is the list of time indexes to be read for each file.
-	
-
-	##################################################
-	##################################################
-	if(!is.numeric(segpar)){
+	if(length(segpar) == 0 && length(filelist[filesind])){
+		segfile <- 1
+		info <- list(segfilenr=segfile, segfile=filelist[filesind][segfile])
+	}
+	else if(!is.numeric(segpar)){
 		# 'segpar' may be given with more user friendly variables:
 		if("h" %in% names(segpar) && !"bwGp" %in% names(segpar)){
 			segpar$bwGp=segpar$h
@@ -138,7 +127,9 @@ read.event_read_sgsc<-function(filelist, var, filesind, segpar, TIME, tlist, mer
 			cat(ngettext(length(segfile), "The following segmentation file selected", "The following segmentation files selected"),"\n",paste(seq_along(segfile),filelist[filesind][segfile],collapse="\n"),"\n", "for the following segmentation parameters:\n", segparinfo)
 		}
 		
-		suppressWarnings(c(read.TSDs(filelist[filesind][segfile], t=tlist[filesind[segfile]], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=TRUE),list(sgPM=thissegpar, segfilenr=segfile, segfile=filelist[filesind][segfile])))
+		info <- list(sgPM=thissegpar, segfilenr=segfile, segfile=filelist[filesind][segfile])
+		
+		#suppressWarnings(c(read.TSDs(filelist[filesind][segfile], t=tlist[filesind[segfile]], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=TRUE),list(sgPM=thissegpar, segfilenr=segfile, segfile=filelist[filesind][segfile])))
 		}
 	# Else the segmentation file numbers are already given (segpar numeric):
 	else{
@@ -148,8 +139,14 @@ read.event_read_sgsc<-function(filelist, var, filesind, segpar, TIME, tlist, mer
 			cat(ngettext(length(segfile), "The following segmentation file selected", "The following segmentation files selected"),"\n",paste(seq_along(segfile),filelist[filesind][segfile],collapse="\n"),"\n", "for the following segmentation parameter:\n", segparinfo)
 		}
 		
-		suppressWarnings(c(read.TSDs(filelist[filesind][segfile], t=tlist[filesind[segfile]], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=TRUE),list(segfilenr=segfile, segfile=filelist[filesind][segfile])))
+		info <- list(segfilenr=segfile, segfile=filelist[filesind][segfile])
+		
+		#suppressWarnings(c(read.TSDs(filelist[filesind][segfile], t=tlist[filesind[segfile]], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=TRUE),list(segfilenr=segfile, segfile=filelist[filesind][segfile])))
 		}
-	##################################################
-	##################################################
+	
+	
+	suppressWarnings(out <- read.TSDs(filelist[filesind][segfile], t=tlist[filesind[segfile]], var=var, dimension=TRUE, merge=merge, clean=FALSE, indt=FALSE, msg=FALSE, addNvar=TRUE))
+	
+	out <- c(out, info)
+	out
 	}

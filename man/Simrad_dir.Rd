@@ -8,6 +8,8 @@ Simrad_dir(data, dira_offset = 0)
 }
 \arguments{
 \item{data}{is a list containing the rquired variables 'dirx' (vector of x-beam-directions), 'diry' (vector of y-beam-directions), 'dirz' (vector of z-beam-directions), and 'esnm' (name of the echosounder/sonar).}
+
+\item{dira_offset}{An optional offset in the azimuth direction 'dira'.}
 }
 \value{
 

@@ -13,7 +13,7 @@
 #'
 #' @importFrom data.table rbindlist
 #' @importFrom SimradRaw soundbeam_range
-#' @importFrom TSD arr.ind2ind write.TSD NAs zeros utim2ftim merge_TSD papply
+#' @importFrom TSD arr.ind2ind write.TSD NAs zeros utim2ftim combine.TSD papply
 #' @importFrom utils tail head read.table
 #'
 #' @export
@@ -300,7 +300,7 @@ LSSS2TSD <- function(event=NULL, filesize=3e8, chunksize=1e8, keep.temp=FALSE, c
 	papply(pingInd, getOnePing, files=lclean[["Export/ProfosSchoolSamples"]], outfiles=pingsfiles, vessel=vessel, beams=beams, cores=cores, outfile=FALSE)
 	
 	# Simply merge the pings files (pad=FALSE ensures that segmented data, using the vxIX, are saved in a list, and not padded with NAs):
-	pingsfiles = merge_TSD(pingsfiles, dir=tsdDir, reserve=TRUE, filesize=filesize, chunksize=chunksize, cores=cores, pad=FALSE, ...)
+	pingsfiles = combine.TSD(pingsfiles, dir=tsdDir, reserve=TRUE, filesize=filesize, chunksize=chunksize, cores=cores, pad=FALSE, ...)
 	
 	# Delete the individual pings:
 	if(!keep.temp){

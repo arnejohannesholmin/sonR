@@ -3,9 +3,10 @@
 #' Function for extracting the type (dynamic or static) of the school files given by 'schoolfiles'. Four vectors are returned:
 #' NA
 #'
-#' @param schoolfiles  is a vector of paths to school files.
-#' @param dynschoolnames  is a vector of four character strings representing dynamic school valiable names.
-#' @param staticschoolnames  is a vector of four character strings representing static school valiable names.
+#' @param schoolfiles		is a vector of paths to school files.
+#' @param dynschoolnames	is a vector of four character strings representing dynamic school valiable names.
+#' @param staticschoolnames	is a vector of four character strings representing static school valiable names.
+#' @param thr				A treshold value in [0, 1], with defaultvalue 0.5 indicating that at least half of the variables read from the \code{schoolfiles} must be dynamic or static for the files to be labeled accoringly.
 #'
 #' @return
 #'
@@ -51,7 +52,7 @@ echoIBM.getSchoolfileType <- function(schoolfiles, dynschoolnames, staticschooln
 	########## Execution ##########
 	# For loop through the school files:
 	for(i in seq_along(schoolfiles)){
-		this=suppressWarnings(read.TSD(schoolfiles[i], var=NULL, header=TRUE))
+		this <- suppressWarnings(read.TSD(schoolfiles[i], var=NULL, header=TRUE))
 		thislabl <- setdiff(this$labl, c("size","info","d000", labl.TSD("t")))
 		# Make an exeption for "size", "info" and "d000", which may be present both in dynamic and static data:
 		if(mean(thislabl %in% staticschoolnames) > thr){

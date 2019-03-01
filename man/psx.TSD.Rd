@@ -6,6 +6,15 @@
 \usage{
 psx.TSD(x, pad = TRUE, split = TRUE, ...)
 }
+\arguments{
+\item{x}{A list of data as the output from read.event(), containing the variables 'lenb', 'dire', 'psxv', 'psyv', 'pszv', and those required by \code{\link{soundbeam.TSD}}.}
+
+\item{pad}{Logical: If TRUE, pad with NAs for non-equal lengths of beams.}
+
+\item{split}{See \code{\link{mergeListKeepDimensions}}.}
+
+\item{...}{Passed on to \code{\link{soundbeam.TSD}}.}
+}
 \value{
 
 }

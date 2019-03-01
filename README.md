@@ -4,7 +4,7 @@ sonR R package
 This package contains many functions used by the packages echoIBM and cpplot3d.
 
 Version: 1.2
-Required R version: 3.3.3
+Required R version: 3.4.4
 
 Installation
 =====

@@ -6,6 +6,7 @@
 #' @param cruise  is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event to be read.
 #' @param esnm  is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.
 #' @param dir.type  is the name of the directory holding the data files (usually one of "tsd" and "raw")
+#' @param up	An integer value specifying how many directories the funciton should jump up before finding the event. With up=2 it is possible to change esnm in a full path to an directory ending with 'dir.type', e.g., "tsd" or "raw".
 #' @param ...  is used in agrep() for locating events based on approximate string matching.
 #'
 #' @return
@@ -19,20 +20,12 @@
 #' @export
 #' @rdname event.path
 #'
-event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...){
+event.path <- function(event=1, cruise=2009116, eventName=1, esnm="MS70", dir.type="tsd", up=0, ...){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############### LOG: ###############
-	# Start: 2012-07-07 - Clean version.
-
-	
-	##################################################
-	##################################################
 	########## Preparation ##########
 	# Functions used for expanding the file path to the folders specifying the 'esnm' and the 'dir.type':
 	getPresent_esnm = function(event, esnm){
-		present_esnm = basename(list.dirs(event))
+		present_esnm = basename(list.dirs(event, recursive=FALSE))
 		if(length(present_esnm)==0){
 			stop(paste("No directories in ", event,sep=""))
 		}
@@ -45,7 +38,7 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 		}
 	}
 	getPresent_dir.type = function(event, dir.type){
-		present_dir.type = basename(list.dirs(event))
+		present_dir.type = basename(list.dirs(event, recursive=FALSE))
 		if(length(present_dir.type)==0){
 			stop(paste("No directories in ", event,sep=""))
 		}
@@ -64,6 +57,12 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 	}
 	event = event[1]
 	
+	if(up > 0){
+		for(i in seq_len(up)){
+			event <- dirname(event)
+		}
+	}
+	
 	# Somtimes it is simpler to only check that the event exists:
 	#if(length(event)==1 && isTRUE(file.info(event)$isdir)){
 	#	return(event)
@@ -81,7 +80,6 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 		warningevent = list()
 	}
 	
-
 	########## Execution ##########
 	# If the event ends with a folder called "tsd" or "raw", things are assumed to be ok:
 	if(tolower(basename(as.character(event[1]))) %in% c("raw","tsd")){
@@ -103,9 +101,9 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 	
 	# Expand to the expected folder:
 	if(length(event_subdir)==atEvent){
-		#warning("The event not suffuciently specified. The first event chosen")
-		eventlist = list.files(event)
-		event = file.path(event, eventlist[1])
+		#warning("The event not sufficiently specified. The first event chosen")
+		eventlist = list.dirs(event, full.names=FALSE, recursive=FALSE)
+		event = file.path(event, if(is.character(eventName)) eventName else eventlist[eventName])
 		# Get the list of esnm:
 		event = getPresent_esnm(event,esnm)
 		# Get the list of data file types:
@@ -120,6 +118,10 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 	else if(length(event_subdir)==atEvent+2){
 		# Get the list of data file types:
 		event = getPresent_dir.type(event,dir.type)
+	}
+	else if(length(event_subdir)==atEvent+3){
+		# Get the list of data file types:
+		event = getPresent_dir.type(dirname(event),dir.type)
 	}
 	
 	if(is.na(file.info(event)$isdir)){
@@ -160,7 +162,14 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 	}
 	
 	# If the 'event' was NULL, it was set to 1 to locate the cruise, and then it is set to NULL again here:
-	out = list(event=event, eventname=eventname, eventnr=eventnr, cruise=cruise, cruisename=cruisename, esnm=basename(dirname(event)))
+	out = list(
+		event = path.expand(event), 
+		eventname = eventname, 
+		eventnr = eventnr, 
+		cruise = if(!is.na(cruise)) path.expand(cruise) else cruise, 
+		cruisename = cruisename, 
+		esnm = basename(dirname(event))
+	)
 	
 	if(length(cruise)==0){
 		out["cruise"] = list(NULL)
@@ -171,7 +180,6 @@ event.path <- function(event=1, cruise=2009116, esnm="MS70", dir.type="tsd", ...
 		out["eventname"] = list(NULL)
 		out["eventnr"] = list(NULL)
 	}
+	
 	out
-	##################################################
-	##################################################
 }

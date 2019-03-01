@@ -4,16 +4,18 @@
 \alias{getFanWidth}
 \title{Calculates the width of a 2-D sonar fan given the specifications in the parameter fanWidth. Only one time step is treated.}
 \usage{
-getFanWidth(data, fanWidth, stretch = 1, ind = NULL, range = 0)
+getFanWidth(data, fanWidth, stretch = 1, range = 0, ind = NULL)
 }
 \arguments{
-\item{data}{is the list of inputs variables as returned from read.TSD (including ).}
+\item{data}{The list of inputs variables as returned from read.TSD (including ).}
 
-\item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
+\item{fanWidth}{Has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
 
-\item{stretch}{is used to stretch the voxels of the ME70 multibeam echosounder in the direction of motion, so that space in between voxels is smoothed out.}
+\item{stretch}{Used to stretch the voxels of the ME70 multibeam echosounder in the direction of motion, so that space in between voxels is smoothed out.}
 
-\item{ind}{are the indices of the beams to treat (such as data$rect).}
+\item{range}{The range at which this stretch value is as desired}
+
+\item{ind}{The indices of the beams to treat (such as data$rect).}
 }
 \value{
 

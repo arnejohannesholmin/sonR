@@ -7,9 +7,15 @@
 medSmooth1(x, w = 3, try.runmed = FALSE, silent = FALSE, ...)
 }
 \arguments{
-\item{x}{is an array to be median smoothed along the first dimension.}
+\item{x}{An array to be median smoothed along the first dimension.}
 
-\item{w}{is the width of median filter (odd number).}
+\item{w}{The width of median filter (odd number).}
+
+\item{try.runmed}{Locigal: If TRUE try the function \code{\link{medSmooth1_runmed}} first and then \code{\link{medSmooth1_median3d}}.}
+
+\item{silent}{Used in \code{\link{medSmooth1_runmed}}.}
+
+\item{...}{Used in \code{\link{medSmooth1_runmed}} and \code{\link{medSmooth1_median3d}}.}
 }
 \value{
 

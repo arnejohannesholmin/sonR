@@ -24,7 +24,7 @@ extract_event(event, rawevent, t, ow = TRUE, dir.data = NULL,
 
 \item{temp}{is TRUE to only return the temporary directory if raw files already exist and toTSD==TRUE, in which case the existing and temporary tsd files are not merged into the existing.}
 
-\item{...___}{are parameters passed to EKRaw2TSD(). NA}
+\item{...}{are parameters passed to EKRaw2TSD().}
 }
 \value{
 

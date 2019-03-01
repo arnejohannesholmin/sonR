@@ -8,6 +8,8 @@ median3d(x, along = 1)
 }
 \arguments{
 \item{x}{is a 3d array to be median smoothed along the 'along' dimension.}
+
+\item{along}{Integer. The median is taken along this dimension.}
 }
 \value{
 

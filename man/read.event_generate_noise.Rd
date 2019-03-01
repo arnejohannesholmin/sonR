@@ -4,8 +4,8 @@
 \alias{read.event_generate_noise}
 \title{Estimates the noise in MS70 data.}
 \usage{
-read.event_generate_noise(data, t = 1, noise = c("bgns", "pdns", "nrns",
-  "hins"), nsind = 0.75, cruise = 2009116, esnm = "MS70",
+read.event_generate_noise(data, t = 1, noise = c("bgns", "pdns",
+  "nrns", "hins"), nsind = 0.75, cruise = 2009116, esnm = "MS70",
   dir.data = NULL, hins_add = 10, phase = TRUE, pdns_scale = 1e-14,
   TVG = TRUE, TVG.exp = 2)
 }
@@ -18,9 +18,11 @@ read.event_generate_noise(data, t = 1, noise = c("bgns", "pdns", "nrns",
 
 \item{nsind}{is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.}
 
+\item{cruise}{Used by \code{\link{get.pdns_phase.TSD}} to get the phase of the periodic noise.}
+
 \item{hins_add}{is the number of voxels that should be discarded on both sides of high intensity noise voxels voxels along beams, used for accounting for possible high values that are related to the high intensity noise but not classified as such voxels.}
 
-\item{phase}{is FALSE if any of 'pn3M' (phase for each time step) or 'pns3' (phase equal for all time steps) given in 'bgns' or read from the noise file located by the funciton noise.path.event() should be used, as oposed to estimating the phase from the data for each time step. This is only recommended for simulated data where the phase is constant over all time steps, and saves some CPU time.}
+\item{phase, esnm, dir.data}{is FALSE if any of 'pn3M' (phase for each time step) or 'pns3' (phase equal for all time steps) given in 'bgns' or read from the noise file located by the funciton noise.path.event() should be used, as oposed to estimating the phase from the data for each time step. This is only recommended for simulated data where the phase is constant over all time steps, and saves some CPU time.}
 
 \item{pdns_scale}{is used in get.pdns_phase.event() to scale the noise in order to allow the optimization to work.}
 

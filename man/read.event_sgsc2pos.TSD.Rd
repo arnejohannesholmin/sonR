@@ -5,8 +5,8 @@
 \title{Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.}
 \usage{
 read.event_sgsc2pos.TSD(data, N = 100, esnm = "MS70", ideal = TRUE,
-  allert = NULL, seabed = -12000, rot = 1, compensation = c("pitch",
-  "roll"), ...)
+  allert = NULL, seabed = -12000, rot = 1,
+  compensation = c("pitch", "roll"), ...)
 }
 \arguments{
 \item{data}{is the list of TSD inputs as returned from read.TSD(var=c("vbsc","voxels","vessel")). Should only contain one ping/timestep.}
@@ -24,6 +24,8 @@ read.event_sgsc2pos.TSD(data, N = 100, esnm = "MS70", ideal = TRUE,
 \item{rot}{see soundbeam.TSD().}
 
 \item{compensation}{is a vector of string giving which rotation values that are compensated for in the sonar. Only c("pitch","roll") is available for the current version. Used in soundbeam.TSD.}
+
+\item{...}{used for robustness.}
 }
 \value{
 
@@ -33,9 +35,5 @@ Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). 
 }
 \examples{
 \dontrun{}
-
-
-
-
 
 }

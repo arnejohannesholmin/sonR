@@ -4,16 +4,15 @@
 \alias{list.files_caseInsensitive}
 \title{Sorts in a case insensitive matter. Created to solve the problem of errors when listing files in R as run from the terminal, in which case sorting is not case insensitive. In the R-GUI sorting is done case insensitive.}
 \usage{
-list.files_caseInsensitive(path, pattern = NULL, all.files = FALSE,
-  full.names = FALSE, recursive = FALSE, ignore.case = FALSE,
+list.files_caseInsensitive(path = ".", pattern = NULL,
+  all.files = FALSE, full.names = FALSE, recursive = FALSE,
+  ignore.case = FALSE, include.dirs = FALSE, no.. = FALSE,
   method = "shell")
 }
 \arguments{
-\item{x}{is an R-object as input to sort() / order().}
+\item{method}{The ordering method used in \code{\link{order}}.}
 
-\item{decreasing}{used in sort() / order().}
-
-\item{na.last}{used in sort() / order().}
+\item{...}{Used in \code{\link{list.files}}.}
 }
 \value{
 

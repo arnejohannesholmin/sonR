@@ -22,7 +22,7 @@ edgedir2D(data, seabed = -12000, rot = 1, compensation = c("pitch",
 
 \item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
 
-\item{esnm}{is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
+\item{...}{Used for robutness.}
 }
 \value{
 

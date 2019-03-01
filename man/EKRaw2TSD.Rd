@@ -2,22 +2,33 @@
 % Please edit documentation in R/EKRaw2TSD.R, R/LSSS2TSD.R
 \name{EKRaw2TSD}
 \alias{EKRaw2TSD}
+\alias{EKRaw2TSDs}
+\alias{getSchoolsFromWork}
+\alias{aggregateSchoolsFromWork}
 \alias{LSSS2TSD}
 \title{Convert from Simrad or LSSS Profos files to TSD files.}
 \usage{
 EKRaw2TSD(event, filenr = "all", t = "all", cruise = NULL,
-  esnm = "MS70", eventname = NULL, CTD_station = NULL, event_tsd = NULL,
-  endian = "little", dir.data = NULL, timeOffset = 0, minTimeDiff = Inf,
-  drop = TRUE, msg = TRUE, prenumt = 10, hpr0 = NULL, Pain = FALSE,
+  esnm = "MS70", eventname = NULL, CTD_station = NULL,
+  event_tsd = NULL, event_sadv = NULL, endian = "little",
+  dir.data = NULL, timeOffset = 0, minTimeDiff = Inf, drop = TRUE,
+  msg = TRUE, prenumt = 10, hpr0 = NULL, Pain = FALSE,
   TVG.exp = 2, psze = -7, variableRange = TRUE, gain = NULL,
-  sacr = NULL, correctTime = TRUE, ow = TRUE, dira_offset = 0,
-  write = TRUE, bmmd = NULL, cali = TRUE, toTS = FALSE, na.rm = TRUE,
+  sacr = NULL, correctTime = FALSE, ow = TRUE, dira_offset = 0,
+  write = TRUE, cali = TRUE, toTS = FALSE, na.rm = TRUE,
   cleanNMEA = 1, mergeFiles = TRUE, cores = 1, tres = NULL,
   xres = NULL, zres = NULL, rres = NULL, bres = NULL,
   funvbsc = c("median", "mean"), funt = c("median", "mean"),
   adds = list(), split = TRUE, skipAngles = TRUE, origin = 1,
   filesize = 3e+08, chunksize = 1e+08, apply.range.offset = FALSE,
   thr1m = FALSE, ...)
+
+EKRaw2TSDs(event, esnm = c("SU90", "EK60"), dir.type = c("tsd",
+  "Work"), cores = 1)
+
+getSchoolsFromWork(event, esnm = "SU90", cores = 1)
+
+aggregateSchoolsFromWork(x, by = "sadv", delta = 1)
 
 LSSS2TSD(event = NULL, filesize = 3e+08, chunksize = 1e+08,
   keep.temp = FALSE, cores = 1, ...)
@@ -67,7 +78,7 @@ LSSS2TSD(event = NULL, filesize = 3e+08, chunksize = 1e+08,
 
 \item{sacr}{optinal sacorrection values to apply to the data, typically from calibration.}
 
-\item{correctTime}{is FALSE to avoid correcting the data for offset in the time of the pings, determined by the difference in the time of the first ping and the first NMEA time information.}
+\item{correctTime}{is TRUE to correct the data for offset in the time of the pings, determined by the difference in the time of the first ping and the first NMEA time information.}
 
 \item{ow}{is FALSE to not overwrite existing TSD files.}
 
@@ -113,7 +124,11 @@ LSSS2TSD(event = NULL, filesize = 3e+08, chunksize = 1e+08,
 
 \item{chunksize}{is the maximum size of the chunks of file read at the time.}
 
-\item{...}{For EKRaw2TSD(), arguments passed to merge_TSD() and compr.TSD(), and for LSSS2TSD(), inputs complementing the variables extracted from the files. Several of these are missing in the data as per 2016, such as (numt = number of time steps, and dimensions are given in square brackets):
+\item{apply.range.offset}{Logical:: If TRUE strip the data of samples by the range offset Ro (for raw=1).}
+
+\item{thr1m}{Logical: If TRUE apply a rule that TVG closer than 1 m should not cause increasedd level (as used in LSSS).}
+
+\item{...}{For EKRaw2TSD(), arguments passed to combine.TSD() and compr.TSD(), and for LSSS2TSD(), inputs complementing the variables extracted from the files. Several of these are missing in the data as per 2016, such as (numt = number of time steps, and dimensions are given in square brackets):
 \describe{
 \item{"numb"}{Number of beams [numt], interpreted from the file names}
 \item{"lenb"}{Lengths of the beams [numb, numt], set to the maximum range of the data}

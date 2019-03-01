@@ -93,7 +93,10 @@ read.event_unzip_vbsc <- function(x, pad=TRUE, split=TRUE, filename=NULL, t=NULL
 	else if(length(x$lenb) && length(x$numb)){
 		lenb <- x$lenb[1]
 		numb <- x$numb[1]
-		dim(x$vbsc) <- c(lenb, numb, length(x$vbsc) / (lenb*numb))
+		numt <- length(x$vbsc) / (lenb*numb)
+		if(numt %% 1 == 0){
+			dim(x$vbsc) <- c(lenb, numb, length(x$vbsc) / (lenb*numb))
+		}
 	}
 	else if(length(dim(x$vbsc))<3){
 		warning("Dimension not set to the volume backscattering coefficient 'vbsc', and number of beams 'numb' and length of the beams 'lenb' not present in the pings files.")

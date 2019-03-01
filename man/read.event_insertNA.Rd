@@ -4,7 +4,7 @@
 \alias{read.event_insertNA}
 \title{Adds empty list elements of NAs (if vectors) to data read in read.event(). This is done by comparing to the time step indices stored in the object 'TIME'.}
 \usage{
-read.event_insertNA(thisout, TIME, filesind, filelist, t, tlist, var, segvar)
+read.event_insertNA(thisout, TIME, filesind, filelist, t, tlist, var)
 }
 \arguments{
 \item{thisout}{is a list containing the relevant data.}
@@ -19,7 +19,7 @@ read.event_insertNA(thisout, TIME, filesind, filelist, t, tlist, var, segvar)
 
 \item{tlist}{is the list of time step indexes for the files.}
 
-\item{segvar}{is a vector of the variables to treat, named "segvar" for historical reasons (this function was first intended for, and possibly still is, segmentation data).}
+\item{var}{is a vector of the variables to to insert NAs to.}
 }
 \value{
 

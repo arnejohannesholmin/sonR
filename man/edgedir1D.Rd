@@ -19,6 +19,8 @@ edgedir1D(data, esnm = NULL, seabed = -12000, rot = 1,
 \item{compensation}{is a vector of string giving which rotation values that are compensated for in the sonar. Only c("pitch","roll") is available for the current version. Used in soundbeam.TSD.}
 
 \item{ideal}{is TRUE to represent the simple case where the speed of sound 'data$asps' is invariant of depth.}
+
+\item{...}{Used for robutness.}
 }
 \value{
 

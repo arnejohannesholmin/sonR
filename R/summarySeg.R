@@ -7,7 +7,7 @@
 #' @examples
 #' \dontrun{}
 #'
-#' @importFrom TSD ang2rot merge_TSD zeros
+#' @importFrom TSD ang2rot combine.TSD zeros
 #' @importFrom stats quantile
 #'
 #' @export
@@ -18,7 +18,7 @@ summarySeg = function(event, t, TS=-55, w=0.369, segpar=1:2, ang=NULL, maxRange=
 	out = zeros(3, 12)
 	for(i in seq_along(segpar)){
 		s = read.event(event, t=t, var="seg", segpar=segpar[[i]])
-		outlist[[i]] = merge_TSD(s)
+		outlist[[i]] = combine.TSD(s)
 		
 		get.outliers = function(x, n90){
 			u90 = quantile(x, 0.9, na.rm=TRUE)*n90

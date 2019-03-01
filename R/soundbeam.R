@@ -37,10 +37,6 @@
 #'
 soundbeam<-function(start=c(0,0), ang, ctd, seabed=-12000, time=NULL, w=NULL, lenb=1500, sint=5.12e-4, rpos=c("midpoint","edge"), Ncirc=1000, maxlength=Inf, plot=TRUE, Pain=TRUE){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2008-02-23 - Finished.
 	# Update: 2009-06-12 - Changed to support list and matrix input. Fundamental change in method from the old soundbeam(), which used the old function propagate() for the tracking along the path of the sound beam (see the "-unused" directory for old version).
@@ -48,34 +44,6 @@ soundbeam<-function(start=c(0,0), ang, ctd, seabed=-12000, time=NULL, w=NULL, le
 	# Update: 2009-07-12 - Changed in method when adjusting the depth 'D' and speed 'speed' to match the range c(seabed,0), by using the function extrapolate.matrix().
 	# Update: 2009-07-23 - Fixed bug occuring when the start point is located in the interior of a layer, and the first circle segment does not cross into the next layer. The function structure is changed to defining all variables at the start of the "execution" section, and initializing all variables before the while loop, and then updating the variables at the end of the while loop. Description updated and systemized.	
 	# Last: 2009-09-04 - Fixed bug for the special case when ang=0 and the beam starts in the border between two layers.	
-	########### DESCRIPTION: ###########
-	# Computes the path of a ray of sound for the given temperature, salinity and depth/pressure values. The sound beam is calculated in the x-y-plane, where y corresponds to z in three dimensions. If unequal in length, the shorter ones of the inputs are recycled. A list of the following elements is returned Used in soundbeam.TSD().
-	########## DEPENDENCIES: ###########
-	# speedofsound(), getzfromctd(), extrapolate.matrix(), track.circle()
-	############ VARIABLES: ############
-	# ---start--- is the transducer position.
-	# ---ang--- is the initial angle of the sound beam, defined on the unit circle in the interval (-pi/2,pi/2) (for downward starting angle ang is negative).
-	# ---ctd--- is the conductivity-temperature-depth data given as a list of suitable names.
-	# ---seabed--- is the z-position of the sea bed.
-	# ---time--- is the vector of time points at which the positions along the sound beam are recorded. If not given, 'time' is calculated from 'lenb' and 'sint'.
-	# ---w--- is the vector of positions along the sound beam, overriding 'time' or 'lenb' and 'sint'.
-	# ---lenb--- is the number of partitions radially of equal distance 'sint' in time. 
-	# ---sint--- is the time length of the sound pulse. 'lenb' and 'sint' are used specifically when calculating midpoints of voxels of sonars, where the sound beam travels out to an object and is reflected back to the sonar. Thus the effective time used is dt=sint/2 (see the master thesis of Arne Johannes Holmin page 30-33). The first time point starts at dt/4, and the remaining time points are dt*k, k=2,3,...,lenb. (See the master thesis of Arne Johannes Holmin page 31-32.)
-	# ---rpos--- is a string of two possible values: "midpoint" which specifies that the positions alont the beams are to bo located at midpoints of voxels and "edge" which returns the edges of the voxels including the first edge on the surface of the sonar (length of output is lenb+1 in this case). Abbreviation are allowed.
-	# ---Ncirc--- are the maximum number of circles from which the soundbeams are reconstructed.
-	# ---maxlength--- is the maximum length of the beam, restricting the number of calculations of circles.
-	# ---plot--- is TRUE if the sound beams should be plotted (time consuming).
-	############ OUTPUT: ############
-	# ---x--- is a vector of the x-positions of the sound beam.
-	# ---y--- is a vector of the y-positions of the sound beam.
-	# ---l--- is a vector of the tracked positions along the sound beam.
-	# ---r--- is a vector of the origins of the circles along which the sound beam is traced for each sound speed layer.
-	# ---ang--- is a matrix of two columns representing the vectors of the start and end angles of the circle segments along which the sound beam is traced for each sound speed layer, as defined on the unit circle.
-	# ---origin--- is a matrix of two columns representing the x- and y-positions of the points linking the circle segments.
-	# ---pos--- is a vector of the x-positions of the sound beam.
-	# ---extrapolated--- is a logical vector which is TRUE for all circle segments located in sound speed layers extrapolated from the ctd-data, in the case that the ctd measurements do not extend the entire water column.
-	# ---totlength--- is the total length of the calculated path along which the sound beam positions are tracked.
-	
 	
 	##################################################
 	##################################################

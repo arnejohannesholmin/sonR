@@ -41,7 +41,7 @@ sonR_implemented<-function(esnm, type=c("MBS","MBE","SBE","OFS"), notest=FALSE){
 	implemented = list(
 		MBS = c("ms70"), 
 		MBE = c("me70"), 
-		SBE = c("ek60", "ek500"), 
+		SBE = c("ek80", "ek60", "ek500"), 
 		OFS = c("sx80","sx90","sh80","sh90","su80","su90","sp80","sp90","sn90"))
 	types = unlist(implemented[toupper(type)])
 	if(notest){
@@ -53,7 +53,10 @@ sonR_implemented<-function(esnm, type=c("MBS","MBE","SBE","OFS"), notest=FALSE){
 	if(is.list(esnm)){
 		esnm = esnm$esnm
 		}
-	any(strff(types, esnm[1]))
+	out <- sapply(esnm, function(this) any(strff(types, this)))
+	
+	return(out)
+	#any(strff(types, esnm[1]))
 	##################################################
 	##################################################
 	}

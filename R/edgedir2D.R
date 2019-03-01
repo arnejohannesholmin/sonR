@@ -3,13 +3,13 @@
 #' Calculates the edge points of an acoustic device based on the CTD-data, using edge points along the beam maxima as basis, and extracting the vertical dimension (elevation angle) from the vertical angular distance between beam maxima. !!!Only one time step is treated!!!!
 #'
 #' @param data  is the list of TSD inputs as returned from read.TSD (must contain ""dira" and "dire", and CTD-data).
-#' @param esnm  is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.
 #' @param seabed  is the z-coordinate of the sea bed, usually provided by echo sounder data. Soundbeams reflected from the sea bed or the surface are reflected at the incidence angle.
 #' @param rot  is 1 if simple rotation using cosine and sine is to be used, and 2 if the function rotate() is to be used in the rotation. Times for the different methods (tested on MacBook Pro dual 2.8 GHz, 2010-02-09, with other applications running):
 #' @param compensation  is a vector of string giving which rotation values that are compensated for in the sonar. Only c("pitch","roll") is available for the current version. Used in soundbeam.TSD.
 #' @param ideal  is TRUE to represent the simple case where the speed of sound 'data$asps' is invariant of depth.
 #' @param stretch  is used to stretch the voxels of the ME70 multibeam echosounder in the direction of motion, so that space in between voxels is smoothed out.
 #' @param fanWidth  has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.
+#' @param ... Used for robutness.
 #'
 #' @return
 #'

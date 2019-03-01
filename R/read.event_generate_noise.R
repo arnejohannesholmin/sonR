@@ -6,8 +6,9 @@
 #' @param t  is either the indexes of the pings to be treated, as listed from 1 to the number of pings in the event, or the time point given as a string "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF".
 #' @param noise  is a vector of strings representing the noise components to include in the estimate.
 #' @param nsind  is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.
+#' @param cruise  Used by \code{\link{get.pdns_phase.TSD}} to get the phase of the periodic noise.
 #' @param hins_add  is the number of voxels that should be discarded on both sides of high intensity noise voxels voxels along beams, used for accounting for possible high values that are related to the high intensity noise but not classified as such voxels.
-#' @param phase  is FALSE if any of 'pn3M' (phase for each time step) or 'pns3' (phase equal for all time steps) given in 'bgns' or read from the noise file located by the funciton noise.path.event() should be used, as oposed to estimating the phase from the data for each time step. This is only recommended for simulated data where the phase is constant over all time steps, and saves some CPU time.
+#' @param phase,esnm,dir.data  is FALSE if any of 'pn3M' (phase for each time step) or 'pns3' (phase equal for all time steps) given in 'bgns' or read from the noise file located by the funciton noise.path.event() should be used, as oposed to estimating the phase from the data for each time step. This is only recommended for simulated data where the phase is constant over all time steps, and saves some CPU time.
 #' @param pdns_scale  is used in get.pdns_phase.event() to scale the noise in order to allow the optimization to work.
 #' @param TVG  is FALSE if TVG compensation is to be removed from the data.
 #' @param TVG.exp  is the exponent of the eamotric spreading of the sound wave, theoretically 2 for Sv and 4 for TS.
@@ -25,30 +26,9 @@
 #'
 read.event_generate_noise<-function(data, t=1, noise=c("bgns","pdns","nrns","hins"), nsind=0.75, cruise=2009116, esnm="MS70", dir.data=NULL, hins_add=10, phase=TRUE, pdns_scale=1e-14, TVG=TRUE, TVG.exp=2){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2012-11-23 - Clean version, adopted from echoIBM.vbsc2p.event().
-	########### DESCRIPTION: ###########
-	# Estimates the noise in MS70 data.
-	########## DEPENDENCIES: ###########
-	# read.event(), apply.TVG(), zeros()
-	############ VARIABLES: ############
-	# ---data--- is a list containing the data from which the noise should be estimated. Sould contain the following variables: "vbsc", "time", "hini", "hins", "beams", "ctd".
-	# ---t--- is either the indexes of the pings to be treated, as listed from 1 to the number of pings in the event, or the time point given as a string "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF".
-	# ---noise--- is a vector of strings representing the noise components to include in the estimate.
-	# ---nsind--- is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.
-	# ---hins_add--- is the number of voxels that should be discarded on both sides of high intensity noise voxels voxels along beams, used for accounting for possible high values that are related to the high intensity noise but not classified as such voxels.
-	# ---phase--- is FALSE if any of 'pn3M' (phase for each time step) or 'pns3' (phase equal for all time steps) given in 'bgns' or read from the noise file located by the funciton noise.path.event() should be used, as oposed to estimating the phase from the data for each time step. This is only recommended for simulated data where the phase is constant over all time steps, and saves some CPU time.
-	# ---pdns_scale--- is used in get.pdns_phase.event() to scale the noise in order to allow the optimization to work.
-	# ---TVG--- is FALSE if TVG compensation is to be removed from the data.
-	# ---TVG.exp--- is the exponent of the eamotric spreading of the sound wave, theoretically 2 for Sv and 4 for TS.
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Store the original dimension of the acoustic data:
 	if(length(dim(data$vbsc))==2){
@@ -169,6 +149,4 @@ read.event_generate_noise<-function(data, t=1, noise=c("bgns","pdns","nrns","hin
 		
 	# Return the output:
 	data$tlns
-	##################################################
-	##################################################
-	}
+}

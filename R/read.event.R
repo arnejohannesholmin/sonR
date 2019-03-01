@@ -6,7 +6,6 @@
 #' @param var  is a string vector representing the variables to return. The function searches for the variables in the files contained in the event directory. The legal variable names are listed below:
 #' @param t  is either a vector of the numbers of the pings to be returned, as listed from 1 to the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points to be read is extracted. If t == "all", all files are read and if t == "none" an empty list is returned.
 #' @param cruise  is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event to be read.
-#' @param ind  is a list of indexes, as typed into the [] of an array extracting a subset of the acoustic data (vbsc or mvbs).
 #' @param TIME  is an optional list as returned from UNIX_time() (speed up reading).
 #' @param adds  is an optional list of variables overriding the variables located in the event directory, used when calculating the positions and volumes of the voxels. Elements of 'adds' representing dynamic variables of the vessel (like "rtzv", "psxv" and so on) need to be at time steps 't' and thus have length equal to the length of 't'.
 #' @param esnm  is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.
@@ -23,6 +22,7 @@
 #' @param drop.out  is FALSE if output should not be dropped of dimensions of only one level.
 #' @param strip.out  is FALSE if duplicated elements of the output list should be kept.
 #' @param dir.out  is TRUE if only the path to the directory of the event is to be returned.
+#' @param mask  is TRUE to return a data frame of the segmentation mask.
 #' @param Paout  is TRUE if pressure data are to be returned in Pascal.
 #' @param bgns  indicates wheter the estimated background noise should be subtracted, resulting in some negative sv-values. If TRUE (default) the background noise is kept in the data (no action). If FALSE the background noise estimates are attemptedly located in the event directory or the noise estimate directory of the cruise. If string, it should be the path to the file holding the background noise estimates. If the length of 'bgns' is longer than 1, the background noise estmate taken as the simple mean for all beams, regardless of the periodic noise is used.
 #' @param pdns  indicates wheter the estimated periodic noise should be subtracted. If TRUE (default) the periodic noise is kept in the data (no action). If FALSE the periodic noise estimates are attemptedly located in the event directory or the noise estimate directory of the cruise. If string, it should be the path to the file holding the periodic noise estimates.
@@ -30,6 +30,7 @@
 #' @param hins  indicates wheter the estimated high intensity noise should be subtracted. If TRUE (default) the high intensity noise is kept in the data (no action). If FALSE the high intensity noise estimates are attemptedly located in the event directory or the noise estimate directory of the cruise.
 #' @param kern  is the standard deviation in units of the number of voxels used in a Gaussian kernel smoother along the beams (no smoothing if kern == 0 or length(kern) == 0, which is the default). If given as an integer, say 5L, median smoothing is applied instead of Gaussian.
 #' @param merge  is TRUE if variables read for more than one file are to be merged.
+#' @param msg  is TRUE to print messages to the console.
 #' @param segpar  is a list of elements named "bwGp", "lsth"/"rlst", "usth"/"rust", or "sgth"/"sgt0" specifying the parameters of the segmentation data to read.
 #' @param pamkpar  is a list of parameters ('krange', 'criterion', 'alpha' and 'mindist') used pamk() when clustering the segmented voxels 'sgsc'. The voxels 'sgsc' are also ordered so that the voxels belonging to the largest cluster lead and the second to largest cluster follows. A suggested set of parameters are pamkpar = list(krange = 1:4, criterion = "asw", alpha = 0.05, N = 1e2, mindist = 100).
 #' @param nsind  is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.
@@ -37,7 +38,14 @@
 #' @param pdns_scale  is used in get.pdns_phase.event() to scale the noise in order to allow the optimization to work.
 #' @param TOV  is the time offset of the vessel information, discovered by Holmin and Korneliussen in 2013. The default is found in "/Applications/echoIBM/Documentation/Error in yaw MS70/Error in yaw MS70.R".
 #' @param allow.old  is a TRUE if old UNIX_time file is accepted (still with the correct list of files).
+#' @param ggsz  is the grid size of the global grid in which Sv is returned.
+#' @param pad	Logical: If TRUE, pad with NAs for non-equal lengths of beams.
+#' @param split	See \code{\link{mergeListKeepDimensions}}.
+#' @param cal  a factor to multiply all data by (prior to range compensation).
+#' @param fanWidth  has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.
 #' @param onestep  is TRUE or 1 to allow for files with only one time step to be read regardless of 't'. If set to 2, the single time step is repeated to the number of time steps requested by \code{t}.
+#' @param other. is TRUE to read other files than acoustic, electrical angle, vessel, beams, noise, ctd, school, seg, time.
+#' @param fill	is the value to use for missing data (outside of the mask).
 #' @param ...  are inputs used in ftim.TSD(), but more importantly in pplot3d.TSD(). Particularly, 'ind', 'range', and 'subset' can be used to subset the data in pplot3d.TSD(), but 'ind' can also be used to subset the acoustic data.
 #'
 #' @return
@@ -45,7 +53,7 @@
 #' @examples
 #' \dontrun{}
 #'
-#' @importFrom SimradRaw apply.TVG
+#' @importFrom SimradRaw apply.TVG soundbeam_range
 #' @importFrom TSD arr.ind2ind dim_all ftim.TSD ftim2utim ind.expand info.TSD labl.TSD mergeListKeepDimensions mtim.TSD ones read.TSD read.TSDs strff utim2mtim zeros prettyIntegers
 #' @importFrom tools file_ext
 #' @importFrom data.table rbindlist
@@ -54,12 +62,11 @@
 #' @export
 #' @rdname read.event
 #'
-read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds=NULL, esnm="MS70", TVG=TRUE, TVG.exp=2, ideal=TRUE, cs="g", seabed=-12000, rot=2, compensation=c("pitch", "roll"), exact=FALSE, origin=1, dir.data=NULL, drop.out=TRUE, strip.out=TRUE, dir.out=FALSE, mask=TRUE, Paout=TRUE, bgns=TRUE, pdns=TRUE, nrns=TRUE, hins=TRUE, kern=NULL, merge=TRUE, msg=TRUE, segpar=NULL, pamkpar=list(), nsind=0.75, hins_add=10, pdns_scale=1e-14, TOV=0, allow.old=FALSE, ggsz=10, pad=TRUE, split=TRUE, cal=1, fanWidth="b2", onestep=TRUE, other=FALSE, fill=NA, info.out=FALSE, ...){
+read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, adds=NULL, esnm="MS70", TVG=TRUE, TVG.exp=2, ideal=TRUE, cs="g", 
+	seabed=-12000, rot=2, compensation=c("pitch", "roll"), exact=FALSE, origin=1, dir.data=NULL, drop.out=TRUE, strip.out=TRUE, dir.out=FALSE, 
+	mask=TRUE, Paout=TRUE, bgns=TRUE, pdns=TRUE, nrns=TRUE, hins=TRUE, kern=NULL, merge=TRUE, msg=TRUE, segpar=NULL, pamkpar=list(), 
+	nsind=0.75, hins_add=10, pdns_scale=1e-14, TOV=0, allow.old=FALSE, ggsz=10, pad=TRUE, split=TRUE, cal=1, fanWidth="b2", onestep=TRUE, other=FALSE, fill=NA, info.out=FALSE, ...){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2009-03-10 - First version.
 	# Update: 2009-06-04 - Cleaned up and documented.
@@ -109,39 +116,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	# Update: 2014-09-30 - Fixed bugs in reading "vbsC" and "vbsA".
 	# Update: 2015-04-24 - Changed to use for loop when calculating the voxel positions psxx, psyx, and pszx.
 	# Last: 2015-11-02 - Disactivating 'TVG', and only using 'TVG.exp'.
-	########### DESCRIPTION: ###########
-	# Extracts variables from acoustic events.
-	########## DEPENDENCIES: ###########
-	# read.TSD(), global2car(), soundbeam.TSD(), volx.MS70(), HIB(), apply.TVG(), zeros(), utim.TSD(), read.TSDs(), UNIX_time(), labl.TSD()
-	############ DETAILS: ############
-	# info.TSD() attempts to locate a table named "TSD_description_table" with two columns, where the first column contains the TSD variable names, and the second the descriptions of the variables. If not present, read.TSD_description_table() tries to read the table from the file given by 'file'. The used should create a file with two columns separated by "\t" with the variable names and desciptions as described above, with a header line "Label\tDescription". To avoid that this file is read each time info.TSD() is run, run the following code at the start of the R-session, where 'file' is the full path to the file of the TSD names and descriptions:
-	# TSD_description_table = read.TSD_description_table(file)
-	############ VALUE: ############
-	# 
-	############ REFERENCES: ############
-	#
-	############ SEAALSO: ############
-	#
-	############ EXAMPLES: ############
-	# # Create a character matrix 'TSD_description_table' if not alreaddy existing:
-	# if(!exists("TSD_description_table")) TSD_description_table = cbind(c("var1","var2"), c("First variable","Second variable"))
-	# x <- list(var1 = 1:12)
-	# info.TSD(x)
-	############ VARIABLES: ############
-	#
-	#	Variable identifiers reading whole files or groups of variables (see the "TSD-format_names.dat" for all currently documented TSD variables):
-	#		"pings" reads the variables located in .pings files
-	#		"beams" all beams variables: labl.TSD("b")
-	#		"beams0" reads (mostly) relevant beams variables: labl.TSD("rb")
-	#		"vessel" reads vessel variables: labl.TSD("v")
-	#		"ctd" CTD (conductivity, temperature, depth) data: labl.TSD("ctd")
-	#		"voxels" reads voxel position and volume data: labl.TSD("vx")
-	#		"time" reads time variables: labl.TSD("t")
-	#		"school" read static and dynamic school variables: labl.TSD(c("ss", "ds"))
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	filetypes <- c("school", "beams", "ctd", "vessel", "pings", "seg", "tsd")
 	filetypeslist <- setNames(as.list(filetypes), filetypes)
@@ -362,8 +337,8 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	filelist <- filelist[relevantFiles]
 	ext <- tolower(file_ext(filelist))
 	fInd <- lapply(filetypeslist, function(xx) which(ext==xx))
-	##########
 	
+	##########
 	
 	##########
 	# Read UNIX_time file if not given as input:
@@ -373,14 +348,14 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	}
 	else{
 		#TIME <- UNIX_time(event=event, file=TRUE, var="all", t=relevantFiles, msg=msg, allow.old=allow.old)
-		TIME <- UNIX_time(event=event, file=TRUE, var="all", t="all", msg=msg, allow.old=allow.old)
+		TIME <- UNIX_time(event=event, file=TRUE, var="all", t="all", allow.old=allow.old)
 		# Select only the relevant files:
 		matchRelevantFiles <- match(path.expand(filelist), TIME$f000)
 		TIME[c("f000", "i000", "u000", "l000", "t000")] <- lapply(TIME[c("f000", "i000", "u000", "l000", "t000")], function(x) x[matchRelevantFiles])
 		
-		# Sone check for the success of reading the UNIX time (unclear why):
+		# Some check for the success of reading the UNIX time (unclear why):
 		if(length(TIME$I000[[1]]) == 0 || length(TIME$U000[[1]]) == 0){
-			TIME <- UNIX_time(event=event, file=TRUE, fresh=TRUE, msg=msg, allow.old=allow.old)
+			TIME <- UNIX_time(event=event, file=TRUE, fresh=TRUE, allow.old=allow.old)
 		}
 	}
 	# Rename to allow ftim.TSD() and mtim.TSD():
@@ -399,7 +374,6 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		return(list())
 	}
 	##########
-	
 	
 	##########
 	# Get the number of unique time point:
@@ -530,7 +504,6 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	
 	# Merging the list of .vessel-files and other files to obtain the list of files that are not .pings-files so that the .vessel-files are sorted first in the list. (At the end of the function list elements of duplicated names are removed so that only the first of the duplicated elements is chosen.)??? Why are vessel files mentioned?
 	fInd$notpings <- unlist(fInd[names(fInd)!="pings"])
-	
 	#fInd$notpings <- unique(match(fInd$notpings, filelist))
 	
 	
@@ -731,7 +704,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 }
 	### (5c) Read the ranges to the voxel centers (only for one beam):
 	if("rngx" %in% var){
-		out$rngx <- soundbeam_range(beams, pos="mid")
+		out$rngx <- SimradRaw::soundbeam_range(beams, pos="mid")
 		# Remove from 'var' the variables that have been read:
 		var <- setdiff(var, "rngx")
 }
@@ -747,13 +720,13 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		# Special case where only 'sgPM' is requested:
 		if(sum(segvar %in% var) == 1 && "sgPM" %in% var){
 			out["sgPM"] <- list(sgPM(filelist[fInd$seg]))
-	}
+		}
 		else{
 			# Read the segementation data:
 			thisout <- read.event_read_sgsc(filelist=filelist, var=c(var,"indt"), filesind=fInd$seg, segpar=segpar, TIME=TIME, tlist=tlist, merge=merge, msg=msg)
 			# Add empty list elements where no data were present:
 			if(merge){
-				thisout <- read.event_insertNA(thisout, TIME, fInd$seg[thisout$segfilenr], filelist, t, tlist, var, segvar)
+				thisout <- read.event_insertNA(thisout=thisout, TIME=TIME, filesind=fInd$seg[thisout$segfilenr], filelist=filelist, t=t, tlist=tlist, var=c(var, segvar))
 			}
 			out[names(thisout)] <- thisout
 			
@@ -769,7 +742,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	}
 	######################################
 	######################################
-			
+	
 	
 	##################################
 	### (7) Reading acoustic data: ###
@@ -958,10 +931,10 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			# Calibration factor:
 			if(cal != 1){
 				if(is.list(out$vbsc)){
-					out$vbsc <- lapply(out$vbsc, function(x) x*c(matrix(cal,nrow=nrow(x), ncol=ncol(x))))
+					out$vbsc <- lapply(out$vbsc, function(x) x*c(matrix(cal, nrow=nrow(x), ncol=ncol(x))))
 				}
 				else{
-					out$vbsc <- out$vbsc*c(matrix(cal,nrow=nrow(out$vbsc), ncol=ncol(out$vbsc)))
+					out$vbsc <- out$vbsc*c(matrix(cal, nrow=nrow(out$vbsc), ncol=ncol(out$vbsc)))
 				}
 			}
 				
@@ -969,33 +942,65 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			if(isTRUE(mask) && (length(out$vxIX) || length(out$sgsc))){
 				# Declare the mask:
 				mask <- list()
-				
 				# Extract the segmentation indices:
 				ind <- if(length(out$sgsc)) out$sgsc else out$vxIX
 				if(!is.list(ind)){
 					ind <- list(ind)
 				}
-				# Get the number of values per time step:
-				numtPerPing <- sapply(ind, length)
-				# Get the time:
-				if(length(out$utim)){
-					datetime <- as.POSIXct(out$utim, origin="2970-01-01")
-					date <- format(datetime, "%Y-%m-%d")
-					time <- format(datetime, "%H-%H-%OS3")
-					mask$date <- rep(date, numtPerPing)
-					mask$time <- rep(time, numtPerPing)
-					mask$utim <- rep(out$utim, numtPerPing)
-				}
-				if(length(out$indt)){
-					mask$indt <- rep(out$indt, numtPerPing)
+				mask$indt <- rep(t, lengths(ind))
+				
+				# Get the 'vbsc' segmented by the 'sgsc':
+				out$vbss <- lapply(seq_along(ind), function(i) out$vbsc[,,i][ind[[i]]])
+				# Add school ID:
+				if(length(out$sgID)){
+					mask$sgID <- unlist(out$sgID)
 				}
 				
-				# Get array indices:
+				# Get the number of values per time step:
+				numPerPing <- sapply(ind, length)
+				
+				# Get the time:
+				if(length(out$utim)){
+					datetime <- as.POSIXct(out$utim, origin="1970-01-01", tz="UTC")
+					date <- format(datetime, "%Y-%m-%d")
+					time <- format(datetime, "%H-%H-%OS3")
+					mask$date <- rep(date, numPerPing)
+					mask$time <- rep(time, numPerPing)
+					mask$utim <- rep(out$utim, numPerPing)
+				}
+				if(length(out$indt)){
+					mask$indt <- rep(out$indt, numPerPing)
+				}
+				
+				# Get array indices and beam variables:
 				if(length(out$lenb) || length(out$numb)){
 					l <- lapply(ind, ind2arr.ind, c(max(out$lenb), max(out$numb)))
 					arr.ind <- do.call("rbind", l)
 					mask$indb <- arr.ind[,2]
 					mask$indr <- arr.ind[,1]
+					
+					# Also add all possible beams variables:
+					beamsPingsInd <- cbind(mask$indb, mask$indt)
+					presentBeamsVar <- intersect(relevantbeamsvar, names(out))
+					# Get beams variables of 1 and 2 dimensions:
+					presentBeamsVar1Dim <- presentBeamsVar[sapply(out[presentBeamsVar], nrow)  == 1]
+					presentBeamsVar2Dim <- presentBeamsVar[sapply(out[presentBeamsVar], nrow)  > 1]
+					# Extract the beams variables for the segmentation indices (beams ind and ping ind, not range ind since the beams variables are identical along beams):
+					maskBeams1 <- structure(lapply(presentBeamsVar1Dim, function(x) out[[x]][mask$indt]), names=presentBeamsVar1Dim)
+					maskBeams2 <- structure(lapply(presentBeamsVar2Dim, function(x) out[[x]][mask$indt]), names=presentBeamsVar2Dim)
+					
+					# Add to the mask data.frame:
+					mask <- c(mask, maskBeams1, maskBeams2)
+					
+					# Also add the ranges of the midpoints of the voxels:
+					if(length(out$rofs) == 0 && length(out$pszx)){
+						warning("Upper, mid and loweer voxels edge (at the mid range of the voxel) calculated without range offset 'rofs', which may lead to different values for 'pszM' and 'pszx'")
+					}
+					psrx <- SimradRaw::soundbeam_range(out)
+					mask$psrx <- psrx[mask$indr]
+					mask$pszU <- mask$psze + mask$psrx * cos(mask$dire - mask$bwty/2)
+					mask$pszM <- mask$psze + mask$psrx * cos(mask$dire)
+					mask$pszL <- mask$psze + mask$psrx * cos(mask$dire + mask$bwty/2)
 				}
 				
 				# Position data:
@@ -1011,15 +1016,29 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					mask$pszx <- unlist(lapply(seq_along(ind), function(i) out$pszx[,,i][ind[[i]]]), use.names=FALSE)
 				}
 				
+				# Voxel volume:
+				if(length(out$volx)){
+					mask$volx <- out$volx[cbind(mask$indr, mask$indb, mask$indt)]
+				}
+				
+				# Vessel info:
+				if(length(out$psxv)){
+					# Get vessel variables present in the data:
+					presentvesselnamesVar <- intersect(vesselnames, names(out))
+					maskVessel <- structure(lapply(presentvesselnamesVar, function(x) out[[x]][mask$indt]), names=presentvesselnamesVar)
+					# Add to the mask data.frame:
+					mask <- c(mask, maskVessel)
+				}
+				
 				# Acoustic data:
 				if(length(out$vbsc)){
 					if(length(dim(out$vbsc))==2){
 						dim(out$vbsc) <- c(dim(out$vbsc), 1)
 					}
-					mask$vbsc <- unlist(lapply(seq_along(ind), function(i) out$vbsc[,,i][ind[[i]]]), use.names=FALSE)
+					mask$vbsc <- unlist(out$vbss, use.names=FALSE)
 				}
 				
-			out$mask <- as.data.frame(mask)
+			out$mask <- as.data.frame(mask, stringsAsFactors=FALSE)
 			}
 			
 			# Extracting a subset if required:
@@ -1140,7 +1159,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		
 		# Add empty list elements where no data were present:
 		if(merge){
-			otherout <- read.event_insertNA(otherout, TIME, fInd$notpings, filelist, t, tlist, var, var)
+			otherout <- read.event_insertNA(thisout=otherout, TIME=TIME, filesind=fInd$notpings, filelist=filelist, t=t, tlist=tlist, var=var)
 		}
 		
 		# Add to the output:
@@ -1194,6 +1213,4 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		out$info <- info.TSD(names(out))
 	}
 	out
-	##################################################
-	##################################################
 }

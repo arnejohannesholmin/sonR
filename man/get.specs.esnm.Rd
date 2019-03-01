@@ -4,13 +4,21 @@
 \alias{get.specs.esnm}
 \title{Returns specifications of the acoustic instrument 'esnm' regarding types of beams. The function treats single time steps, except for the output "region".}
 \usage{
-get.specs.esnm(data, var = c("rect", "offset", "region", "valid", "ind",
-  "direction"), esnm = NULL, ind = NULL, add = 30, beamstypes = 1)
+get.specs.esnm(data, var = c("rect", "offset", "region", "valid", "ind"),
+  esnm = NULL, ind = NULL, add = 30, beamstypes = 1)
 }
 \arguments{
-\item{data}{is a list of elements named according to the TSD file format holding the following information: "esnm" (may be given separately), "lenb", "", "", "", "", "", "", "", "", "", "", "".}
+\item{data}{A list of elements named according to the TSD file format holding the following information: "esnm" (may be given separately), "lenb", "", "", "", "", "", "", "", "", "", "", "".}
 
-\item{esnm}{is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
+\item{var}{The variables for which to get the specifications. "rect": get rectangular and non-rectangular beams. "offset": the angle offset and whether there is time offset. "region": The region over which to draw positions. "valid", "ind": The logical and indices of valid beams given \code{beamstypes}.}
+
+\item{esnm}{The name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
+
+\item{ind}{The input indices of beams to use, which are updated by this funciton.}
+
+\item{add}{The angle in degrees to add on either side of the sonar volume.}
+
+\item{beamstypes}{The beam type to use, where rectangluar is 1 and non-rectangular is 2.}
 }
 \value{
 

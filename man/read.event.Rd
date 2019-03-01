@@ -5,16 +5,17 @@
 \title{Extracts variables from acoustic events.}
 \usage{
 read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
-  TIME = FALSE, adds = NULL, esnm = "MS70", TVG = TRUE, TVG.exp = 2,
-  ideal = TRUE, cs = "g", seabed = -12000, rot = 2,
+  TIME = FALSE, adds = NULL, esnm = "MS70", TVG = TRUE,
+  TVG.exp = 2, ideal = TRUE, cs = "g", seabed = -12000, rot = 2,
   compensation = c("pitch", "roll"), exact = FALSE, origin = 1,
-  dir.data = NULL, drop.out = TRUE, strip.out = TRUE, dir.out = FALSE,
-  mask = TRUE, Paout = TRUE, bgns = TRUE, pdns = TRUE, nrns = TRUE,
-  hins = TRUE, kern = NULL, merge = TRUE, msg = TRUE, segpar = NULL,
-  pamkpar = list(), nsind = 0.75, hins_add = 10, pdns_scale = 1e-14,
-  TOV = 0, allow.old = FALSE, ggsz = 10, pad = TRUE, split = TRUE,
-  cal = 1, fanWidth = "b2", onestep = TRUE, other = FALSE, fill = NA,
-  info.out = FALSE, ...)
+  dir.data = NULL, drop.out = TRUE, strip.out = TRUE,
+  dir.out = FALSE, mask = TRUE, Paout = TRUE, bgns = TRUE,
+  pdns = TRUE, nrns = TRUE, hins = TRUE, kern = NULL,
+  merge = TRUE, msg = TRUE, segpar = NULL, pamkpar = list(),
+  nsind = 0.75, hins_add = 10, pdns_scale = 1e-14, TOV = 0,
+  allow.old = FALSE, ggsz = 10, pad = TRUE, split = TRUE,
+  cal = 1, fanWidth = "b2", onestep = TRUE, other = FALSE,
+  fill = NA, info.out = FALSE, ...)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}
@@ -57,6 +58,8 @@ read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
 
 \item{dir.out}{is TRUE if only the path to the directory of the event is to be returned.}
 
+\item{mask}{is TRUE to return a data frame of the segmentation mask.}
+
 \item{Paout}{is TRUE if pressure data are to be returned in Pascal.}
 
 \item{bgns}{indicates wheter the estimated background noise should be subtracted, resulting in some negative sv-values. If TRUE (default) the background noise is kept in the data (no action). If FALSE the background noise estimates are attemptedly located in the event directory or the noise estimate directory of the cruise. If string, it should be the path to the file holding the background noise estimates. If the length of 'bgns' is longer than 1, the background noise estmate taken as the simple mean for all beams, regardless of the periodic noise is used.}
@@ -70,6 +73,8 @@ read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
 \item{kern}{is the standard deviation in units of the number of voxels used in a Gaussian kernel smoother along the beams (no smoothing if kern == 0 or length(kern) == 0, which is the default). If given as an integer, say 5L, median smoothing is applied instead of Gaussian.}
 
 \item{merge}{is TRUE if variables read for more than one file are to be merged.}
+
+\item{msg}{is TRUE to print messages to the console.}
 
 \item{segpar}{is a list of elements named "bwGp", "lsth"/"rlst", "usth"/"rust", or "sgth"/"sgt0" specifying the parameters of the segmentation data to read.}
 
@@ -85,11 +90,23 @@ read.event(event = 1, var = "pings", t = 1, cruise = 2009116,
 
 \item{allow.old}{is a TRUE if old UNIX_time file is accepted (still with the correct list of files).}
 
+\item{ggsz}{is the grid size of the global grid in which Sv is returned.}
+
+\item{pad}{Logical: If TRUE, pad with NAs for non-equal lengths of beams.}
+
+\item{split}{See \code{\link{mergeListKeepDimensions}}.}
+
+\item{cal}{a factor to multiply all data by (prior to range compensation).}
+
+\item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
+
 \item{onestep}{is TRUE or 1 to allow for files with only one time step to be read regardless of 't'. If set to 2, the single time step is repeated to the number of time steps requested by \code{t}.}
+
+\item{fill}{is the value to use for missing data (outside of the mask).}
 
 \item{...}{are inputs used in ftim.TSD(), but more importantly in pplot3d.TSD(). Particularly, 'ind', 'range', and 'subset' can be used to subset the data in pplot3d.TSD(), but 'ind' can also be used to subset the acoustic data.}
 
-\item{ind}{is a list of indexes, as typed into the [] of an array extracting a subset of the acoustic data (vbsc or mvbs).}
+\item{other.}{is TRUE to read other files than acoustic, electrical angle, vessel, beams, noise, ctd, school, seg, time.}
 }
 \value{
 

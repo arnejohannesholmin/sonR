@@ -3,6 +3,7 @@
 #' Median along the dimension given by 'along'. The same as apply(x,(1:3)[-along],median,na.rm=TRUE), but some hundred times faster.
 #'
 #' @param x  is a 3d array to be median smoothed along the 'along' dimension.
+#' @param along Integer. The median is taken along this dimension.
 #'
 #' @return
 #'
@@ -16,23 +17,9 @@
 #'
 median3d=function(x, along=1){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2012-01-24 - Clean version.
-	########### DESCRIPTION: ###########
-	# Median along the dimension given by 'along'. The same as apply(x,(1:3)[-along],median,na.rm=TRUE), but some hundred times faster.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---x--- is a 3d array to be median smoothed along the 'along' dimension.
-		
 
-	##################################################
-	##################################################
-	##### Preparation, execution #####
 	d=dim_all(x)
 	nd=length(d)
 	add=3-nd
@@ -66,8 +53,5 @@ median3d=function(x, along=1){
 		}
 	
 		
-	##### Output #####
 	x
-	##################################################
-	##################################################
-	}
+}

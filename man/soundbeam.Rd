@@ -5,8 +5,8 @@
 \title{Computes the path of a ray of sound for the given temperature, salinity and depth/pressure values. The sound beam is calculated in the x-y-plane, where y corresponds to z in three dimensions. If unequal in length, the shorter ones of the inputs are recycled. A list of the following elements is returned Used in soundbeam.TSD().}
 \usage{
 soundbeam(start = c(0, 0), ang, ctd, seabed = -12000, time = NULL,
-  w = NULL, lenb = 1500, sint = 0.000512, rpos = c("midpoint", "edge"),
-  Ncirc = 1000, maxlength = Inf, plot = TRUE, Pain = TRUE)
+  w = NULL, lenb = 1500, sint = 0.000512, rpos = c("midpoint",
+  "edge"), Ncirc = 1000, maxlength = Inf, plot = TRUE, Pain = TRUE)
 }
 \arguments{
 \item{start}{is the transducer position.}

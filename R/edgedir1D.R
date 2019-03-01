@@ -8,6 +8,7 @@
 #' @param rot  is 1 if simple rotation using cosine and sine is to be used, and 2 if the function rotate() is to be used in the rotation. Times for the different methods (tested on MacBook Pro dual 2.8 GHz, 2010-02-09, with other applications running):
 #' @param compensation  is a vector of string giving which rotation values that are compensated for in the sonar. Only c("pitch","roll") is available for the current version. Used in soundbeam.TSD.
 #' @param ideal  is TRUE to represent the simple case where the speed of sound 'data$asps' is invariant of depth.
+#' @param ... Used for robutness.
 #'
 #' @return
 #'

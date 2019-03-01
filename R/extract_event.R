@@ -10,7 +10,7 @@
 #' @param toTSD  is false to disable converting to TSD files.
 #' @param last  is FALSE to skip the last raw file, useful if this file is not complete.
 #' @param temp  is TRUE to only return the temporary directory if raw files already exist and toTSD==TRUE, in which case the existing and temporary tsd files are not merged into the existing.
-#' @param ...___ are parameters passed to EKRaw2TSD(). NA
+#' @param ... are parameters passed to EKRaw2TSD().
 #'
 #' @return
 #'
@@ -25,26 +25,9 @@
 #' @rdname extract_event
 #'
 extract_event <- function(event, rawevent, t, ow=TRUE, dir.data=NULL, toTSD=TRUE, last=TRUE, temp=FALSE, ...){
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
+	
 	############### LOG: ###############
 	# Start: 2015-10-05 - Clean version.
-	########### DESCRIPTION: ###########
-	# Extracts events from a directory of raw files.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---event--- is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.
-	# ---t--- is a two element vector of ftim values between which rawfiles are extracted from a directory (see the description of 'event').
-	# ---rawevent--- specifies a directory with raw files which are copied to 'event' and converted to TSD filess before running the segmentation.
-	# ---ow--- is FALSE to not overwrite existing data when copying data from 'rawevent'.
-	# ---dir.data--- is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().
-	# ---toTSD--- is false to disable converting to TSD files.
-	# ---last--- is FALSE to skip the last raw file, useful if this file is not complete.
-	# ---temp--- is TRUE to only return the temporary directory if raw files already exist and toTSD==TRUE, in which case the existing and temporary tsd files are not merged into the existing.
-	# ---...___ are parameters passed to EKRaw2TSD().
 	
 	# Repeat the t if only of length 1:
 	if(length(t) == 1){
@@ -118,7 +101,7 @@ extract_event <- function(event, rawevent, t, ow=TRUE, dir.data=NULL, toTSD=TRUE
 				file.copy(list.files(tempevent_raw, full.names=TRUE), event_raw)
 				unlink(tempevent_raw, recursive=TRUE)
 				if(!temp){
-					merge_events(c(event_tsd, tempevent_tsd), event_tsd, cruise=NULL, esnm=NULL, dir.data=NULL, ctd=1)
+					combine.events(c(event_tsd, tempevent_tsd), event_tsd, cruise=NULL, esnm=NULL, dir.data=NULL, ctd=1)
 					unlink(tempevent_tsd, recursive=TRUE)
 					t = read.event(event_tsd, var="indt", t=t)$indt
 					}

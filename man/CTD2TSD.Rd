@@ -15,6 +15,8 @@ CTD2TSD(f = NULL, outfile = NULL, hpr0 = NULL, Pain = FALSE,
 \item{hpr0}{is the pressure at sea level, which must be given externally. Defaulted to 101325 pascal.}
 
 \item{Pain}{is TRUE if pressure "ihpr" is given in Pascal and FALSE if given in decibar relative to surface pressure (10000 Pascal, giving values approximately equivalent to water depth).}
+
+\item{vessel}{A list of vessel info by which the closest CTD station is found as the minimum of the sum of distance in meters and seconds.}
 }
 \value{
 

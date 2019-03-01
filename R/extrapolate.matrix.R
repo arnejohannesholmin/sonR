@@ -3,7 +3,7 @@
 #' Extrapolates or shrinks a matrix to according to the specifications given by 'a', 'b' and 'along'. If 'along' (defaulted to 0) is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns of the matrix (negative values imply shrinkage). If along is in in 1:nrow(x), 'a' and 'b' are interpreted as the desired lower and upper value to which the values of x[,along] are to be extrapolated by a simple linear expansion of the two first and the two last rows of 'x'. The column given by 'along' should be sorted.
 #'
 #' @param x  is the input vector or matrix/data.frame. If 'x' is a vector, it is interpreted as a matrix/data.frame of one column
-#' @param a  and 'b' give the range to which the column given by 'along' is extrapolated/shrinked. If along is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns (negative values imply shrinkage). If b==NULL and 'a' has length > 1, the second element of 'a' is interpreted as 'b'.
+#' @param a,b give the range to which the column given by 'along' is extrapolated/shrinked. If along is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns (negative values imply shrinkage). If b==NULL and 'a' has length > 1, the second element of 'a' is interpreted as 'b'.
 #' @param along  is the column along which the extrapolation is specified.
 #' @param grid  is TRUE if the first and the last row of the output are on the grid defined by the expansion.
 #' @param byrow  is TRUE if the expansion/shrinkage is to be done on the rows instead of the columns.

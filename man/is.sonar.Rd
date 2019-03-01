@@ -4,8 +4,8 @@
 \alias{is.sonar}
 \title{Identifies whether the acoustic system is a sonar, fishery sonar or echosounder, for exactly one ping is 'data' is given.}
 \usage{
-is.sonar(esnm = "MS70", bydirs = FALSE, data = list(), margin = 10 *
-  pi/180, bmmd = NULL, fishery = FALSE)
+is.sonar(esnm = "MS70", bydirs = FALSE, data = list(), margin = 10
+  * pi/180, bmmd = NULL, fishery = FALSE)
 }
 \arguments{
 \item{esnm}{the four character identifyer of the acoustical system. Currently implemented: echosounders: "EK60", "ME70"; sonars: "MS70", "SX80", "SH80", "SX90", "SH90".}

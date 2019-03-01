@@ -24,7 +24,7 @@
 #' @export
 #' @rdname UNIX_time
 #'
-UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TRUE, allow.old=FALSE, recursive=TRUE, saveData=FALSE, cores=1){
+UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, allow.old=FALSE, recursive=TRUE, saveData=FALSE, cores=1){
 	
 	############### LOG: ###############
 	# Start: 2011-08-11 - Clean version.
@@ -41,8 +41,6 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 	# Last: 2016-11-03 - Fixed a major bug where new files were not registered in the event, and also set the default of 'saveData' to FALSE.
 	
 	
-	##################################################
-	##################################################
 	##### Preparation #####
 	processvar = c("f000", "u000", "i000", "l000", "t000", "U000", "I000", "i000_full", "I000_full")
 	processdtyp = c("char", "doub", "long", "char", "char", "doub", "long", "long", "long")
@@ -53,23 +51,23 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 	validvarList = setdiff(validvar, c("U000", "I000"))
 	if(identical(tolower(var),"all")){
 		var = validvar
-		}
+	}
 	if(is.list(event)){
 		event = event$event
-		}
+	}
 	if(length(event)==1 && isTRUE(file.info(event)$isdir)){
 		dir = event
-		}
+	}
 	else{
 		dir = dirname(event[1])
-		}
+	}
 		
 	# Get the path to the UNIX_time file, if present:
 	unixfile = file.path(dir,"UNIX_time.tsd")
 	# If the file "UNIX_time.tsd" exists, extract the unix time points:
 	if(!file.exists(unixfile)){
 		unixfile = NULL
-		}
+	}
 	file_path_understroke = gsub("/", "_", file_path_sans_ext(unixfile))
 	UNIX_time_data = paste0("UNIX_time_data", file_path_understroke)
 	UNIX_time_mtime = paste0("UNIX_time_mtime", file_path_understroke)
@@ -83,8 +81,8 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		if(mtime_unixfile < "2016-07-23 20:00:00 CEST"){
 			warnings("Replacing old UNIX_time.TSD file with new and compressed file (all files prior to 2016-07-23 20:00:00 CEST are replaced)")
 			fresh = TRUE
-			}
 		}
+	}
 		
 		
 	### Get the UNIX_time data of the event in memory if present, saving time for large events: ###
@@ -97,8 +95,8 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		file = FALSE
 		if(identical(t,"all")){
 			t = seq_along(out$f000)
-			}
-		}	
+		}
+	}	
 	else{
 		# Using recursive=TRUE discards empty directories:
 		event = list.files_caseInsensitive(event, full.names=TRUE, recursive=recursive)
@@ -109,7 +107,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		if(nfiles==0){
 			warning(paste("Event \"",event,"\" is empty of valid files (not UNIX_time.tsd and sgPM.tsd)",sep=""))
 			return()
-			}
+		}
 	
 		# Identify the tsd directory, if present:
 		if(length(grep("tsd", tolower(tail(pathparts(dir), 1))))==0){
@@ -117,13 +115,13 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			if(tsddir[1]>0){
 				attsd = max(tsddir)
 				dir = substr(dir,1,attsd+4)
-				}
 			}
+		}
 	
 		# Treat all the files if t=="all":
 		if(identical(t,"all")){
 			t = seq_len(nfiles)
-			}
+		}
 	
 		
 		##### Execution and output #####
@@ -134,12 +132,12 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		# Try reading the "UNIX_time.tsd" file:
 		if(!isTRUE(fresh) && length(unixfile)>0){
 			# Read the "UNIX_time.tsd" file:
-			out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, raw=FALSE)
+			out <- read.TSD(unixfile, t="all", dimension=FALSE, header=FALSE, info=FALSE, drop.out=FALSE, use.raw=FALSE)
 			
 			# If information is given for only one file, re-list the data in 'out' (due to read.TSD, which drops dimensions if only one time step is requested):
 			if(!is.list(out$l000)){
 				out = lapply(out, list)
-				}
+			}
 			# Unlist f000 and t000 for convenience:
 			out$f000 = unlist(out$f000, use.names=FALSE)
 			out$t000 = unlist(out$t000, use.names=FALSE)
@@ -153,14 +151,14 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			out$i000[areseq] = lapply(out$i000[areseq], function(xx) seq.int(xx[2], xx[3]))
 			if(length(out$I000)==3 && head(out$I000, 1)==0){
 				out$I000 = seq.int(out$I000[2], out$I000[3])
-				}
+			}
 			# Add u000:
 			out$u000 = lapply(out$i000, function(xx) out$U000[xx])
 			
 			if(saveData){
 				assign(UNIX_time_data, out, envir=.GlobalEnv)
 				assign(UNIX_time_mtime, mtime_unixfile, envir=.GlobalEnv)
-				}
+			}
 			
 			# Check whether the filenames given in the unix time file are the same as the actual filenames, and whether the "UNIX_time.tsd" file is the latest:
 			### names_unixfile = sort(tolower(c(out$f000)))[t]
@@ -172,14 +170,14 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			### 	parts_names_filelist1 = strsplit(names_filelist[1],"/|\\\\")[[1]]
 			### 	if(sum(parts_names_unixfile1!=parts_names_filelist1) < 2){
 			### 		identicalnames = TRUE
-			### 		}
+			### 	}
 			### 	else{
 			### 		identicalnames = FALSE
-			### 		}
 			### 	}
+			### }
 			### else{
 			### 	identicalnames = FALSE
-			### 	}
+			### }
 			
 			#identicalnames <- identical(names_unixfile==names_filelist)
 			identicalnames <- identical(names_unixfile, names_filelist)
@@ -189,17 +187,17 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			if((allow.old && identicalnames) || (identicalnames && latestfile)){
 				file = FALSE
 				readFiles = FALSE
-				}
+			}
 			else if(length(file)>0 && !is.character(file[1])){
 				file = NULL
-				}
 			}
 		}
+	}
 	
 	# If fresh==NULL, return 'out' before trying to get the time information (used in noise.path()):
 	if(length(fresh)==0){
 		return(out)
-		}
+	}
 	
 	###################################################################################################
 	##### Get the new time information of file for which UNIX_time information has not been read: #####
@@ -220,18 +218,18 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 			# Warning if label information is not present:
 			if(identical(eventClean, event) && length(unlist(lapply(labl_all, length), use.names=FALSE))==0){
 				warning("The event contains no TSD files")
-				}
+			}
 			
 				# Discard time information for ctd-files:
 				arectd = tolower(file_ext(eventClean))=="ctd"
 				if(any(arectd)){
 					utim_all[arectd] = vector("list", sum(arectd))
-				}
+			}
 				# Add the information that was read for the new or changed files:
 				out$u000 = c(out$u000, utim_all)
 				out$l000 = c(out$l000, labl_all)
 				out$f000 = c(out$f000, eventClean)
-			}
+		}
 			
 		
 		
@@ -240,7 +238,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		present = out$f000 %in% event
 		if(any(present)){
 			out[validvarList] = lapply(out[validvarList], function(x) x[present])
-		}
+	}
 		
 		
 		
@@ -267,7 +265,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		out$I000_full = out$I000
 		if(diff(range(out$I000))==length(out$I000)-1 && length(out$I000) > 3){
 			out$I000 = c(0, range(out$I000))
-			}
+		}
 		
 		
 		# Order by the order in 'event':
@@ -276,21 +274,21 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		
 		# Insert modification time:
 		out$t000 = as.character(mtime_event)
-		}
+	}
 	
 	# Default is to write to a file named "UNIX_time.tsd" in the event:
 	if(any(length(file)==0,nchar(file)==0,isTRUE(file))){
 		file = file.path(dir,"UNIX_time.tsd")
-		}	
+	}	
 	# Write the UNIX_time file:
 	if(!identical(file,FALSE) && sum(unlist(lapply(out,length), use.names=FALSE))>0){
 		listsTooDeep = lapply(out, function(x) if(length(x)>0) which(sapply(x,is.list)) else FALSE)
 		listsTooDeep = unique(unlist(listsTooDeep, use.names=FALSE))
 		if(length(listsTooDeep)>0){
 			warning(paste("The following files are improperly organized (list at one or more of the time steps, which is not supported). Most likely the time information is not present for all time steps:\n",paste(event[listsTooDeep],collapse="\n")))
-			}
-		write.TSD(out[varToWrite], file, header=list(dtyp=processdtyp[varToWrite]), dimension=TRUE, numt=nfiles, keep.null=TRUE)
 		}
+		write.TSD(out[varToWrite], file, header=list(dtyp=processdtyp[varToWrite]), dimension=TRUE, numt=nfiles, keep.null=TRUE)
+	}
 	
 	# Add the file names as names to the list elements for each variable:
 	if("f000" %in% names(out)){
@@ -298,9 +296,9 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		for(i in which(names(out) %in% addfilenames)){
 			if(length(out[[i]])>0){
 				names(out[[i]]) = out$f000
-				}
 			}
 		}
+	}
 	
 	# Re-insert the full time step indices, and remove compressed:
 	if(length(out)>7){
@@ -308,7 +306,7 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 		out$I000 = out$I000_full
 		out$i000_full = NULL
 		out$I000_full = NULL
-		}
+	}
 	# Return the subset specified by 't':
 	out[c("f000", "i000", "u000", "l000", "t000")] = lapply(out[c("f000", "i000", "u000", "l000", "t000")],function(x) x[t])
 	# Unlist the I000 and U000 which were put in a list during writing to indicate one single time step for these variables:
@@ -316,6 +314,4 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, msg=TR
 	
 	
 	invisible(out)
-	##################################################
-	##################################################
-	}
+}

@@ -4,8 +4,8 @@
 \alias{merge_TSD_by_var}
 \title{This function returns a list of indices of files of common time (utim)/sailed distance (sadv), or if this list is given merges the common files.}
 \usage{
-merge_TSD_by_var(files, var = "utim", ind = NULL, fun = weighted.mean,
-  msg = FALSE, ...)
+merge_TSD_by_var(files, var = "utim", ind = NULL,
+  fun = weighted.mean, msg = FALSE, ...)
 }
 \arguments{
 \item{files}{list of file names, seed the use in \code{\link{compr.event}}.}

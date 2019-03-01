@@ -20,7 +20,7 @@
 #' @param kurtosis  is a vector of the lower and upper limit for the kurtosis estimate, outside of which estimates (of all parameters) are discarded.
 #' @param reffan  is the reference fan used in the calculation of the phase angles.
 #' @param pdns_scale  is used for scaling the data to ensure best performance of the optimization, and corersponds to the mean of the data (default if set to NULL).
-#' @param lowerpar , 'startpar' and 'upperpar' are the lower, start and upper parameter values representing the magnitude, kurtosis and phase, respectively, where the magnitude is given relative to 'pdns_scale'.
+#' @param lowerpar,startpar,upperpar are the lower, start and upper parameter values representing the magnitude, kurtosis and phase, respectively, where the magnitude is given relative to 'pdns_scale'.
 #' @param kern  is either a vector of wieghts summing to 1, specifying the smoothing of the spectral frequency used to identify the harmonics, or a single numeric = 1, specitying a Gaussian kernel with sd=1.
 #' @param high  is used in resampleHigh() in get.bgns.event() to reduce the impact from unusually high values in the fft.
 #' @param ...  variables used in write.TSD() (such as 'ow' for overwriting existing files).
@@ -38,10 +38,6 @@
 #'
 get.bgns.event<-function(con=NULL, event=NULL, cruise=2009116, t=NULL, esnm="MS70", noise=NULL, fftthreshold=0.145, nsind=0.75, acfq=100, prob=0.2, type=6, tries=c(10,10), thr=1e-3, trim=0.1, search=4, kurtosis=c(0.1,3), reffan=16, pdns_scale=1e-14, lowerpar=c(1e-3,0.001,-2*pi), startpar=c(1,2,3), upperpar=c(1e3,6,4*pi), kern=NULL, high=Inf, ...){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2010-03-12 - Clean version.
 	# Update: 2012-05-23 - Changed to estimate the periodic noise as well, using optim() and estimating the background noise and periodic noise simultaneously.
@@ -61,9 +57,6 @@ get.bgns.event<-function(con=NULL, event=NULL, cruise=2009116, t=NULL, esnm="MS7
 	# Update: 2012-11-24 - Added the simple mean of each beam, regardless of periodic noise, to the output.
 	# Last: 2013-07-19 - Removed 'near.range' and renamed 'ind1' to 'nsind'.
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Mode function:
 	getharm = function(x){
@@ -505,6 +498,4 @@ get.bgns.event<-function(con=NULL, event=NULL, cruise=2009116, t=NULL, esnm="MS7
 		write.TSD(out,con=con,numt=numt,...)
 		}
 	out
-	##################################################
-	##################################################
-	}
+}

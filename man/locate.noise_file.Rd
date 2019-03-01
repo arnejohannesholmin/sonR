@@ -4,8 +4,17 @@
 \alias{locate.noise_file}
 \title{(Internal) Locate noise file.}
 \usage{
-locate.noise_file(event, noisevar = c("bgns", "nrnp"), corvar = c("crb1",
-  "olpb"), esnm = "MS70")
+locate.noise_file(event, noisevar = c("bgns", "nrnp"),
+  corvar = c("crb1", "olpb"), esnm = "MS70")
+}
+\arguments{
+\item{event}{The path to the event.}
+
+\item{noisevar}{A vector of noise variabes to find.}
+
+\item{corvar}{A vector of noise correlation variabes to find.}
+
+\item{esnm}{The name of the acoustic instrument for which to find the noise files.}
 }
 \value{
 

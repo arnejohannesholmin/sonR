@@ -13,6 +13,8 @@ get.pdns_phase.TSD(data = list(), nsind = 0.75, cruise = 2009116,
 
 \item{nsind}{is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.}
 
+\item{cruise, event, esnm}{Used in \code{\link{noise.path}} to get the path to the noise data holding the background noise, if missing in the data.}
+
 \item{dir.data}{is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().}
 
 \item{pdns_scale}{is used to scale the noise in order to allow the optimization to work.}

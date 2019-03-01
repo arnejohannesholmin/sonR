@@ -5,6 +5,7 @@
 #' @param data  is a list of elements named according to the TSD file format.
 #' @param range  is a list of elements with names matching names if 'data', specifying the range of the corresponding elements.
 #' @param this  is an optional previously generated list of indexes as returned from extract().
+#' @param treated  A vector of variable names already treated.
 #' @param ineq  is a string giving the inequality function to apply to the selection ("<" or "<=").
 #' @param ind.out  is TRUE if the indexes for the elements segmented are to be returned.
 #' @param insert.NA  is TRUE if the discarded data are to be kept as NA.
@@ -17,29 +18,11 @@
 #' @export
 #' @rdname extract.range.TSD
 #'
-extract.range.TSD<-function(data=list(), range=list(), this=list(), treated=NULL, ineq="<", ind.out=FALSE, insert.NA=FALSE){
+extract.range.TSD <- function(data=list(), range=list(), this=list(), treated=NULL, ineq="<", ind.out=FALSE, insert.NA=FALSE){
 
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2013-06-06 - Clean version.
-	########### DESCRIPTION: ###########
-	# Extracts a subset of TSD data according to the ranges given for the variables of 'data' in 'range'. 
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---data--- is a list of elements named according to the TSD file format.
-	# ---range--- is a list of elements with names matching names if 'data', specifying the range of the corresponding elements.
-	# ---this--- is an optional previously generated list of indexes as returned from extract().
-	# ---ineq--- is a string giving the inequality function to apply to the selection ("<" or "<=").
-	# ---ind.out--- is TRUE if the indexes for the elements segmented are to be returned.
-	# ---insert.NA--- is TRUE if the discarded data are to be kept as NA.
-		
 	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Get the names of 'range' and separate out the names concerinig voxels ('namesposx') and fish ('namesposf'):
 	# If the mean volume backscattering strength (Sv) is to be subsetted, transform to volume backscattering coefficient (linear, sv):
@@ -55,6 +38,8 @@ extract.range.TSD<-function(data=list(), range=list(), this=list(), treated=NULL
 	
 		
 	##### Execution #####
+	# 2018-11-17: This seems like repeated code which sould be treated by a function:
+	
 	# Positions of the voxels, simultaneously subsetted:
 	if(length(namesposx)>0){
 		thisind=TRUE
@@ -147,6 +132,4 @@ extract.range.TSD<-function(data=list(), range=list(), this=list(), treated=NULL
 	# Output:
 	data[["treated"]]=treated
 	data
-	##################################################
-	##################################################
-	}
+}

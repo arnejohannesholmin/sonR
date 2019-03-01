@@ -20,18 +20,11 @@
 #' @export
 #' @rdname voxel.edge.TSD
 #'
-voxel.edge.TSD<-function(data, t=1, esnm=NULL, seabed=-12000, rot=1, compensation=c("pitch", "roll"), ideal=TRUE, stretch=1, fanWidth="b2", ...){
-		
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
+voxel.edge.TSD <- function(data, t=1, esnm=NULL, seabed=-12000, rot=1, compensation=c("pitch", "roll"), ideal=TRUE, stretch=1, fanWidth="b2", ...){
+	
 	############### LOG: ###############
 	# Start: 2011-09-25 - Clean version.
 		
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Function for selecting one ping of multiple pings beam configuration data (particularly for fishery sonars):
 	getPingBeams = function(x, p){
@@ -65,6 +58,4 @@ voxel.edge.TSD<-function(data, t=1, esnm=NULL, seabed=-12000, rot=1, compensatio
 	else{
 		warning(paste("Unsupported echo sounder ",esnm," for voxel data",sep=""))
 		}
-	##################################################
-	##################################################
 	}

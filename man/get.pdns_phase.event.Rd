@@ -2,7 +2,7 @@
 % Please edit documentation in R/get.pdns_phase.event.R
 \name{get.pdns_phase.event}
 \alias{get.pdns_phase.event}
-\title{Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the MS70 noise estimate for the given event. Only used in echoIBM.vbsc2p.event().}
+\title{Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the noise estimate for the given event. Only used in echoIBM.vbsc2p.event().}
 \usage{
 get.pdns_phase.event(event = 1, cruise = 2009116, esnm = "MS70",
   t = 1:100, noise = list(), nsind = 0.75, dir.data = NULL,
@@ -12,6 +12,8 @@ get.pdns_phase.event(event = 1, cruise = 2009116, esnm = "MS70",
 \item{event}{is the identifier of the event. Given either as the number of the event, a string contained in the name of the event, or the path of the event directory. More than one event may be given, in a vector.}
 
 \item{cruise}{is the identifier of the cruise. Given either as the specification used by IMR (yyyynnn), or the path to the directory containing the event to be read.}
+
+\item{esnm}{The name of the acoustic system for ehich to estimate the phase of the periodic noise.}
 
 \item{t}{is the identifier of the time points. Given either as a vector of integers between 1 and the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points are extracted. If t=="all", all files are read and if t=="none" no action is done. If more than one event is given, 't_bgns' must be given as a list of vectors.}
 
@@ -29,7 +31,7 @@ get.pdns_phase.event(event = 1, cruise = 2009116, esnm = "MS70",
 
 }
 \description{
-Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the MS70 noise estimate for the given event. Only used in echoIBM.vbsc2p.event().
+Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the noise estimate for the given event. Only used in echoIBM.vbsc2p.event().
 }
 \examples{
 \dontrun{}

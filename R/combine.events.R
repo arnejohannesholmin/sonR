@@ -2,17 +2,24 @@
 #*********************************************
 #' (Internal) Merge segmentation events, used in SX90.segment.event() and extract_event().
 #'
+#' @param events  is a list of beam configuration data.
+#' @param event  is a list of beam configuration data.
+#' @param cruise  is a list of beam configuration data.
+#' @param esnm  is a list of beam configuration data.
+#' @param dir.data  is a list of beam configuration data.
+#' @param ctd  is a list of beam configuration data.
+#'
 #' @return
 #'
 #' @examples
 #' \dontrun{}
 #'
-#' @importFrom TSD merge_TSD read.TSD read.TSDs zeropad
+#' @importFrom TSD combine.TSD read.TSD read.TSDs zeropad
 #' @importFrom tools file_ext
 #'
 #' @export
 #' 
-merge_events <- function(events, event, cruise=NULL, esnm=NULL, dir.data=NULL, ctd=1){
+combine.events <- function(events, event, cruise=NULL, esnm=NULL, dir.data=NULL, ctd=1){
 	if(length(events)<2){
 		stop("At least one event must be given")
 		}
@@ -59,17 +66,17 @@ merge_events <- function(events, event, cruise=NULL, esnm=NULL, dir.data=NULL, c
 	
 	# Merge beams files if these have more than one time step, otherwise copy only the first file to the new event:
 	if(read.TSD(beamsfiles[1], var="numt")$numt>1){
-		merge_TSD(beamsfiles, dir=event, indt=FALSE, reserve=FALSE)
+		combine.TSD(beamsfiles, dir=event, indt=FALSE, reserve=FALSE)
 		}
 	else{
 		file.copy(beamsfiles[1], file.path(event,basename(beamsfiles[1])))
 		}
 	
 	# Merge vessel files:
-	merge_TSD(vesselfiles, dir=event, indt=FALSE, reserve=FALSE)
+	combine.TSD(vesselfiles, dir=event, indt=FALSE, reserve=FALSE)
 
 	# Merge rawvessel files:
-	merge_TSD(rawvesselfiles, dir=event, indt=FALSE, reserve=FALSE)
+	combine.TSD(rawvesselfiles, dir=event, indt=FALSE, reserve=FALSE)
 
 	# Copy the first CTD file to the new event:
 	file.copy(ctdfiles[ctd], file.path(event,basename(ctdfiles[1])))

@@ -4,6 +4,7 @@
 #'
 #' @param data  is a list of the following variables ( can be obtained by data=c(read.event(var=c("beams","vbsc","")),read.TSDs(noise.path(),var=c("pns1","pns2","harm","badb","bgns","acfq"))) ):
 #' @param nsind  is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.
+#' @param cruise,event,esnm  Used in \code{\link{noise.path}} to get the path to the noise data holding the background noise, if missing in the data.
 #' @param dir.data  is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().
 #' @param pdns_scale  is used to scale the noise in order to allow the optimization to work.
 #' @param TVG  is FALSE if TVG compensation is to be removed from the data.
@@ -23,39 +24,11 @@
 #'
 get.pdns_phase.TSD<-function(data=list(), nsind=0.75, cruise=2009116, event=NULL, esnm="MS70", dir.data=NULL, pdns_scale=1e-14, TVG=TRUE){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2010-11-23 - Clean version, adopted from get.pdns_phase.MS70().
 	# Update: 2013-07-19 - Changed 'ind1' to 'nsind' and applied ind.expand().
 	# Last: 2013-07-19 - Changed names from get.pdns_phase.MS70.TSD() to get.pdns_phase.TSD().
-	########### DESCRIPTION: ###########
-	# Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the MS70 noise estimate for the given event.
-	########## DEPENDENCIES: ###########
-	# zeros(), write.TSD()
-	############ VARIABLES: ############
-	# ---data--- is a list of the following variables ( can be obtained by data=c(read.event(var=c("beams","vbsc","")),read.TSDs(noise.path(),var=c("pns1","pns2","harm","badb","bgns","acfq"))) ):
-	#		'pns1' - magnitude parameter of the periodic noise
-	#		'pns2' - kurtosis parameter of the periodic noise
-	#		'harm' - harmonics parameter of the periodic noise
-	#		'badb' - identifyer of the periodic noise
-	#		'bgns' - background noise 
-	#		'acfq' - alternating current frequency
-	#		'vbsc' - volume backscattering coefficient
-	#		'numb' - number of beams
-	#		'lenb' - length of the beams
-	#		'freq' - frequency of the beams
-	#		'sint' - sample interval duration
-	# ---nsind--- is a vector of indexes along the beams, as input to ind.expand(), used to select the subset over which the estimation of the phase of the periodic noise is done. If given as a single numeric, the outermost 'nsind' voxels are used in each beam.
-	# ---dir.data--- is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().
-	# ---pdns_scale--- is used to scale the noise in order to allow the optimization to work.
-	# ---TVG--- is FALSE if TVG compensation is to be removed from the data.
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# Function for calculating the mean og angles:
 	angleMean=function(ang,w=1){
@@ -162,6 +135,4 @@ get.pdns_phase.TSD<-function(data=list(), nsind=0.75, cruise=2009116, event=NULL
 	
 	# Write the mean of the rows of 'out' if required:
 	list(pns3=pns3, pn3M=pn3M, pn30=pn30)
-	##################################################
-	##################################################
-	}
+}

@@ -5,7 +5,7 @@
 \title{Generate a simulation event.}
 \usage{
 generate.event(event = "Event1", cruise = "Cruise1", esnm = NULL,
-  dir.type = c("raw", "tsd"), dir.data = NULL, ...)
+  dir.type = c("raw", "tsd"), ...)
 }
 \arguments{
 \item{event}{is the name of the event, such as "S2014119_D200141023_E0003".}
@@ -16,7 +16,7 @@ generate.event(event = "Event1", cruise = "Cruise1", esnm = NULL,
 
 \item{dir.type}{is the types of data, usually c("raw", "tsd").}
 
-\item{schoolthr}{is a function of size and mean volume backscattering strength (S_V) defining the threshold level below the 90-percentile of the school using the initial above-noise-threshold. Can also be a vector of values, where one segmentation file is written for each value of 'schoolthr'.}
+\item{...}{Passed on to dir.create.}
 }
 \value{
 

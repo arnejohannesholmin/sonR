@@ -5,7 +5,7 @@
 #' @param out  is a list containing the segmentation data, typically out$sgsc when run from read.event().
 #' @param beamsfiles  is a vector of the file names of the beams-files.
 #' @param beamsfilesind  is a vector of the indexes of the beams-files in the list of files.
-#' @param TIME  is the list returned from UNIX_time().
+#' @param tlist  a list of time step indices.
 #' @param pamkpar  is a list of parameters ('krange', 'criterion', 'alpha' and 'mindist') used pamk() when clustering the segmented voxels 'sgsc'. The voxels 'sgsc' are also ordered so that the voxels belonging to the largest cluster lead and the second to largest cluster follows. A suggested set of parameters are pamkpar=list(krange=1:4,criterion="asw",alpha=0.05,N=1e2,mindist=100).
 #' @param esnm  is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.
 #'
@@ -20,18 +20,11 @@
 #' @export
 #' @rdname read.event_get.clsz
 #'
-read.event_get.clsz<-function(out, beamsfiles, beamsfilesind, tlist, pamkpar, esnm){
+read.event_get.clsz <- function(out, beamsfiles, beamsfilesind, tlist, pamkpar, esnm){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2013-05-12 - Clean version.
 	
-
-	##################################################
-	##################################################
 	if(!"sgsc" %in% names(out)){
 		warning("Segmentation cluster size 'clsz' requested but not returned. Segmentation data 'sgsc' must be present for 'clsz' to be returned")
 		}
@@ -123,6 +116,4 @@ read.event_get.clsz<-function(out, beamsfiles, beamsfilesind, tlist, pamkpar, es
 			}
 		}
 	out
-	##################################################
-	##################################################
-	}
+}

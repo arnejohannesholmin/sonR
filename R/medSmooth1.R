@@ -2,8 +2,11 @@
 #*********************************************
 #' Median smoothing an array along the first dimension.
 #'
-#' @param x  is an array to be median smoothed along the first dimension.
-#' @param w  is the width of median filter (odd number).
+#' @param x				An array to be median smoothed along the first dimension.
+#' @param w				The width of median filter (odd number).
+#' @param try.runmed	Locigal: If TRUE try the function \code{\link{medSmooth1_runmed}} first and then \code{\link{medSmooth1_median3d}}.
+#' @param silent		Used in \code{\link{medSmooth1_runmed}}.
+#' @param ...			Used in \code{\link{medSmooth1_runmed}} and \code{\link{medSmooth1_median3d}}.
 #'
 #' @return
 #'
@@ -15,24 +18,9 @@
 #'
 medSmooth1<-function(x, w=3, try.runmed=FALSE, silent=FALSE, ...){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2013-09-19 - Clean version.
-	########### DESCRIPTION: ###########
-	# Median smoothing an array along the first dimension.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---x--- is an array to be median smoothed along the first dimension.
-	# ---w--- is the width of median filter (odd number).
 	
-	
-	##################################################
-	##################################################
-	########## Preparation ##########
 	# Try the fast method:
 	m <- NULL
 	if(try.runmed){
@@ -46,6 +34,4 @@ medSmooth1<-function(x, w=3, try.runmed=FALSE, silent=FALSE, ...){
 		m <- medSmooth1_median3d(x, w, ...)
 	}
 	return(m)
-	##################################################
-	##################################################
 }

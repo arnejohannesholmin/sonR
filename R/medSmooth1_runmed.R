@@ -4,6 +4,7 @@
 #'
 #' @param x  is an array to be median smoothed along the first dimension.
 #' @param w  is the width of median filter (odd number).
+#' @param ...  Used for robustness.
 #'
 #' @return
 #'
@@ -18,23 +19,9 @@
 #'
 medSmooth1_runmed<-function(x, w=3, ...){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2013-09-19 - Clean version.
-	########### DESCRIPTION: ###########
-	# Median smoothing an array along the first dimension.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---x--- is an array to be median smoothed along the first dimension.
-	# ---w--- is the width of median filter (odd number).
 	
-	
-	##################################################
-	##################################################
 	########## Preparation ##########
 	if(length(x)==0 || is.character(x)){
 		return(x)
@@ -73,6 +60,4 @@ medSmooth1_runmed<-function(x, w=3, ...){
 	# Return the smoothed data with the original dimension:
 	dim(x) <- olddim
 	x
-	##################################################
-	##################################################
-	}
+}
