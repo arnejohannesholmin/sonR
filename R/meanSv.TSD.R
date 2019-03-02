@@ -126,7 +126,7 @@ meanSv.TSD <- function(data, plot.hist=FALSE, allow.vbsc=TRUE, list.out=FALSE, m
 	
 	HhSv = 10*log10(o$m)
 	
-	# Fast approximation, where the scale nu = 10/log(10), a quantile of the kernel density estimate is taken at 93 % (giving a point close to the half point for a negative Gumbel distributed variable), and the Gumbel CDF is used to calculate the mean mu, by GumbelCDF(y at the 93 percentile) = exp( -exp(-(y-mu)/nu) ) = 0.07 => y-mu = 10/log(10) * log(-log(0.07)) = 4.247608 ≈ 4.25. Thus, the mean Sv can be estimated by the 93-percentile of the Sv minus 4.25 dB:
+	# Fast approximation, where the scale nu = 10/log(10), a quantile of the kernel density estimate is taken at 93 percent (giving a point close to the half point for a negative Gumbel distributed variable), and the Gumbel CDF is used to calculate the mean mu, by GumbelCDF(y at the 93 percentile) = exp( -exp(-(y-mu)/nu) ) = 0.07 => y-mu = 10/log(10) * log(-log(0.07)) = 4.247608 approx 4.25. Thus, the mean Sv can be estimated by the 93-percentile of the Sv minus 4.25 dB:
 	HGSv = quantile(x, 0.93, names=FALSE, na.rm=TRUE) - 4.25
 	
 	# Also get the average and median Sv:

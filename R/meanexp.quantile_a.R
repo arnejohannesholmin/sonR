@@ -37,7 +37,7 @@ meanexp.quantile_a <- function(x, lower=0, upper=1, prob=0.5, a=1, type=6, MARGI
 	# The expression which is the Exponential cummulative distribution function estimated by the quantile q(prob)
 	CDF <- function(beta, q, a, prob, N){
 		#abs(sum(exp(-q/(beta+a)))-N*(1-prob))
-		# Change implemented after comment from Dag Tjøstheim 2012-11-02:
+		# Change implemented after comment from Dag Tjostheim 2012-11-02:
 		(sum(exp(-q/(beta+a)))-N*(1-prob))^2
 	}
 	getbeta <- function(x, lower, upper, prob, type, a){

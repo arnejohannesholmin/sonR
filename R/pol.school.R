@@ -37,7 +37,7 @@ pol.school=function(x,type=c("Huth","Couzin","sd","azimuth","elevation")){
 			meandir=colMeans(x)
 			norm_meandir=sqrt(sum(meandir^2))
 			}
-		# The dot product between two vectors 'a' and 'b' is given by a•b = |a| |b| cos(theta):
+		# The dot product between two vectors 'a' and 'b' is given by a*b = norm(a) norm(b) cos(theta):
 		mean(acos((x %*% meandir) / (norm_meandir * norm_x) ))
 		}
 	

@@ -16,28 +16,15 @@
 #'
 volx3D_oneping<-function(data){
 		
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
 	############### LOG: ###############
 	# Start: 2009-07-24 - Clean version.
 	# Update: 2010-02-09 - Added support for TSD input and adapted to the array structure having the radial part along the first dimension and the beams along the second (lenb,numb).
 	# Last: 2015-11-24 - Return list.
-	########### DESCRIPTION: ###########
-	# Calculates the volumes of the voxels of the MS70 multibeam sonar given the CTD-data and beams-data. See read.event() for importing volumes of voxels.
-	########## DEPENDENCIES: ###########
-	# zeros(), soundbeam(), 
-	############ VARIABLES: ############
-	# ---data--- is the list of the inputs used in the function as returned from read.TSD() (must include "").
 	
-	
-	##################################################
-	##################################################
 	##### Preparation #####
 	# The volume of the spherical segments, calculated by the following argument:
-	# Volume of an open spherical sector (see http://mathworld.wolfram.com/SphericalSector.html), is 2 pi r^3(cos(phi1) − cos(phi2))/3, where 'r' is the radial distance to the edge of the sphere, and 'theta' and 'phi' are the azimuth and elevation angles, respectively. Subtracting for two radial distances and subsetting the resulting strip by theta relative to 2*pi gives: 
-	# (theta2−theta1) (cos(phi1) −cos(phi2))(r2^3 −r1^3) / 3:
+	# Volume of an open spherical sector (see http://mathworld.wolfram.com/SphericalSector.html), is 2 pi r^3(cos(phi1) - cos(phi2))/3, where 'r' is the radial distance to the edge of the sphere, and 'theta' and 'phi' are the azimuth and elevation angles, respectively. Subtracting for two radial distances and subsetting the resulting strip by theta relative to 2*pi gives: 
+	# (theta2 - theta1) (cos(phi1) -cos(phi2))(r2^3 - r1^3) / 3:
 	
 	# If average speed of sound is not given, it is set to 1500 with a warning.
 	if(is.null(data$asps) && is.null(data$asps)){
@@ -72,6 +59,4 @@ volx3D_oneping<-function(data){
 	##### Output #####
 	# Horizontal partitioning:
 	data[c("volx", "ranges", "udira", "udire")]
-	##################################################
-	##################################################
-	}
+}
