@@ -46,7 +46,7 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 	##### Execution #####
 	# Get the edges of the voxels, rectangular and/or circular:
 	out=list()
-	if(sonR_implemented(esnm, "SBE")){
+	if(sonR_implemented(esnm, "SBE")[1]){
 		data = getPingBeams(data, 1)
 		data = get.specs.esnm(data, esnm=esnm)
 		if(strff("harx",var)){
@@ -58,7 +58,7 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 			out[names(thisdata)] = thisdata
 			}
 		}
-	else if(sonR_implemented(esnm, "MBE")){
+	else if(sonR_implemented(esnm, "MBE")[1]){
 		data = getPingBeams(data, 1)
 		data = get.specs.esnm(data, esnm=esnm)
 		if(strff("harx",var)){
@@ -79,7 +79,7 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 				}
 			}
 		}
-	else if(sonR_implemented(esnm, "MBS")){
+	else if(sonR_implemented(esnm, "MBS")[1]){
 		data = getPingBeams(data, 1)
 		data = get.specs.esnm(data, esnm=esnm)
 		if(strff("harx",var)){
@@ -92,7 +92,7 @@ volx.TSD<-function(data, esnm="MS70", var=c("volx", "harx"), fanWidth="b2"){
 			#out$volx = volx3D_oneping(data)
 			}
 		}
-	else if(sonR_implemented(esnm, "OFS")){
+	else if(sonR_implemented(esnm, "OFS")[1]){
 		# If only one time step is given, expand to a matrix for convenience:
 		if(length(dim(data$dira))<2){
 			presentbeamsvar = intersect(names(data),labl.TSD("rb"))

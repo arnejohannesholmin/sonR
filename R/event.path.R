@@ -30,7 +30,7 @@ event.path <- function(event=1, cruise=2009116, eventName=1, esnm="MS70", dir.ty
 			stop(paste("No directories in ", event,sep=""))
 		}
 		if(!any(tolower(present_esnm)==tolower(esnm))){
-			warning(paste("The specified 'esnm' (",esnm,") is not present in ",event,". The first chosen: ",present_esnm[1],sep=""))
+			warning(paste("The specified 'esnm' (", esnm, ") is not present in ",event,". The first chosen: ",present_esnm[1],sep=""))
 			file.path(event, present_esnm[1])
 		}
 		else{
@@ -43,7 +43,7 @@ event.path <- function(event=1, cruise=2009116, eventName=1, esnm="MS70", dir.ty
 			stop(paste("No directories in ", event,sep=""))
 		}
 		if(!any(tolower(present_dir.type)==tolower(dir.type))){
-			warning(paste("The specified 'dir.type' is not present in ",event,". The first chosen: ",present_dir.type[1],sep=""))
+			warning(paste("The specified 'dir.type' (", dir.type ,") is not present in ",event,". The first chosen: ",present_dir.type[1],sep=""))
 			file.path(event, present_dir.type[1])
 		}
 		else{

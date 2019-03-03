@@ -47,10 +47,10 @@ is.sonar<-function(esnm="MS70", bydirs=FALSE, data=list(), margin=10*pi/180, bmm
 	}
 	# Test using sonR_implemented():
 	if(fishery){
-		issonar <- sonR_implemented(esnm, type=c("MBS", "OFS"))
+		issonar <- sonR_implemented(esnm, type=c("MBS", "OFS")[1])
 	}
 	else{
-		issonar <- sonR_implemented(esnm, type=c("MBS"))
+		issonar <- sonR_implemented(esnm, type=c("MBS")[1])
 	}
 	### # Define echosounders:
 	### echsounders = c("ek60", "me70")

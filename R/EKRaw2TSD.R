@@ -112,6 +112,7 @@ EKRaw2TSD <- function(event, filenr="all", t="all", cruise=NULL, esnm="MS70", ev
 		x3 <- file.path(paste0(file_path_sans_extx, "_3."), file_extx)
 		list(x1, x2, x3, x)
 	}
+	
 	compress <- any(sapply(c(tres, xres, zres, rres, bres), length)>0)
 	if(isTRUE(write)){
 		write <- c("p", "b", "v", "rv", "c")
@@ -378,9 +379,9 @@ EKRaw2TSD <- function(event, filenr="all", t="all", cruise=NULL, esnm="MS70", ev
 	}
 	
 	# Return individual lists or merge to one list:
-	invisible(c(data, vessel, rawvessel, ctd))
-	##################################################
-	##################################################
+	#invisible(c(data, vessel, rawvessel, ctd))
+	
+	return(event_tsd)
 }
 #'
 #' @export
@@ -405,8 +406,10 @@ EKRaw2TSDs <- function(event, esnm=c("SU90", "EK60"), dir.type=c("tsd", "Work"),
 	events <- as.data.frame(events, stringsAsFactors=FALSE)
 	
 	# Run first the conversion from EKRaw to TSD, linking to the echosounder TSD directory, which should be the first directory as per the ordering of 'esnm' above:
-	lapply(events$raw, EKRaw2TSD, cores=cores, event_sadv=events$tsd[1])
+	out <- lapply(events$raw, EKRaw2TSD, cores=cores, event_sadv=events$tsd[1])
 
+	# Return a vector of paths to the TSD events:
+	return(out)
 	# Then convert the Work files:
 	#lapply(events$Work, work2TSD, cores=cores)
 }
