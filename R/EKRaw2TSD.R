@@ -400,7 +400,7 @@ EKRaw2TSDs <- function(event, esnm=c("SU90", "EK60"), dir.type=c("tsd", "Work"),
 	
 	# Get the full paths to the events:
 	esnm_dir.type <- expand.grid(esnm=esnm, dir.type=dir.type)
-	events <- apply(esnm_dir.type, 1, function(x) event.path(event, esnm=x["esnm"], dir.type=x["dir.type"])$event)
+	suppressWarnings(events <- apply(esnm_dir.type, 1, function(x) event.path(event, esnm=x["esnm"], dir.type=x["dir.type"])$event))
 	events <- matrix(events, ncol=length(dir.type))
 	dimnames(events) <- list(esnm, dir.type)
 	events <- as.data.frame(events, stringsAsFactors=FALSE)
@@ -417,11 +417,11 @@ EKRaw2TSDs <- function(event, esnm=c("SU90", "EK60"), dir.type=c("tsd", "Work"),
 #' @export
 #' @rdname EKRaw2TSD
 #'
-getSchoolsFromWork <- function(event, esnm="SU90", cores=1){
+getSchoolsFromWork <- function(event, eventE=NULL, esnm="SU90", esnmLog="EK60", cores=1){
 	
 	# Get the full paths to the events:
 	event_raw <- event.path(event, esnm=esnm, dir.type="raw")$event
-	event_tsd <- event.path(event, esnm=esnm, dir.type="tsd")$event
+	eventLog_tsd <- event.path(event, esnm=esnmLog, dir.type="tsd")$event
 	
 	# Get the school info and save a data frame with one row per school and vessel data appended to the columns:
 	temp <- readLSSSWorkOFS(event=event_raw, cores=cores)
@@ -443,7 +443,7 @@ getSchoolsFromWork <- function(event, esnm="SU90", cores=1){
 
 	##### Link the school data to the vessel data of the sonar (which has been linked with the echosounder data to get the log, which is named 'sadv' (sailed distance of the vessel) in TSD: #####
 	# Read the vessel info from the echosounder:
-	vesselSBE <- read.event(event=event_tsd, var="vessel", t="all")
+	vesselSBE <- read.event(event=eventLog_tsd, var="vessel", t="all")
 
 	#schools <- addVesselFromEchoosunder(schools, echosounder=vesselSBE, var=c("sadv", "lonv", "latv"))
 	schools <- addVesselFromEchoosunder(schools, echosounder=vesselSBE)
