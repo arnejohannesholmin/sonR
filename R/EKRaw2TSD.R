@@ -417,7 +417,12 @@ EKRaw2TSDs <- function(event, esnm=c("SU90", "EK60"), dir.type=c("tsd", "Work"),
 #' @export
 #' @rdname EKRaw2TSD
 #'
-getSchoolsFromWork <- function(event, eventE=NULL, esnm="SU90", esnmLog="EK60", cores=1){
+getSchoolsFromWork <- function(event, esnm="SU90", esnmLog=NULL, cores=1){
+	
+	# Use the sonar data to get the log per default:
+	if(length(esnmLog) == 0){
+		esnmLog <- esnm
+	}
 	
 	# Get the full paths to the events:
 	event_raw <- event.path(event, esnm=esnm, dir.type="raw")$event

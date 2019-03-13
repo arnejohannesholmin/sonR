@@ -26,8 +26,7 @@ EKRaw2TSD(event, filenr = "all", t = "all", cruise = NULL,
 EKRaw2TSDs(event, esnm = c("SU90", "EK60"), dir.type = c("tsd",
   "Work"), cores = 1)
 
-getSchoolsFromWork(event, eventE = NULL, esnm = "SU90",
-  esnmLog = "EK60", cores = 1)
+getSchoolsFromWork(event, esnm = "SU90", esnmLog = NULL, cores = 1)
 
 aggregateSchoolsFromWork(x, by = "sadv", delta = 1)
 
