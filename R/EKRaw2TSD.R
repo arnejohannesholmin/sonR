@@ -465,9 +465,17 @@ aggregateSchoolsFromWork <- function(x, by="sadv", delta=1){
 	
 	x$key <- floor(x[,by, with=FALSE] / delta)
 	
+	x$HeadingRad <- x$Heading * pi/180
 	
 	out <- x[,  .(
+		"StartDateTime" = StartDateTime[1], 
+		"StopDateTime" = StopDateTime[1], 
+		"AverageSpeed" = mean(Speed), 
+		"AverageHeading" = atan2(sum(Speed * sin(HeadingRad)), sum(Speed * cos(HeadingRad))), 
 		"SumArea" = sum(Area), 
+		"AverageArea" = mean(Area), 
+		"AverageAlongBeamSize" = mean(AlongBeamSize), 
+		"AverageAlongRingSize" = mean(AlongRingSize), 
 		"NumSchools" = length(unique(Id)), 
 		"AverageDepth" = mean(Depth), 
 		"MedianSv" = median(Mean)
