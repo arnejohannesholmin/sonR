@@ -869,10 +869,16 @@ addVesselFromEchoosunder <- function(x, echosounder, var="sadv"){
 	x$utim <- utim.TSD(x)
 	echosounder$utim <- utim.TSD(echosounder)
 	if(!length(x$utim) || !length(echosounder$utim)){
-		stop("Both lists must contain time coerable to UNIX time using utim.TSD() utim")
+		stop("Both lists must contain time coercable to UNIX time using utim.TSD() utim")
 	}
 	
 	indt <- findInterval(x$utim, echosounder$utim)
+	# If there are times in x$utim before the first time in echosounder$utim, replace the zeros in 'indt' with 1 (assign these to the first echosounder interval) and add a warning:
+	are0 <- which(indt == 0)
+	if(length(are0)){
+		indt[are0] <- 1
+		warning("Some time steps of the sonar Work files are before the first time of the echosounder. These time steps are assigned to the first time of the echosounder when adding log form the echosounder to the data from the Work files. These are the following ping numbers in the sonar Work files: ", prettyIntegers(are0))
+	}
 	
 	# Add log:
 	for(this in var){

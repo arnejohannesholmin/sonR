@@ -19,3 +19,6 @@ Minor change in rotate3D(), where NAs in the rotation angles now result in NAs i
 Fixed bug in read.event_unzip_vbsc(), where setting dimension to vbsc failed when lenb and numb were missing. Now setting dimension is only done if these are present.
 
 Fixed bug in compr.event().
+
+Added the functions EKRaw2TSDs(), getSchoolsFromWork() and aggregateSchoolsFromWork() which batch convert Simrad raw files to TSD, reads schools from sonar Work files, and aggregates these schools from several events, respectively.
+
