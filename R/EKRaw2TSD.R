@@ -470,15 +470,15 @@ aggregateSchoolsFromWork <- function(x, by="sadv", delta=1){
 	out <- x[,  .(
 		"StartDateTime" = StartDateTime[1], 
 		"StopDateTime" = StopDateTime[1], 
-		"AverageSpeed" = mean(Speed), 
-		"AverageHeading" = atan2(sum(Speed * sin(HeadingRad)), sum(Speed * cos(HeadingRad))), 
-		"SumArea" = sum(Area), 
-		"AverageArea" = mean(Area), 
-		"AverageAlongBeamSize" = mean(AlongBeamSize), 
-		"AverageAlongRingSize" = mean(AlongRingSize), 
+		"AverageSpeed" = mean(Speed, na.rm=TRUE), 
+		"AverageHeading" = atan2(sum(Speed * sin(HeadingRad), na.rm=TRUE), sum(Speed * cos(HeadingRad), na.rm=TRUE)), 
+		"SumArea" = sum(Area, na.rm=TRUE), 
+		"AverageArea" = mean(Area, na.rm=TRUE), 
+		"AverageAlongBeamSize" = mean(AlongBeamSize, na.rm=TRUE), 
+		"AverageAlongRingSize" = mean(AlongRingSize, na.rm=TRUE), 
 		"NumSchools" = length(unique(Id)), 
-		"AverageDepth" = mean(Depth), 
-		"MedianSv" = median(Mean)
+		"AverageDepth" = mean(Depth, na.rm=TRUE), 
+		"MedianSv" = median(Mean, na.rm=TRUE)
 		), by="key"]
 		
 	data.table::setnames(out, "key", by)
