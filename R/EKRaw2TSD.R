@@ -1006,13 +1006,18 @@ readLSSSWorkOFS_one <- function(x){
 	school <- getInfo(out$aspects$AllPings)
 	#names(school) <- paste("School", names(school), sep="_")
 	
-	# The Work files have the string "N/A" for NAs, so we need to convert to "NA" before trying to assign to numeric:
-	as.numericNA <- function(x, NAstring="N/A"){
-		as.numeric(replace(x, grep(NAstring, x), NA))
+	# The Work files have the string "N/A" for NAs, so we need to convert to NA before trying to assign to numeric:
+	convertToNA <- function(x, NAstring="N/A"){
+		replace(x, grep(NAstring, x), NA)
+	}
+	school <- lapply(school, convertToNA)
+	
+	areNumeric <- function(x){
+		!any(is.na(as.numeric(x)) && !is.na(x))
 	}
 	
-	numeric <- !is.na(suppressWarnings(sapply(school, as.numericNA)))
-	school[numeric] <- lapply(school[numeric], as.numericNA)
+	numeric <- suppressWarnings(sapply(school, areNumeric))
+	school[numeric] <- lapply(school[numeric], as.numeric)
 	
 	# Get the school IDs:
 	#schoolID <- as.numeric(out$aspects$AllPings$Id$Id)
