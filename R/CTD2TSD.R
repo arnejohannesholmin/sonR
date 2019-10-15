@@ -114,7 +114,7 @@ CTD2TSD <- function(f=NULL, outfile=NULL, hpr0=NULL, Pain=FALSE, vessel=list()){
 	}
 	
 	# Pressure:
-	ihprpresent <- which(varnames %in% c("prDM"))
+	ihprpresent <- which(varnames %in% c("prdM", "prDM"))
 	ihprpresent <- matrix(as.numeric(data[,ihprpresent,drop=FALSE]), ncol=length(ihprpresent))
 	if(length(ihprpresent)>0){
 		ihpr <- rowMeans(ihprpresent)

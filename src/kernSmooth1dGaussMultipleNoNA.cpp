@@ -54,13 +54,13 @@ extern "C" {
 		int pos1 = 0;
 		// 'ind_referencePos', 'ind_referenceY', 'ind_currentPos' and 'ind_currentY' are the indexes of the reference voxel in the data vector and the position vectors, and the indexes of the current voxel in the data vector and the position vectors:
 		int ind_referencePos = 0;
-		int ind_referenceY[*L2];
+		std::vector<int>  ind_referenceY(*L2);
 		for(int i2 = 0; i2 < *L2; i2++)
 		{
 			ind_referenceY[i2] = 0;
 		}
 		int ind_currentPos = 0;
-		int ind_currentY[*L2];
+		std::vector<int>  ind_currentY(*L2);
 		for(int i2 = 0; i2 < *L2; i2++)
 		{
 			ind_currentY[i2] = 0;

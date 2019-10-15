@@ -14,30 +14,13 @@
 #'
 CTDtimeandpos<-function(x){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
-	############### LOG: ###############
-	# Start: 2014-10-31 - Clean version.
-	########### DESCRIPTION: ###########
-	# Reads the time and position of a CTD file in the cnv format.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---x--- is a CTD file in the cnv format.
-	
-	
-	##################################################
-	##################################################
-	########## Preparation ##########
 	if(isTRUE(file.exists(x))){
 		x=readLines(x)
-		}
+	}
 	start = substr(x,1,18)
-	atlat = start == "* NMEA Latitude = "
-	atlon  = start == "* NMEA Longitude ="
-	attime  = start == "* System UpLoad Ti"
+	atlat = tolower(start) == "* nmea latitude = "
+	atlon  = tolower(start) == "* nmea longitude ="
+	attime  = tolower(start) == "* system upload ti"
 	utim = unclass(as.POSIXct(strptime(substring(x[attime],24),"%b %d %Y %H:%M:%S")))
 	lat = strsplit(substr(x[atlat],19,nchar(x[atlat])-1)," ",fixed=TRUE)[[1]]
 	lat = as.numeric(lat[nchar(lat)>0])
@@ -49,13 +32,11 @@ CTDtimeandpos<-function(x){
 	East = substring(x[atlon],nchar(x[atlon])) == "E"
 	if(!North){
 		lat = -lat
-		}
+	}
 	if(!East){
 		lon = -lon
-		}
-	
-	########## Execution and output ##########
-	c(utim=utim, lat=lat, lon=lon)
-	##################################################
-	##################################################
 	}
+	
+	
+	c(utim=utim, lat=lat, lon=lon)
+}

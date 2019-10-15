@@ -460,10 +460,10 @@ getSchoolsFromWork <- function(event, esnm="SU90", esnmLog=NULL, cores=1){
 #' @export
 #' @rdname EKRaw2TSD
 #'
-aggregateSchoolsFromWork <- function(x, by="sadv", delta=1){
+aggregateSchoolsFromWork <- function(x, by="sadv", delta=1, digits=6){
 	x <- data.table::as.data.table(x)
 	
-	x$key <- floor(x[,by, with=FALSE] / delta)
+	x$key <- floor(x[,by, with=FALSE] / delta) * delta
 	
 	x$HeadingRad <- x$Heading * pi/180
 	
@@ -478,10 +478,14 @@ aggregateSchoolsFromWork <- function(x, by="sadv", delta=1){
 		"AverageAlongRingSize" = mean(AlongRingSize, na.rm=TRUE), 
 		"NumSchools" = length(unique(Id)), 
 		"AverageDepth" = mean(Depth, na.rm=TRUE), 
-		"MedianSv" = median(Mean, na.rm=TRUE)
+		"MedianSvDB" = median(Mean, na.rm=TRUE), 
+		"MedianSv" = 10^(median(Mean, na.rm=TRUE) / 10)
 		), by="key"]
 		
 	data.table::setnames(out, "key", by)
+	
+	# Make sure that the column named by 'by' only has 'digits' digits:
+	out[[by]] <- signif(out[[by]], digits=digits)
 		
 	out <- as.data.frame(out)	
 	
@@ -903,10 +907,13 @@ addVesselFromEchoosunder <- function(x, echosounder, var="sadv"){
 addDateTime <- function(x, prefix="", tz="UTC"){
 	DateVar <- paste0(prefix, "Date")
 	TimeVar <- paste0(prefix, "Time")
+	DateTime = as.POSIXct(paste(x[[DateVar]], x[[TimeVar]]), tz=tz)
+	utim = unclass(DateTime)
 	
-	temp <- list()
-	temp$DateTime <- as.POSIXct(paste(x[[DateVar]], x[[TimeVar]]), tz=tz)
-	temp$utim <- unclass(temp$DateTime)
+	temp <- data.table::data.table(
+		DateTime = DateTime, 
+		utim = utim
+	)
 	
 	names(temp) <- paste0(prefix, names(temp))
 	
@@ -916,130 +923,264 @@ addDateTime <- function(x, prefix="", tz="UTC"){
 }
 
 
+# Function for a character variable of a list, splitting it by the 'split' argument, and returning the resulting numeric vector:
+getVarNumeric <- function(x, name, split=NULL){
+	out <- x[[name]]
+	if(length(split)){
+		out <- strsplit(out, split)[[1]]
+	}
+	out <- as.numeric(out)
+	out
+}
+
+
+tryExtractFromList <- function(x, selection=NULL, error=list()){
+	if(length(selection)){
+		x <- tryCatch(
+			x[[selection]]
+			, error=function(err) error
+		)
+	}
+	return(x)
+}
+
+
+# Function for expanding a segmentation mask og one vector from the compact form (a starting index, then the number of incldued indices, followed by pairs of number of excluded and included indices) to a vector of indices of the mask:
+expandSamples <- function(x){
+	# The data are saved by a starting index, then the number of incldued indices, followed by pairs of number of excluded and included indices:
+	starts <- cumsum(x)
+	ends <- starts[-1] - 1
+	starts <- starts[-length(starts)]
+	# Pick out only the included:
+	included <- TSD::odd(seq_along(starts))
+	starts <- starts[included]
+	ends <- ends[included]
+	
+	mask <- unlist(lapply(seq_along(starts), function(i) seq.int(starts[i], ends[i])))
+	mask
+}
+
+# Function for reading and expanding one beam of the segmentation mask:
+expandOneBeam <- function(oneBeam){
+	beamInd <- getVarNumeric(oneBeam, "channel")
+	sampleInd <- getVarNumeric(oneBeam, "range", split=" ")
+	sampleInd <- expandSamples(sampleInd)
+	out <- cbind(sampleInd, beamInd)
+	out
+}
+
+# The segmentation mask is stored by a start range followed the number of voxels included in the mask, then optionally th enumber of voxels excluded and then the number incldued, and so on:
+expandBeams <- function(x, selection=NULL){
+	
+	# Extract the selection:
+	x <- tryExtractFromList(x, selection)
+	
+	# Detect whether the Work file is from an onmidirectional fishery sonar (OFS) or from a multibeam sonar (MBS):
+	isOFS <- "samples" %in% names(x$.attrs)
+	
+	# Expand all the beams and rbind and convert to flat indices:
+	beams <- x[names(x) == "beam"]
+	arr.ind <- lapply(beams, expandOneBeam)
+	arr.ind <- do.call(rbind, arr.ind)
+	
+	# Get the number of samples along the beams, the number of beams, and convert to flat indices:%%
+	# For the fishery sonar:
+	if(isOFS){
+		lenb <- getVarNumeric(x$.attrs, "samples")
+		numb <- getVarNumeric(x$.attrs, "beams")
+	}
+	# For the MS70:
+	else{
+		lenb <- getVarNumeric(x$beam, "beamLength")
+		numb <- getVarNumeric(x$.attrs, "beamCount")
+	}
+	
+	ind <- TSD::arr.ind2ind(arr.ind, c(lenb, numb))
+	ind
+}
+
+# Get info per ping:
+getInfo <- function(x, selection=NULL, unname=TRUE){
+	x <- tryExtractFromList(x, selection)
+	if(unname){
+		x <- unname(x)
+	}
+	out <- as.list(unlist(x))
+	out <- lapply(out, convertToNA)
+	out <- lapply(out, convertToNumericOrLogical)
+	
+	return(out)
+}
+getInfos <- function(x, selection=NULL, unname=TRUE){
+	out <- lapply(x, getInfo, selection=selection, unname=unname)
+	out <- data.table::rbindlist(out, fill=TRUE)
+	return(out)
+}
+
+convertToNA <- function(x, NAstring="N/A"){
+	replace(x, grep(NAstring, x), NA)
+}
+
+areNumeric <- function(x){
+	!any(is.na(as.numeric(x)) && !is.na(x))
+}
+
+convertToNumericOrLogical <- function(x){
+	if(is.list(x)){
+		out <- lapply(x, convertToNumericOrLogical)
+	}
+	else{
+		out <- suppressWarnings(as.numeric(x))
+		if(any(is.na(out))){
+			out <- x
+		}
+	}
+	
+	if(length(out) && all(out %in% c("true", "false"))){
+	 	out <- as.logical(out)
+	}
+	return(out)
+}
+
+getTextAttrsPair <- function(x){
+	out <- structure(list(convertToNumericOrLogical(x$text)), names=x$.attrs)
+	return(out)
+}
+getTextAttrsPairs <- function(x, selection=NULL){
+	x <- tryExtractFromList(x, selection)
+	out <- unlist(unname(lapply(x, getTextAttrsPair)), recursive=FALSE)
+	return(out)
+}
+
+
+getSingleElements <- function(x, selection=NULL, null.value=NA){
+	out <- lapply(x, tryExtractFromList, selection)
+	# If the data are single values or a list for each element of the list 'out':
+	if(is.list(out[[1]])){
+		# Get a list of data for each element of 'out':
+		out <- lapply(out, function(x) as.list(unlist(x)))
+		out <- lapply(out, convertToNumericOrLogical)
+		# Combine into a data table:
+		out <- data.table::rbindlist(out)
+	}
+	else{
+		out <- unlist(out)
+		#out <- unlist(unname(out))
+		out <- convertToNumericOrLogical(out)
+	}
+	
+	#out <- unlist(unname(lapply(x, tryExtractFromList, selection)))
+	#out <- convertToNumericOrLogical(out)
+	if(length(out) == 0){
+		out <- null.value
+	}
+	return(out)
+}
+
+# Function for getting the mask(s) for several pings of one school of the multibeam sonar:
+getMaskOneSchoolMBS <- function(x, selection="schoolMask"){
+	mask <- lapply(x[[selection]], expandBeams)
+	info <- getInfos(x[[selection]], selection=".attrs", unname=FALSE)
+	out <- list(
+		info = info, 
+		msk = mask
+	)
+	return(out)
+}
+
+
+
+
+readLSSSWorkMBS_one <- function(x){
+	
+	# Read the xml file (possibly from a local file):
+	dat <- Rstox::downloadXML(x)
+	
+	if(length(dat$schools) == 0){
+		return(list())
+	}
+	
+	# Get object and school numbers:
+	ObjectNumber <- getSingleElements(dat$schools, c(".attrs", "ObjectNumber"))
+	SchoolIdNumber <- getSingleElements(dat$schools, c(".attrs", "SchoolIdNumber"))
+	
+	# Get parameters:
+	parameters <- lapply(dat$schools, getTextAttrsPairs, c("growParameters", "parameters"))
+	parameters <- data.table::rbindlist(parameters)
+	bubbleCorrectionValue <- getSingleElements(dat$schools, "bubbleCorrection")
+	aspectComputationComplete <- getSingleElements(dat$schools, "aspectComputationComplete")
+	restSpecies <- getSingleElements(dat$schools, "restSpecies")
+	speciesInterpretationRoot <- getSingleElements(dat$schools, "speciesInterpretationRoot")
+	# Add to the 'parameters':
+	parameters <- cbind(
+		ObjectNumber = ObjectNumber, 
+		SchoolIdNumber = SchoolIdNumber, 
+		parameters, 
+		bubbleCorrectionValue = bubbleCorrectionValue, 
+		aspectComputationComplete = aspectComputationComplete, 
+		restSpecies = restSpecies, 
+		speciesInterpretationRoot = speciesInterpretationRoot 
+	)
+	
+	# Get school parameters:
+	schoolParametersAllPings <- getInfos(dat$schools, selection=c("schoolParameters", "allPing"), unname=TRUE)
+	schoolParametersPerPing <- getInfos(dat$schools, selection=c("schoolParameters", "perPing", "perPing"), unname=TRUE)
+	
+	# Get the masks:
+	mask <- lapply(dat$schools, getMaskOneSchoolMBS)
+	
+		# Return the data:
+	out <- list(
+		ObjectNumber = ObjectNumber, 
+		SchoolIdNumber = SchoolIdNumber, 
+		WorkFile = basename(x), 
+		parameters = parameters, 
+		schoolParametersAllPings = schoolParametersAllPings, 
+		schoolParametersPerPing = schoolParametersPerPing, 
+		mask = mask
+	)
+	
+	return(out)
+}
+
+readLSSSWorkMBS <- function(event, filenr="all", esnm="SU90", cores=1){
+	# Get the paths to the work files, on file for each school, thus spanning several pings:
+	if(file.exists(event[1]) && file.info(event[1])$isdir == FALSE){
+		l <- event
+	}
+	else{
+		# Locate work files:
+		event_work <- event.path(event, dir.type="Work", esnm=esnm)$event
+		l <- list.files(event_work, full.names=TRUE)
+	}
+	
+	# Read only the files with file extension "work":
+	l <- l[tolower(tools::file_ext(l)) %in% "work"]
+	
+	if(is.numeric(filenr)){
+		l <- l[filenr]
+	}
+	
+	# Get a list of school data, one element per school/file, and return invisibly:
+	system.time(sv <- TSD::papply(l, readLSSSWorkMBS_one, cores=cores))
+	invisible(sv)
+}
+
 # Function for reading work files:
 readLSSSWorkOFS_one <- function(x){
-	
-	# Function for a character variable of a list, splitting it by the 'split' argument, and returning the resulting numeric vector:
-	getVarNumeric <- function(x, name, split=NULL){
-		out <- x[[name]]
-		if(length(split)){
-			out <- strsplit(out, split)[[1]]
-		}
-		out <- as.numeric(out)
-		out
-	}
-	
-	# The segmentation mask is stored by a start range followed the number of voxels included in the mask, then optionally th enumber of voxels excluded and then the number incldued, and so on:
-	expandBeams <- function(ping){
-		
-		# Function for expanding a segmentation mask og one vector from the compact form (a starting index, then the number of incldued indices, followed by pairs of number of excluded and included indices) to a vector of indices of the mask:
-		expandSamples <- function(x){
-			# The data are saved by a starting index, then the number of incldued indices, followed by pairs of number of excluded and included indices:
-			starts <- cumsum(x)
-			ends <- starts[-1] - 1
-			starts <- starts[-length(starts)]
-			# Pick out only the included:
-			included <- TSD::odd(seq_along(starts))
-			starts <- starts[included]
-			ends <- ends[included]
-			
-			mask <- unlist(lapply(seq_along(starts), function(i) seq.int(starts[i], ends[i])))
-			mask
-		}
-		
-		# Function for reading and expanding one beam of the segmentation mask:
-		expandOneBeam <- function(oneBeam){
-			beamInd <- getVarNumeric(oneBeam, "channel")
-			sampleInd <- getVarNumeric(oneBeam, "range", split=" ")
-			sampleInd <- expandSamples(sampleInd)
-			out <- cbind(sampleInd, beamInd)
-			out
-		}
-		
-		# Get the number of samples along the beams, the number of beams, and the actual segmentation mask:
-		lenb <- getVarNumeric(ping$.attrs, "samples")
-		numb <- getVarNumeric(ping$.attrs, "beams")
-		beams <- ping[names(ping) == "beam"]
-		
-		# Expand all the beams and rbind and convert to flat indices:
-		arr.ind <- lapply(beams, expandOneBeam)
-		arr.ind <- do.call(rbind, arr.ind)
-		ind <- TSD::arr.ind2ind(arr.ind, c(lenb, numb))
-		ind
-	}
 	
 	# Read the xml file (possibly from a local file):
 	out <- Rstox::downloadXML(x)
 	
-	
-	# Get info per ping:
-	getInfo <- function(x){
-		as.list(unlist(unname(x)))
-	}
-	
 	# Get the info per ping:
-	info <- t(sapply(out$aspects$perPing, getInfo))
-	dimNamesInfo <- dimnames(info)
-	dimInfo <- dim(info)
-	# Unlist and convert to a matrix:
-	info <- unlist(info)
-	info <- array(info, dim=dimInfo)
-	dimnames(info) <- dimNamesInfo
-	
-	# Convert to data frame:
-	numericCols <- !is.na(suppressWarnings(sapply(head(info, 1), as.numeric)))
-	info <- as.data.frame(info, stringsAsFactors=FALSE)
-	info[,numericCols] <- apply(info[,numericCols], 2, as.numeric)
-	
-	
-	
-	
-	#info$DateTime <- as.POSIXct(paste(info$Date, info$Time), tz="UTC")
-	#info$utim <- unclass(info$DateTime)
-	
+	info <- getInfos(out$aspects$perPing)
 	info <- addDateTime(info)
-	
 	info$indtInFile <- as.numeric(basename(info$file))
 	info$fileID <- dirname(info$file)
 	
-	
+	# Get general info of the schools:
 	school <- getInfo(out$aspects$AllPings)
 	#names(school) <- paste("School", names(school), sep="_")
-	
-	# The Work files have the string "N/A" for NAs, so we need to convert to NA before trying to assign to numeric:
-	convertToNA <- function(x, NAstring="N/A"){
-		replace(x, grep(NAstring, x), NA)
-	}
-	school <- lapply(school, convertToNA)
-	
-	areNumeric <- function(x){
-		!any(is.na(as.numeric(x)) && !is.na(x))
-	}
-	
-	numeric <- suppressWarnings(sapply(school, areNumeric))
-	school[numeric] <- lapply(school[numeric], as.numeric)
-	
-	# Get the school IDs:
-	#schoolID <- as.numeric(out$aspects$AllPings$Id$Id)
-	
-	# Get the time and convert to UNIX time:
-	#Time <- lapply(out$aspects$perPing, "[[", "Time")
-	#Time <- sapply(Time, paste, collapse=" ")
-	#utim <- TSD::ftim2utim(Time)
-	
-	## Get file ID and ping index in the file:
-	#fileInd <- unlist(lapply(out$aspects$perPing, "[[", "File"))
-	#indtInFile <- as.numeric(basename(fileInd))
-	#fileID <- dirname(fileInd)
-	
-	# Combine all time and file info in a data frame:
-	#time <- data.frame(
-	#	Time = Time, 
-	#	utim = utim, 
-	#	fileID = fileID, 
-	#	indtInFile = indtInFile, 
-	#	stringsAsFactors = FALSE
-	#)
 	
 	# Read the segmentation mask:
 	mask <- lapply(out$mask, expandBeams)
@@ -1057,20 +1198,28 @@ readLSSSWorkOFS_one <- function(x){
 }
 
 readLSSSWorkOFS <- function(event, filenr="all", esnm="SU90", cores=1){
-	# Locate work files:
-	event_work <- sonR::event.path(event, dir.type="Work", esnm=esnm)$event
-	l <- list.files(event_work, full.names=TRUE)
+	# Get the paths to the work files, on file for each school, thus spanning several pings:
+	if(file.exists(event[1]) && file.info(event[1])$isdir == FALSE){
+		l <- event
+	}
+	else{
+		# Locate work files:
+		event_work <- event.path(event, dir.type="Work", esnm=esnm)$event
+		l <- list.files(event_work, full.names=TRUE)
+	}
 	
-	# Read only the file with file extension "work":
+	# Read only the files with file extension "work":
 	l <- l[tolower(tools::file_ext(l)) %in% "work"]
 	
 	if(is.numeric(filenr)){
 		l <- l[filenr]
 	}
 	
+	# Get a list of school data, one element per school/file, and return invisibly:
 	system.time(sv <- TSD::papply(l, readLSSSWorkOFS_one, cores=cores))
 	invisible(sv)
 }
+
 
 
 
@@ -1080,7 +1229,7 @@ work2TSD <- function(event, cores=1){
 	
 	# FINISH THIS LATER
 	
-	event_tsd <- sonR::event.path(event, dir.type="tsd")$event
+	event_tsd <- event.path(event, dir.type="tsd")$event
 	
 	# Read all work files:
 	sv <- readLSSSWorkOFS(event=event, cores=cores)
@@ -1094,7 +1243,7 @@ work2TSD <- function(event, cores=1){
 	sgID <- rep(sgID, numt)
 	sgID <- lapply(seq_along(sgID), function(i) rep(sgID[i], numx[i]))
 	
-	
+	message("ERROR HERE!!!!!!!!!!")
 	utim <- unlist(lapply(sv, "[[", c("time", "utim")), recursive=FALSE)
 	file <- unlist(lapply(sv, "[[", c("time", "fileID")), recursive=FALSE)
 	pind <- unlist(lapply(sv, "[[", c("time", "indtInFile")), recursive=FALSE)

@@ -1,0 +1,27 @@
+# sonR version: 1.2 (latest beta, 2019-10-15)
+# R version: 3.5
+
+
+# This package contains many functions used by the packages echoIBM and cpplot3d.
+
+
+# Install the latest developer version
+devtools::install_github("StoXProject/sonR")
+
+
+# Release notes for sonR_1.2:
+
+# 1. Added the functions readProfosPP() and plotProfosPP() for reading/processing and plotting per ping output files from profos (one line per ping per school.
+
+# 2. Minor change in rotate3D(), where NAs in the rotation angles now result in NAs in the output (before these resulted in no rotation by default).
+
+# 3. Fixed bug in read.event_unzip_vbsc(), where setting dimension to vbsc failed when lenb and numb were missing. Now setting dimension is only done if these are present.
+
+# 4. Fixed bug in compr.event().
+
+# 5. Added the functions EKRaw2TSDs(), getSchoolsFromWork() and aggregateSchoolsFromWork() which batch convert Simrad raw files to TSD, reads schools from sonar Work files, and aggregates these schools from several events, respectively.
+
+
+# For historical release notes see https://github.com/StoXProject/sonR/blob/master/NEWS
+
+

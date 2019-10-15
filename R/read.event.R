@@ -972,6 +972,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					mask$indt <- rep(out$indt, numPerPing)
 				}
 				
+				browser()
 				# Get array indices and beam variables:
 				if(length(out$lenb) || length(out$numb)){
 					l <- lapply(ind, ind2arr.ind, c(max(out$lenb), max(out$numb)))
@@ -1037,7 +1038,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					}
 					mask$vbsc <- unlist(out$vbss, use.names=FALSE)
 				}
-				
+			
 			out$mask <- as.data.frame(mask, stringsAsFactors=FALSE)
 			}
 			

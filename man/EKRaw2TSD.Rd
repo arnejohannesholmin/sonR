@@ -28,7 +28,7 @@ EKRaw2TSDs(event, esnm = c("SU90", "EK60"), dir.type = c("tsd",
 
 getSchoolsFromWork(event, esnm = "SU90", esnmLog = NULL, cores = 1)
 
-aggregateSchoolsFromWork(x, by = "sadv", delta = 1)
+aggregateSchoolsFromWork(x, by = "sadv", delta = 1, digits = 6)
 
 LSSS2TSD(event = NULL, filesize = 3e+08, chunksize = 1e+08,
   keep.temp = FALSE, cores = 1, ...)
