@@ -6,7 +6,7 @@ Authors@R: c(
 Author: Arne Johannes Holmin [aut, cre],
 Maintainer: Arne Johannes Holmin <arnejh@imr.no>
 Description: This package contains many functions used by the packages echoIBM and cpplot3d.
-Depends: R (>= 3.4.4)
+Depends: R (>= 3.5)
 BugReports: https://github.com/arnejohannesholmin/sonR/issues
 License: LGPL-3
 LazyData: true
@@ -15,6 +15,7 @@ Imports:
 		ccaPP,
 		data.table,
 		fpc,
+		ncdf4,
 		pbapply,
 		SoDA,
 		TSD,
