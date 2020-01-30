@@ -4,8 +4,15 @@
 \alias{meanexp.quantile_a}
 \title{Estimates the parameter 'beta' of an exponentially distributed 'X' based on the quantile of values.}
 \usage{
-meanexp.quantile_a(x, lower = 0, upper = 1, prob = 0.5, a = 1,
-  type = 6, MARGIN = NULL)
+meanexp.quantile_a(
+  x,
+  lower = 0,
+  upper = 1,
+  prob = 0.5,
+  a = 1,
+  type = 6,
+  MARGIN = NULL
+)
 }
 \arguments{
 \item{x}{The data.}

@@ -6,9 +6,20 @@
 If pitch and/or roll are not compensated for by the sonar, the function has to be altered.
 The funciton can treat multiple time steps, but not for systems with changing beam configuration between pings, for which the function needs to be run at each separate time step, inputting the beam configuration of one time step at the time (not matrices for variables such as the elevation angle of the direction of the beams 'dire').}
 \usage{
-soundbeam.TSD(data, t = 1, ind = NULL, cs = "g", seabed = -12000,
-  rot = 1, compensation = c("pitch", "roll"), ideal = TRUE,
-  rpos = c("midp", "edge"), drop.out = TRUE, plot = FALSE, ...)
+soundbeam.TSD(
+  data,
+  t = 1,
+  ind = NULL,
+  cs = "g",
+  seabed = -12000,
+  rot = 1,
+  compensation = c("pitch", "roll"),
+  ideal = TRUE,
+  rpos = c("midp", "edge"),
+  drop.out = TRUE,
+  plot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{is the list of TSD inputs as returned from read.TSD (must contain "psxv", "psyv", "rtzv", "lenb", "numb", "sint", "psze", ("dira","dirl") or ("dire", "dirt"), "asps").}

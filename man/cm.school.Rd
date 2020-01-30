@@ -4,8 +4,7 @@
 \alias{cm.school}
 \title{Calculates the center of mass of a (simulated) school in 1D, 2D or 3D, or based on acoustic data.}
 \usage{
-cm.school(school, mass = 1, subset = NULL, na.rm = TRUE,
-  excl.neg = TRUE)
+cm.school(school, mass = 1, subset = NULL, na.rm = TRUE, excl.neg = TRUE)
 }
 \arguments{
 \item{school}{is either a list of x-, y- and z-positions and mass of the fish (named "psxf", "psyf", "pszf" and "mass"), a list of x-, y- and z-positions and volume and acoustic intensity of the voxels (named "psxx", "psyx", "pszx", "volx" and "vbsc" or "mvbs"), or a matrix of columns holding the positions along each dimension.}

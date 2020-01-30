@@ -4,8 +4,16 @@
 \alias{read.event_read_sgsc}
 \title{Reads segmentation indices 'sgsc'.}
 \usage{
-read.event_read_sgsc(filelist, var, filesind, segpar, TIME, tlist, merge,
-  msg = TRUE)
+read.event_read_sgsc(
+  filelist,
+  var,
+  filesind,
+  segpar,
+  TIME,
+  tlist,
+  merge,
+  msg = TRUE
+)
 }
 \arguments{
 \item{filelist}{is a vector of all file names.}

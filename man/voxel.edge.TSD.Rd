@@ -4,9 +4,18 @@
 \alias{voxel.edge.TSD}
 \title{Calculates a matrix of edge points of voxels of an underwater acoustic system. The matrix contains r0 and r1, the closer and father range to each voxel; theta0 and theta1, the azimuth angle of the left and right dge of each voxel; and phi0 and phi1, the elevation angle of the lower and upper edge of each voxel, as seen from the vessel for a multi-beam sonar such as the Simrad MS70. !!!Only one time step is treated!!!!}
 \usage{
-voxel.edge.TSD(data, t = 1, esnm = NULL, seabed = -12000, rot = 1,
-  compensation = c("pitch", "roll"), ideal = TRUE, stretch = 1,
-  fanWidth = "b2", ...)
+voxel.edge.TSD(
+  data,
+  t = 1,
+  esnm = NULL,
+  seabed = -12000,
+  rot = 1,
+  compensation = c("pitch", "roll"),
+  ideal = TRUE,
+  stretch = 1,
+  fanWidth = "b2",
+  ...
+)
 }
 \arguments{
 \item{data}{is the list of inputs variables as returned from read.TSD (including ).}

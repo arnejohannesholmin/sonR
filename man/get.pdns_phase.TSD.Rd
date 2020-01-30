@@ -4,9 +4,16 @@
 \alias{get.pdns_phase.TSD}
 \title{Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the MS70 noise estimate for the given event.}
 \usage{
-get.pdns_phase.TSD(data = list(), nsind = 0.75, cruise = 2009116,
-  event = NULL, esnm = "MS70", dir.data = NULL, pdns_scale = 1e-14,
-  TVG = TRUE)
+get.pdns_phase.TSD(
+  data = list(),
+  nsind = 0.75,
+  cruise = 2009116,
+  event = NULL,
+  esnm = "MS70",
+  dir.data = NULL,
+  pdns_scale = 1e-14,
+  TVG = TRUE
+)
 }
 \arguments{
 \item{data}{is a list of the following variables ( can be obtained by data=c(read.event(var=c("beams","vbsc","")),read.TSDs(noise.path(),var=c("pns1","pns2","harm","badb","bgns","acfq"))) ):}

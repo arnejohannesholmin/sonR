@@ -4,9 +4,17 @@
 \alias{UNIX_time}
 \title{Writes and returns the UNIX_time file of an event.}
 \usage{
-UNIX_time(event, file = FALSE, var = "all", t = "all",
-  fresh = FALSE, allow.old = FALSE, recursive = TRUE,
-  saveData = FALSE, cores = 1)
+UNIX_time(
+  event,
+  file = FALSE,
+  var = "all",
+  t = "all",
+  fresh = FALSE,
+  allow.old = FALSE,
+  recursive = TRUE,
+  saveData = FALSE,
+  cores = 1
+)
 }
 \arguments{
 \item{event}{is a string or vector of strings representing the path to the files or the directory from which to obtain the UNIX_time information, either by reading the UNIX_time file or by generating new information.}

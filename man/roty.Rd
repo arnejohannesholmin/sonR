@@ -4,8 +4,7 @@
 \alias{roty}
 \title{Returns three dimensional rotation matrices for rotation around the y-axis of a three dimensional coordinate system.}
 \usage{
-roty(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE,
-  byrow = TRUE)
+roty(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE, byrow = TRUE)
 }
 \arguments{
 \item{ang}{is a vedctor of the rotation angles around the y-axis.}

@@ -4,8 +4,18 @@
 \alias{track.circle}
 \title{Returns a list of x-values and y-values of points defined by the fractions 'w' along the partial circular path defined by the list or matrix of origin points 'origin', the vector of radii 'r' and the list or matrix of angles 'ang'. Cumulative lengths of the path are also returned.}
 \usage{
-track.circle(origin, r, ang, w = NULL, dw = NULL, speed = NULL,
-  normalized = FALSE, list.out = TRUE, plot = FALSE, ...)
+track.circle(
+  origin,
+  r,
+  ang,
+  w = NULL,
+  dw = NULL,
+  speed = NULL,
+  normalized = FALSE,
+  list.out = TRUE,
+  plot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{origin}{is the origin of the path, given as a list of two elements or a matrix of two columns, representing the x and y values of the origins.}

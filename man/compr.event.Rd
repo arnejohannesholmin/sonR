@@ -6,27 +6,84 @@
 \alias{compr.TSD}
 \title{This funciton compresses the data stored in 'x' by averaging (either mean, trimmed mean or median) in depth and time bins. This is designed primarily for echosounder beams.}
 \usage{
-compr.event(event, filenr = "all", tres = NULL, xres = NULL,
-  zres = NULL, rres = NULL, bres = NULL, cores = 1,
-  funvbsc = c("mean", "median"), funt = c("median", "mean"),
-  adds = NULL, split = TRUE, skipAngles = TRUE, origin = 1,
-  z0 = 0, cruise = NULL, esnm = "EK60", msg = TRUE, write = TRUE,
-  filesize = 3e+08, chunksize = 3e+08, clear_individual = TRUE,
-  clear_along = FALSE, maxlenb = NULL, ow = FALSE, ...)
+compr.event(
+  event,
+  filenr = "all",
+  tres = NULL,
+  xres = NULL,
+  zres = NULL,
+  rres = NULL,
+  bres = NULL,
+  cores = 1,
+  funvbsc = c("mean", "median"),
+  funt = c("median", "mean"),
+  adds = NULL,
+  split = TRUE,
+  skipAngles = TRUE,
+  origin = 1,
+  z0 = 0,
+  cruise = NULL,
+  esnm = "EK60",
+  msg = TRUE,
+  write = TRUE,
+  filesize = 3e+08,
+  chunksize = 3e+08,
+  clear_individual = TRUE,
+  clear_along = FALSE,
+  maxlenb = NULL,
+  ow = FALSE,
+  ...
+)
 
-compr.event_oneFile_write(i, indt, filelist, pingsfiles, vesselfiles,
-  beamsfiles, t = "all", drop = TRUE, compress = FALSE,
-  TIME = NULL, write = TRUE, tres = NULL, xres = NULL,
-  zres = NULL, rres = NULL, bres = NULL, funvbsc = c("mean",
-  "median"), funt = c("median", "mean"), adds = list(), split = TRUE,
-  skipAngles = TRUE, origin = 1, z0 = 0, pingsnames = NULL,
-  vesselnames = NULL, beamsnames = NULL, dumpfiles = NULL,
-  maxlenb = NULL, ...)
+compr.event_oneFile_write(
+  i,
+  indt,
+  filelist,
+  pingsfiles,
+  vesselfiles,
+  beamsfiles,
+  t = "all",
+  drop = TRUE,
+  compress = FALSE,
+  TIME = NULL,
+  write = TRUE,
+  tres = NULL,
+  xres = NULL,
+  zres = NULL,
+  rres = NULL,
+  bres = NULL,
+  funvbsc = c("mean", "median"),
+  funt = c("median", "mean"),
+  adds = list(),
+  split = TRUE,
+  skipAngles = TRUE,
+  origin = 1,
+  z0 = 0,
+  pingsnames = NULL,
+  vesselnames = NULL,
+  beamsnames = NULL,
+  dumpfiles = NULL,
+  maxlenb = NULL,
+  ...
+)
 
-compr.TSD(data = NULL, tres = NULL, xres = NULL, zres = NULL,
-  rres = NULL, bres = NULL, funvbsc = c("mean", "median"),
-  funt = c("median", "mean"), adds = list(), split = TRUE,
-  skipAngles = TRUE, origin = 1, z0 = 0, drop = FALSE, ...)
+compr.TSD(
+  data = NULL,
+  tres = NULL,
+  xres = NULL,
+  zres = NULL,
+  rres = NULL,
+  bres = NULL,
+  funvbsc = c("mean", "median"),
+  funt = c("median", "mean"),
+  adds = list(),
+  split = TRUE,
+  skipAngles = TRUE,
+  origin = 1,
+  z0 = 0,
+  drop = FALSE,
+  ...
+)
 }
 \arguments{
 \item{tres}{The time resolution of the compressed data in seconds.}

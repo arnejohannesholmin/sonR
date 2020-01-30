@@ -4,8 +4,14 @@
 \alias{circle}
 \title{Returns a matrix of two columns representing x- and y-values of positions on a circle of radius 'r' and origin 'origin', defined by the angles given by 'ang' in a polar coordinate system centered at 'origin', or by 'x' or 'y' in a cartesian coordinate system.}
 \usage{
-circle(origin = c(0, 0), r = 1, ang = seq(0, 2 * pi, length.out =
-  100), x = NULL, y = NULL, n = 100)
+circle(
+  origin = c(0, 0),
+  r = 1,
+  ang = seq(0, 2 * pi, length.out = 100),
+  x = NULL,
+  y = NULL,
+  n = 100
+)
 }
 \arguments{
 \item{origin}{is the origin of the circle.}

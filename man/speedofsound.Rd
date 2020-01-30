@@ -4,8 +4,16 @@
 \alias{speedofsound}
 \title{Computes the speed of sound of the ocean for the given temperature, salinity and pressure values. Method adopted from "sw_svel.m" and based on UNESCO 1983.}
 \usage{
-speedofsound(T, S, P, Z = NULL, P0 = 10.1325, rho = 1027, g = 9.82,
-  Pain = TRUE)
+speedofsound(
+  T,
+  S,
+  P,
+  Z = NULL,
+  P0 = 10.1325,
+  rho = 1027,
+  g = 9.82,
+  Pain = TRUE
+)
 }
 \arguments{
 \item{T}{is the temperature in degrees celcius, or a list of the inputs in the TSD file format.}

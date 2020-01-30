@@ -4,9 +4,17 @@
 \alias{get.pdns_phase.event}
 \title{Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the noise estimate for the given event. Only used in echoIBM.vbsc2p.event().}
 \usage{
-get.pdns_phase.event(event = 1, cruise = 2009116, esnm = "MS70",
-  t = 1:100, noise = list(), nsind = 0.75, dir.data = NULL,
-  pdns_scale = 1e-14, TVG = TRUE)
+get.pdns_phase.event(
+  event = 1,
+  cruise = 2009116,
+  esnm = "MS70",
+  t = 1:100,
+  noise = list(),
+  nsind = 0.75,
+  dir.data = NULL,
+  pdns_scale = 1e-14,
+  TVG = TRUE
+)
 }
 \arguments{
 \item{event}{is the identifier of the event. Given either as the number of the event, a string contained in the name of the event, or the path of the event directory. More than one event may be given, in a vector.}

@@ -4,9 +4,18 @@
 \alias{subset_TSD}
 \title{Extracts a subset of TSD data according to the array subset 'ind' and/or the cartesian subset 'range' and/or the logical/numeric vector of subscripts 'subset'.}
 \usage{
-subset_TSD(data, ind = list(), range = list(), subset = NULL,
-  ind.out = FALSE, drop = TRUE, strict = TRUE, insert.NA = FALSE,
-  only.match = FALSE, pad = c("end", "start"))
+subset_TSD(
+  data,
+  ind = list(),
+  range = list(),
+  subset = NULL,
+  ind.out = FALSE,
+  drop = TRUE,
+  strict = TRUE,
+  insert.NA = FALSE,
+  only.match = FALSE,
+  pad = c("end", "start")
+)
 }
 \arguments{
 \item{data}{is a list of elements named according to the TSD file format.}

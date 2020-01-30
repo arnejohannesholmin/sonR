@@ -4,8 +4,15 @@
 \alias{event.path}
 \title{Returns a list of the following strings: (1) the path to the event, (2) the event name, (3) the event number, (4) the path to the cruise, and (5) the cruise name.}
 \usage{
-event.path(event = 1, cruise = 2009116, eventName = 1,
-  esnm = "MS70", dir.type = "tsd", up = 0, ...)
+event.path(
+  event = 1,
+  cruise = 2009116,
+  eventName = 1,
+  esnm = "MS70",
+  dir.type = "tsd",
+  up = 0,
+  ...
+)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}

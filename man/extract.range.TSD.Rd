@@ -4,8 +4,15 @@
 \alias{extract.range.TSD}
 \title{Extracts a subset of TSD data according to the ranges given for the variables of 'data' in 'range'.}
 \usage{
-extract.range.TSD(data = list(), range = list(), this = list(),
-  treated = NULL, ineq = "<", ind.out = FALSE, insert.NA = FALSE)
+extract.range.TSD(
+  data = list(),
+  range = list(),
+  this = list(),
+  treated = NULL,
+  ineq = "<",
+  ind.out = FALSE,
+  insert.NA = FALSE
+)
 }
 \arguments{
 \item{data}{is a list of elements named according to the TSD file format.}

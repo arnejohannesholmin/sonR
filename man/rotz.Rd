@@ -4,8 +4,7 @@
 \alias{rotz}
 \title{Returns three dimensional rotation matrices for rotation around the z-axis of a three dimensional coordinate system.}
 \usage{
-rotz(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE,
-  byrow = TRUE)
+rotz(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE, byrow = TRUE)
 }
 \arguments{
 \item{ang}{is a vedctor of the rotation angles around the z-axis.}

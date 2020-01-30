@@ -5,8 +5,12 @@
 \title{Function for extracting the type (dynamic or static) of the school files given by 'schoolfiles'. Four vectors are returned:
 NA}
 \usage{
-echoIBM.getSchoolfileType(schoolfiles, dynschoolnames, staticschoolnames,
-  thr = 0.5)
+echoIBM.getSchoolfileType(
+  schoolfiles,
+  dynschoolnames,
+  staticschoolnames,
+  thr = 0.5
+)
 }
 \arguments{
 \item{schoolfiles}{is a vector of paths to school files.}

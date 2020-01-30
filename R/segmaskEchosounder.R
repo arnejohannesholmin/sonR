@@ -148,6 +148,8 @@ segmaskEchosounderOnePingOneSchool <- function(schoolNR, voxels, schools, beams)
 	mask <- distX^2 / semiaxisXEffective^2 + distY^2 / semiaxisYEffective^2 <= 1
 	# Collapse across schools (of the same species / schoolNR):
 	mask <- apply(mask, 1:2, max, na.rm = TRUE)
+	# Ensure that the mask has non-negative values (-Inf generated if there are only NAs):
+	mask[mask < 0] <- 0
 	
 	mask <- mask * schoolNR
 }

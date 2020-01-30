@@ -4,10 +4,19 @@
 \alias{get.hins.event}
 \title{Estimates high intensity noise in acoustic data by identifying high intensity one dimensional spikes. Note that this function only works on MS70 and is therefore deprecated.}
 \usage{
-get.hins.event(con = NULL, event = 33, cruise = 2009116,
-  t = c("20091115084000", "20091115085000"), turns = 114, k = 5,
-  q = c(1000, 100), beta_school = 2e-04, ind = list(-(1:100), NULL),
-  max.memory = 2e+09, ...)
+get.hins.event(
+  con = NULL,
+  event = 33,
+  cruise = 2009116,
+  t = c("20091115084000", "20091115085000"),
+  turns = 114,
+  k = 5,
+  q = c(1000, 100),
+  beta_school = 2e-04,
+  ind = list(-(1:100), NULL),
+  max.memory = 2e+09,
+  ...
+)
 }
 \arguments{
 \item{con}{is the connection object or a character string naming the output file.}

@@ -4,8 +4,15 @@
 \alias{read.event_unzip_vbsc}
 \title{Merges time steps of acoustic data located in the neighbor directory "temp" of the "tsd"-directory given by 'event'.}
 \usage{
-read.event_unzip_vbsc(x, pad = TRUE, split = TRUE, filename = NULL,
-  t = NULL, fill = NA, keep.vxIX = TRUE)
+read.event_unzip_vbsc(
+  x,
+  pad = TRUE,
+  split = TRUE,
+  filename = NULL,
+  t = NULL,
+  fill = NA,
+  keep.vxIX = TRUE
+)
 }
 \arguments{
 \item{x}{a list containing the possibly compressed acoustic data (vbsc, vxIX).}

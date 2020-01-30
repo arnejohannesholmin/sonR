@@ -4,8 +4,7 @@
 \alias{summary_event}
 \title{Calculates variaous measures of mean sv, and total backscatter and volume.}
 \usage{
-summary_event(event, t = 1, plot.hist = FALSE, minlen = 1,
-  cores = 1, ...)
+summary_event(event, t = 1, plot.hist = FALSE, minlen = 1, cores = 1, ...)
 }
 \arguments{
 \item{plot.hist}{Logical: If TRUE plot the histogram when calculating the robust mean sv.}

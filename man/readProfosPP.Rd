@@ -5,20 +5,40 @@
 \alias{readProfosPP}
 \title{Plot output from readProfosPP.}
 \usage{
-plotProfosPP(x, ind = c(1, 2), col = list(ship = c("black", "purple"),
-  school = c("black", "brown", "orange"), link = "green4"),
-  pch = list(ship = "*", school = 1), cex = list(ship = c(1, 0.5),
-  school = c(1, 0.5, 0.5), link = 1), lwd = list(track = 0.5, link = 1,
-  sv = 1), plotlink = TRUE, linkvar = "lowess", every = NULL,
-  use = c("sv", "Sv"), svQ = c(0.1, 0.9), ...)
+plotProfosPP(
+  x,
+  ind = c(1, 2),
+  col = list(ship = c("black", "purple"), school = c("black", "brown", "orange"), link =
+    "green4"),
+  pch = list(ship = "*", school = 1),
+  cex = list(ship = c(1, 0.5), school = c(1, 0.5, 0.5), link = 1),
+  lwd = list(track = 0.5, link = 1, sv = 1),
+  plotlink = TRUE,
+  linkvar = "lowess",
+  every = NULL,
+  use = c("sv", "Sv"),
+  svQ = c(0.1, 0.9),
+  ...
+)
 
-readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
-  compensateCurrent = TRUE, sparfact = 1, spar0 = 0.5, byId = TRUE,
-  rm.duplicates = FALSE, filter = NULL, cores = 1, nrows = -1,
-  smooth = TRUE, ...)
+readProfosPP(
+  x,
+  currentSpeed = NULL,
+  currentAngle = NULL,
+  compensateCurrent = TRUE,
+  sparfact = 1,
+  spar0 = 0.5,
+  byId = TRUE,
+  rm.duplicates = FALSE,
+  filter = NULL,
+  cores = 1,
+  nrows = -1,
+  smooth = TRUE,
+  ...
+)
 }
 \arguments{
-\item{x}{The output from \code{readProfosPP}.}
+\item{x}{The Profos per ping file.}
 
 \item{ind}{A numeric vector indicating which plots to produce, 1 being the track plot and 2 the sv plot.}
 
@@ -36,7 +56,7 @@ readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
 
 \item{svQ}{A vector of length 2 defining the quantiles used for defining the amplitude of the sine wave which is fitted to the mean Sv to obtain transitions between weak and strong echo.}
 
-\item{...}{Arguments passed to \code{\link{plot}}.}
+\item{...}{Arguments passed to \code{\link{lowess}}.}
 
 \item{currentSpeed}{A vector of the speed of the current at the observation, one value per ping or one value for all pings.}
 
@@ -47,10 +67,6 @@ readProfosPP(x, currentSpeed = NULL, currentAngle = NULL,
 \item{sparfact}{A factor to multiply the \code{spar} used in \code{\link{smooth.spline}} when smoothing the school positions.}
 
 \item{spar0}{The value of \code{spar} used if application of the \code{sparfact} results in negative values for \code{spar}.}
-
-\item{x}{The Profos per ping file.}
-
-\item{...}{Arguments passed to \code{\link{lowess}}.}
 }
 \value{
 

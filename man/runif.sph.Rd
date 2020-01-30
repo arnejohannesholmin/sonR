@@ -4,9 +4,17 @@
 \alias{runif.sph}
 \title{Generates uniformly distributed variables in the spherical volume segments defined by 'r', 'theta' and 'phi'.}
 \usage{
-runif.sph(n, r = c(0, 1), theta = c(0, 2 * pi), phi = c(0, pi),
-  sph.out = TRUE, offset = list(), scale.voxels = 1,
-  rand.gen = c("unif", "beta", "norm"), reverse = FALSE)
+runif.sph(
+  n,
+  r = c(0, 1),
+  theta = c(0, 2 * pi),
+  phi = c(0, pi),
+  sph.out = TRUE,
+  offset = list(),
+  scale.voxels = 1,
+  rand.gen = c("unif", "beta", "norm"),
+  reverse = FALSE
+)
 }
 \arguments{
 \item{n}{is the number of positions to draw, given either as a single integer or as a vector where each element corresponds to a spherical segment given by the rows of 'r', 'theta' and 'phi'.}

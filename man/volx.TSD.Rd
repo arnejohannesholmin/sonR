@@ -4,8 +4,7 @@
 \alias{volx.TSD}
 \title{Calculates the voxel volumes of acoustic instruments implemented in echoIBM (see sonR_implemented()). Usually the volume or area data of one ping is returned, but if muptiple time steps are given in the beam configuration data (specifically for fishery sonars), all time steps are returned if there are changes in the settings between pings.}
 \usage{
-volx.TSD(data, esnm = "MS70", var = c("volx", "harx"),
-  fanWidth = "b2")
+volx.TSD(data, esnm = "MS70", var = c("volx", "harx"), fanWidth = "b2")
 }
 \arguments{
 \item{data}{is the list of inputs variables as returned from read.TSD (including ).}

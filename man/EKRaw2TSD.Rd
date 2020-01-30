@@ -8,30 +8,77 @@
 \alias{LSSS2TSD}
 \title{Convert from Simrad or LSSS Profos files to TSD files.}
 \usage{
-EKRaw2TSD(event, filenr = "all", t = "all", cruise = NULL,
-  esnm = "MS70", eventname = NULL, CTD_station = NULL,
-  event_tsd = NULL, event_sadv = NULL, endian = "little",
-  dir.data = NULL, timeOffset = 0, minTimeDiff = Inf, drop = TRUE,
-  msg = TRUE, prenumt = 10, hpr0 = NULL, Pain = FALSE,
-  TVG.exp = 2, psze = -7, variableRange = TRUE, gain = NULL,
-  sacr = NULL, correctTime = FALSE, ow = TRUE, dira_offset = 0,
-  write = TRUE, cali = TRUE, toTS = FALSE, na.rm = TRUE,
-  cleanNMEA = 1, mergeFiles = TRUE, cores = 1, tres = NULL,
-  xres = NULL, zres = NULL, rres = NULL, bres = NULL,
-  funvbsc = c("median", "mean"), funt = c("median", "mean"),
-  adds = list(), split = TRUE, skipAngles = TRUE, origin = 1,
-  filesize = 3e+08, chunksize = 1e+08, apply.range.offset = FALSE,
-  thr1m = FALSE, ...)
+EKRaw2TSD(
+  event,
+  filenr = "all",
+  t = "all",
+  cruise = NULL,
+  esnm = "MS70",
+  eventname = NULL,
+  CTD_station = NULL,
+  event_tsd = NULL,
+  event_sadv = NULL,
+  endian = "little",
+  dir.data = NULL,
+  timeOffset = 0,
+  minTimeDiff = Inf,
+  drop = TRUE,
+  msg = TRUE,
+  prenumt = 10,
+  hpr0 = NULL,
+  Pain = FALSE,
+  TVG.exp = 2,
+  psze = -7,
+  variableRange = TRUE,
+  gain = NULL,
+  sacr = NULL,
+  correctTime = FALSE,
+  ow = TRUE,
+  dira_offset = 0,
+  write = TRUE,
+  cali = TRUE,
+  toTS = FALSE,
+  na.rm = TRUE,
+  cleanNMEA = 1,
+  mergeFiles = TRUE,
+  cores = 1,
+  tres = NULL,
+  xres = NULL,
+  zres = NULL,
+  rres = NULL,
+  bres = NULL,
+  funvbsc = c("median", "mean"),
+  funt = c("median", "mean"),
+  adds = list(),
+  split = TRUE,
+  skipAngles = TRUE,
+  origin = 1,
+  filesize = 3e+08,
+  chunksize = 1e+08,
+  apply.range.offset = FALSE,
+  thr1m = FALSE,
+  ...
+)
 
-EKRaw2TSDs(event, esnm = c("SU90", "EK60"), dir.type = c("tsd",
-  "Work"), cores = 1)
+EKRaw2TSDs(
+  event,
+  esnm = c("SU90", "EK60"),
+  dir.type = c("tsd", "Work"),
+  cores = 1
+)
 
 getSchoolsFromWork(event, esnm = "SU90", esnmLog = NULL, cores = 1)
 
 aggregateSchoolsFromWork(x, by = "sadv", delta = 1, digits = 6)
 
-LSSS2TSD(event = NULL, filesize = 3e+08, chunksize = 1e+08,
-  keep.temp = FALSE, cores = 1, ...)
+LSSS2TSD(
+  event = NULL,
+  filesize = 3e+08,
+  chunksize = 1e+08,
+  keep.temp = FALSE,
+  cores = 1,
+  ...
+)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory. If given as a full path to the directory of the raw data, the value of 'esnm' is interpreted from the data. Can also be given as a vector of files directly.}

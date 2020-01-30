@@ -4,8 +4,17 @@
 \alias{extract_event}
 \title{Extracts events from a directory of raw files.}
 \usage{
-extract_event(event, rawevent, t, ow = TRUE, dir.data = NULL,
-  toTSD = TRUE, last = TRUE, temp = FALSE, ...)
+extract_event(
+  event,
+  rawevent,
+  t,
+  ow = TRUE,
+  dir.data = NULL,
+  toTSD = TRUE,
+  last = TRUE,
+  temp = FALSE,
+  ...
+)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}

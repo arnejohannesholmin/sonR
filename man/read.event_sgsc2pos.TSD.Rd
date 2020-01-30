@@ -4,9 +4,17 @@
 \alias{read.event_sgsc2pos.TSD}
 \title{Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.}
 \usage{
-read.event_sgsc2pos.TSD(data, N = 100, esnm = "MS70", ideal = TRUE,
-  allert = NULL, seabed = -12000, rot = 1,
-  compensation = c("pitch", "roll"), ...)
+read.event_sgsc2pos.TSD(
+  data,
+  N = 100,
+  esnm = "MS70",
+  ideal = TRUE,
+  allert = NULL,
+  seabed = -12000,
+  rot = 1,
+  compensation = c("pitch", "roll"),
+  ...
+)
 }
 \arguments{
 \item{data}{is the list of TSD inputs as returned from read.TSD(var=c("vbsc","voxels","vessel")). Should only contain one ping/timestep.}

@@ -4,9 +4,18 @@
 \alias{rotate3D}
 \title{Rotates the set of 'n' three dimensional points 'x' by the 'p' rotation matrices given by 'A', or by the rotation angles 'ang' around the axes given by 'by'. More than one rotations may be given, either as a [3,3,p] array holding 'p' rotation matrices, a [3,3*p] vertically block divided matrix also holding 'p' rotation matrices, or as 'p' pairs of significant characters "x", "y" and "z" and rotation angles given by 'ang'. When p>1, the output has dimensions [n,3,p], where 'n' is the number of points to be rotated. When paired==TRUE, the output has dimension [n,3].}
 \usage{
-rotate3D(x, by, ang, paired = FALSE, radians = TRUE, sph.in = FALSE,
-  sph.out = FALSE, drop.out = TRUE, list.out = NULL,
-  reverse = FALSE)
+rotate3D(
+  x,
+  by,
+  ang,
+  paired = FALSE,
+  radians = TRUE,
+  sph.in = FALSE,
+  sph.out = FALSE,
+  drop.out = TRUE,
+  list.out = NULL,
+  reverse = FALSE
+)
 }
 \arguments{
 \item{x}{is the input given as a matrix of columns representing the x-, y- and z-coordinates (size: [n,3]), or a matrix of rows representing the x-, y- and z-coordinates (size: [3,n]) in which case 'paired' needs to be TRUE, or a list of elements named "x", "y" and "z".}

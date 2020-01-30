@@ -4,8 +4,7 @@
 \alias{sonR_implemented}
 \title{Test for implemented acosutical systems in echoIBM().}
 \usage{
-sonR_implemented(esnm, type = c("MBS", "MBE", "SBE", "OFS"),
-  notest = FALSE)
+sonR_implemented(esnm, type = c("MBS", "MBE", "SBE", "OFS"), notest = FALSE)
 }
 \arguments{
 \item{esnm}{is the name of the acoustical instrument, given as a four character string, or a list containing an element named "esnm". May be given in lower case.}

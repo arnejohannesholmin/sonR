@@ -4,8 +4,15 @@
 \alias{edgedir3D}
 \title{Calculates the edge points of an acoustic device based on the CTD-data, using edge points along the beam maxima as basis, and extracting the vertical dimension (elevation angle) from the vertical angular distance between beam maxima. !!!Only one time step is treated!!!!}
 \usage{
-edgedir3D(data, esnm = NULL, seabed = -12000, rot = 1,
-  compensation = c("pitch", "roll"), ideal = TRUE, ...)
+edgedir3D(
+  data,
+  esnm = NULL,
+  seabed = -12000,
+  rot = 1,
+  compensation = c("pitch", "roll"),
+  ideal = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data}{is the list of TSD inputs as returned from read.TSD (must contain ""dira" and "dire", and CTD-data).}

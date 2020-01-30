@@ -4,9 +4,15 @@
 \alias{noise.path}
 \title{Locates the paths to files holding the noise estimates and the estimates of the correlation between voxels. First the relevant files are seached for in the event given by 'event', 'cruise', and 'esnm', and then the files are seached for in the echoIBM/Resources/Noise/Main directory by matching 'esnm' and 'utim', or by 'esnm', 'cruise' if 'utim' is not given. This may select more than one relevant file, and read.TSDs() should be applied to the detected files, possibly with clean=FALSE.}
 \usage{
-noise.path(event = NULL, cruise = 2009116, esnm = "MS70",
-  utim = NULL, dir.data = NULL, noisevar = c("bgns", "nrnp"),
-  corvar = c("crb1", "olpb"))
+noise.path(
+  event = NULL,
+  cruise = 2009116,
+  esnm = "MS70",
+  utim = NULL,
+  dir.data = NULL,
+  noisevar = c("bgns", "nrnp"),
+  corvar = c("crb1", "olpb")
+)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}

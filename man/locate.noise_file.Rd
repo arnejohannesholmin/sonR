@@ -4,8 +4,12 @@
 \alias{locate.noise_file}
 \title{(Internal) Locate noise file.}
 \usage{
-locate.noise_file(event, noisevar = c("bgns", "nrnp"),
-  corvar = c("crb1", "olpb"), esnm = "MS70")
+locate.noise_file(
+  event,
+  noisevar = c("bgns", "nrnp"),
+  corvar = c("crb1", "olpb"),
+  esnm = "MS70"
+)
 }
 \arguments{
 \item{event}{The path to the event.}

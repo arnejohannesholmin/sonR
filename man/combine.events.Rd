@@ -4,8 +4,14 @@
 \alias{combine.events}
 \title{(Internal) Merge segmentation events, used in SX90.segment.event() and extract_event().}
 \usage{
-combine.events(events, event, cruise = NULL, esnm = NULL,
-  dir.data = NULL, ctd = 1)
+combine.events(
+  events,
+  event,
+  cruise = NULL,
+  esnm = NULL,
+  dir.data = NULL,
+  ctd = 1
+)
 }
 \arguments{
 \item{events}{is a list of beam configuration data.}

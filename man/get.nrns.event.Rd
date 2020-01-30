@@ -12,9 +12,19 @@
 <- sum( k_i^2 / sum(k_i)^2 ) * s^2 
 <- sum( k_i^2 ) / sum(k_i)^2 * s^2}
 \usage{
-get.nrns.event(con = NULL, event = NULL, cruise = NULL, t = NULL,
-  bgns = NULL, filter = dnorm(-20:20, sd = 4), nsdn = 1000,
-  farv = 1000, surface = 451:500, esnm = "MS70", ...)
+get.nrns.event(
+  con = NULL,
+  event = NULL,
+  cruise = NULL,
+  t = NULL,
+  bgns = NULL,
+  filter = dnorm(-20:20, sd = 4),
+  nsdn = 1000,
+  farv = 1000,
+  surface = 451:500,
+  esnm = "MS70",
+  ...
+)
 }
 \arguments{
 \item{con}{is the connection object or a character string naming the output file.}

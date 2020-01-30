@@ -4,8 +4,16 @@
 \alias{summarySeg}
 \title{(Internal) Returns a summary of segmentation data.}
 \usage{
-summarySeg(event, t, TS = -55, w = 0.369, segpar = 1:2, ang = NULL,
-  maxRange = 500, n90 = 2)
+summarySeg(
+  event,
+  t,
+  TS = -55,
+  w = 0.369,
+  segpar = 1:2,
+  ang = NULL,
+  maxRange = 500,
+  n90 = 2
+)
 }
 \value{
 

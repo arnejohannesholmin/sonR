@@ -4,8 +4,7 @@
 \alias{ksmooth.SG}
 \title{Applies a Gaussian 1-D, 2-D, or 3-D kernel on the data 'x' associated to locations 'coords', given the bandwidths given in the vector 'h'. When sim==1, NAs in the coordinates or the data are not supported.}
 \usage{
-ksmooth.SG(coords, x, h, w = h * 3, sim = FALSE, ind = list(),
-  na.rm = FALSE)
+ksmooth.SG(coords, x, h, w = h * 3, sim = FALSE, ind = list(), na.rm = FALSE)
 }
 \arguments{
 \item{coords}{is a list or matrix of spatial coordinates (with names "x", "y", and "z" for 3-D data, otherwise interpreted in that order).}

@@ -4,8 +4,13 @@
 \alias{generate.event}
 \title{Generate a simulation event.}
 \usage{
-generate.event(event = "Event1", cruise = "Cruise1", esnm = NULL,
-  dir.type = c("raw", "tsd"), ...)
+generate.event(
+  event = "Event1",
+  cruise = "Cruise1",
+  esnm = NULL,
+  dir.type = c("raw", "tsd"),
+  ...
+)
 }
 \arguments{
 \item{event}{is the name of the event, such as "S2014119_D200141023_E0003".}

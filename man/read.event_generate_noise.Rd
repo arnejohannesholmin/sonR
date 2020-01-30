@@ -4,10 +4,20 @@
 \alias{read.event_generate_noise}
 \title{Estimates the noise in MS70 data.}
 \usage{
-read.event_generate_noise(data, t = 1, noise = c("bgns", "pdns",
-  "nrns", "hins"), nsind = 0.75, cruise = 2009116, esnm = "MS70",
-  dir.data = NULL, hins_add = 10, phase = TRUE, pdns_scale = 1e-14,
-  TVG = TRUE, TVG.exp = 2)
+read.event_generate_noise(
+  data,
+  t = 1,
+  noise = c("bgns", "pdns", "nrns", "hins"),
+  nsind = 0.75,
+  cruise = 2009116,
+  esnm = "MS70",
+  dir.data = NULL,
+  hins_add = 10,
+  phase = TRUE,
+  pdns_scale = 1e-14,
+  TVG = TRUE,
+  TVG.exp = 2
+)
 }
 \arguments{
 \item{data}{is a list containing the data from which the noise should be estimated. Sould contain the following variables: "vbsc", "time", "hini", "hins", "beams", "ctd".}

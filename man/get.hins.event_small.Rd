@@ -4,10 +4,19 @@
 \alias{get.hins.event_small}
 \title{Estimates high intensity noise in an underwater acoustic system, by identifying high intensity one dimensional spikes.}
 \usage{
-get.hins.event_small(con = NULL, event = 1, cruise = 2009116,
-  esnm = "MS70", t = 1:10, k = 5, q = c(1000, 100),
-  beta_school = 2e-04, ind = list(-(1:100), NULL),
-  max.memory = 2e+09, ...)
+get.hins.event_small(
+  con = NULL,
+  event = 1,
+  cruise = 2009116,
+  esnm = "MS70",
+  t = 1:10,
+  k = 5,
+  q = c(1000, 100),
+  beta_school = 2e-04,
+  ind = list(-(1:100), NULL),
+  max.memory = 2e+09,
+  ...
+)
 }
 \arguments{
 \item{con}{is the connection object or a character string naming the output file.}

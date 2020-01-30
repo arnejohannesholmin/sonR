@@ -4,8 +4,7 @@
 \alias{rotx}
 \title{Returns three dimensional rotation matrices for rotation around the x-axis of a three dimensional coordinate system.}
 \usage{
-rotx(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE,
-  byrow = TRUE)
+rotx(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE, byrow = TRUE)
 }
 \arguments{
 \item{ang}{is a vedctor of the rotation angles around the x-axis.}

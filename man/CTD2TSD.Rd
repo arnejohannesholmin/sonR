@@ -4,8 +4,7 @@
 \alias{CTD2TSD}
 \title{Converts a CTD file to the TSD format for the variables relevant to echoIBM().}
 \usage{
-CTD2TSD(f = NULL, outfile = NULL, hpr0 = NULL, Pain = FALSE,
-  vessel = list())
+CTD2TSD(f = NULL, outfile = NULL, hpr0 = NULL, Pain = FALSE, vessel = list())
 }
 \arguments{
 \item{f}{is the CTD file in cnv format.}

@@ -4,8 +4,14 @@
 \alias{get.specs.esnm}
 \title{Returns specifications of the acoustic instrument 'esnm' regarding types of beams. The function treats single time steps, except for the output "region".}
 \usage{
-get.specs.esnm(data, var = c("rect", "offset", "region", "valid", "ind"),
-  esnm = NULL, ind = NULL, add = 30, beamstypes = 1)
+get.specs.esnm(
+  data,
+  var = c("rect", "offset", "region", "valid", "ind"),
+  esnm = NULL,
+  ind = NULL,
+  add = 30,
+  beamstypes = 1
+)
 }
 \arguments{
 \item{data}{A list of elements named according to the TSD file format holding the following information: "esnm" (may be given separately), "lenb", "", "", "", "", "", "", "", "", "", "", "".}

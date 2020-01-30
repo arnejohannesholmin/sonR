@@ -4,8 +4,16 @@
 \alias{ellipse}
 \title{Returns a matrix of two columns representing x- and y-values of positions on an ellipse of horizontal axis 'a', vertical axis 'b' and origin 'origin', defined by the angles given by 'ang' in a polar coordinate system centered at 'origin', or by 'x' or 'y' in a cartesian coordinate system.}
 \usage{
-ellipse(origin = c(0, 0), a = 2, b = 1, ang = seq(0, 2 * pi,
-  length.out = n), x = NULL, y = NULL, n = 100, aspectcomp = FALSE)
+ellipse(
+  origin = c(0, 0),
+  a = 2,
+  b = 1,
+  ang = seq(0, 2 * pi, length.out = n),
+  x = NULL,
+  y = NULL,
+  n = 100,
+  aspectcomp = FALSE
+)
 }
 \arguments{
 \item{origin}{The origin of the ellipse.}

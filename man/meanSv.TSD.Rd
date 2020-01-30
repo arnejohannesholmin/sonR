@@ -4,8 +4,16 @@
 \alias{meanSv.TSD}
 \title{Locates the point at which the kernel desity estimate of the Sv of the subset is equal to half its maximum, and uses Paper III of the PhD of Holmin to estimate the mean Sv from this. The output variables all start with X, denoting the SX90 segmentation method, but are applicable to all segmentation methods.}
 \usage{
-meanSv.TSD(data, plot.hist = FALSE, allow.vbsc = TRUE,
-  list.out = FALSE, minlen = 1, type = "H", enlarged = FALSE, ...)
+meanSv.TSD(
+  data,
+  plot.hist = FALSE,
+  allow.vbsc = TRUE,
+  list.out = FALSE,
+  minlen = 1,
+  type = "H",
+  enlarged = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{A list containing the acoustic data eihter given as 'vbss' for a segment of the data or as 'vbsc'.}

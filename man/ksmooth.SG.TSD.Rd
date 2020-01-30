@@ -4,8 +4,16 @@
 \alias{ksmooth.SG.TSD}
 \title{Applies a Gaussian 1-D, 2-D, or 3-D kernel on the 'data' given as a list with names according to the TSD-convension, and the bandwidths given in the vector 'h':}
 \usage{
-ksmooth.SG.TSD(data, h = 1, w = h * 3, sim = FALSE, ind = list(),
-  drop = FALSE, var = "vbsc", na.rm = 1)
+ksmooth.SG.TSD(
+  data,
+  h = 1,
+  w = h * 3,
+  sim = FALSE,
+  ind = list(),
+  drop = FALSE,
+  var = "vbsc",
+  na.rm = 1
+)
 }
 \arguments{
 \item{data}{is the list of data with names according to the TSD-convension.}

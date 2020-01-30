@@ -5,20 +5,57 @@
 \alias{pseg.event}
 \title{NA}
 \usage{
-bseg.event(event = 1, t = 1, cruise = 2009116, bgns = NULL,
-  beta0 = NULL, beta1 = NULL, misM = NULL, iter = TRUE,
-  factor = 10^(-5/10), minmsvM = 10^(-40/10), pow = 1,
-  ind = list(-(1:30), NULL), nsind = 0.75, smind = list(-(1:300)),
-  range = list(), subset = NULL, h = NULL, alpha = NULL,
-  filesize = 3e+08, hins_add = 10, turns = 10, phase = TRUE,
-  TVG.exp = 2, dens = NULL, segdir = NULL, esnm = "MS70",
-  subtractNoise = TRUE, pr0s.out = FALSE, adds = list(),
-  sim = TRUE, allow.old = FALSE, TOV = 0, startn = 1,
-  prefix = "", ...)
+bseg.event(
+  event = 1,
+  t = 1,
+  cruise = 2009116,
+  bgns = NULL,
+  beta0 = NULL,
+  beta1 = NULL,
+  misM = NULL,
+  iter = TRUE,
+  factor = 10^(-5/10),
+  minmsvM = 10^(-40/10),
+  pow = 1,
+  ind = list(-(1:30), NULL),
+  nsind = 0.75,
+  smind = list(-(1:300)),
+  range = list(),
+  subset = NULL,
+  h = NULL,
+  alpha = NULL,
+  filesize = 3e+08,
+  hins_add = 10,
+  turns = 10,
+  phase = TRUE,
+  TVG.exp = 2,
+  dens = NULL,
+  segdir = NULL,
+  esnm = "MS70",
+  subtractNoise = TRUE,
+  pr0s.out = FALSE,
+  adds = list(),
+  sim = TRUE,
+  allow.old = FALSE,
+  TOV = 0,
+  startn = 1,
+  prefix = "",
+  ...
+)
 
-pseg.event(event = 1, t = 1, cruise = 2009116, alpha = NULL,
-  filesize = 3e+08, dens = NULL, segdir = NULL, adds = list(),
-  TOV = 0, startn = 1, ...)
+pseg.event(
+  event = 1,
+  t = 1,
+  cruise = 2009116,
+  alpha = NULL,
+  filesize = 3e+08,
+  dens = NULL,
+  segdir = NULL,
+  adds = list(),
+  TOV = 0,
+  startn = 1,
+  ...
+)
 }
 \arguments{
 \item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}
@@ -73,23 +110,7 @@ pseg.event(event = 1, t = 1, cruise = 2009116, alpha = NULL,
 
 \item{dir.data}{is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().}
 
-\item{event}{is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.}
-
-\item{t}{is either the number of the ping to be treated, as listed from 1 to the number of pings in the event, or the time point given as a string "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF". Only one time step alowed!}
-
-\item{cruise}{is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event.}
-
-\item{alpha}{is the significance level of the hypothesis testing of H0: school not present in the voxel, against H1: school present in the voxel. To return non-thresholded data, use alpha=NULL.}
-
-\item{dir.data}{is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().}
-
 \item{var}{is "vbsc" for segmenting volume backscattering data, and "posf" for segmenting original fish position data.}
-
-\item{dens}{is the packing density of the school, used when var="posf". These values are attemptedly read in the event, if not given as input to the function.}
-
-\item{segdir}{is an optional string giving the name of the folder in which to put the segmentation files. The folder will be put in the directory of the event. segdir==NULL results in segdir="seg0".}
-
-\item{adds}{is an optional list of variables overriding the variables in read from the event.}
 }
 \value{
 

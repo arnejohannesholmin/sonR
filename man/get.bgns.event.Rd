@@ -4,13 +4,32 @@
 \alias{get.bgns.event}
 \title{Estimates the mean of exponentially distributed background noise for each beam of an underwater acoustic system, based on the lower fraction of the values specified by 'prob', and writes the result to file in the TSD format if 'con' is given.}
 \usage{
-get.bgns.event(con = NULL, event = NULL, cruise = 2009116,
-  t = NULL, esnm = "MS70", noise = NULL, fftthreshold = 0.145,
-  nsind = 0.75, acfq = 100, prob = 0.2, type = 6, tries = c(10,
-  10), thr = 0.001, trim = 0.1, search = 4, kurtosis = c(0.1, 3),
-  reffan = 16, pdns_scale = 1e-14, lowerpar = c(0.001, 0.001, -2 *
-  pi), startpar = c(1, 2, 3), upperpar = c(1000, 6, 4 * pi),
-  kern = NULL, high = Inf, ...)
+get.bgns.event(
+  con = NULL,
+  event = NULL,
+  cruise = 2009116,
+  t = NULL,
+  esnm = "MS70",
+  noise = NULL,
+  fftthreshold = 0.145,
+  nsind = 0.75,
+  acfq = 100,
+  prob = 0.2,
+  type = 6,
+  tries = c(10, 10),
+  thr = 0.001,
+  trim = 0.1,
+  search = 4,
+  kurtosis = c(0.1, 3),
+  reffan = 16,
+  pdns_scale = 1e-14,
+  lowerpar = c(0.001, 0.001, -2 * pi),
+  startpar = c(1, 2, 3),
+  upperpar = c(1000, 6, 4 * pi),
+  kern = NULL,
+  high = Inf,
+  ...
+)
 }
 \arguments{
 \item{con}{is the connection object or a character string naming the output file.}
