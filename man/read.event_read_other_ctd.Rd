@@ -15,9 +15,6 @@ read.event_read_other_ctd(var, ctdfiles, ctdfilesind, TIME)
 
 \item{TIME}{is the list returned from UNIX_time().}
 }
-\value{
-
-}
 \description{
 Reads ctd-variables. Used in read.event().
 }

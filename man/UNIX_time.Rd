@@ -35,9 +35,6 @@ UNIX_time(
 
 \item{cores}{is the number of cores for parallel reading of the TSD files.}
 }
-\value{
-
-}
 \description{
 Writes and returns the UNIX_time file of an event.
 }

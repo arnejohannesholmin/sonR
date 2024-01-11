@@ -6,9 +6,8 @@
 \title{NA}
 \usage{
 bseg.event(
-  event = 1,
+  event,
   t = 1,
-  cruise = 2009116,
   bgns = NULL,
   beta0 = NULL,
   beta1 = NULL,
@@ -62,8 +61,6 @@ pseg.event(
 
 \item{t}{is either the number of the ping to be treated, as listed from 1 to the number of pings in the event, or the time point given as a string "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF". Only one time step alowed!}
 
-\item{cruise}{is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event.}
-
 \item{bgns}{is ann optional list of noise estimates (must contain the background noise 'bgns', and may contain the periodic noise estimates 'pns1', 'pns2' and 'harm'). The phase parameter 'pns2' is extracted from the data.}
 
 \item{beta0}{is the minimum schooling threshold for the volume backscattering coefficient. For voxels where beta0<noise: beta0=noise.}
@@ -106,16 +103,13 @@ pseg.event(
 
 \item{adds}{is an optional list of variables overriding the variables in read from the event.}
 
-\item{sim}{is a TRUE if smoothing should be done only along the first dimensions, simultaneously over the stages of the last dimension. If 'sim' is an integer larger than 1, the positions 'coords' are used 'sim' times, and the data 'x' should have length 'sim' times the length of one coordinate of 'coords'.}
+\item{sim}{is TRUE if smoothing should be done only along the first dimensions, simultaneously over the stages of the last dimension. If 'sim' is an integer larger than 1, the positions 'coords' are used 'sim' times, and the data 'x' should have length 'sim' times the length of one coordinate of 'coords'.}
+
+\item{cruise}{is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event.}
 
 \item{dir.data}{is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().}
 
 \item{var}{is "vbsc" for segmenting volume backscattering data, and "posf" for segmenting original fish position data.}
-}
-\value{
-
-
-
 }
 \description{
 NA

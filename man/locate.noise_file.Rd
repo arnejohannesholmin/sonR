@@ -20,9 +20,6 @@ locate.noise_file(
 
 \item{esnm}{The name of the acoustic instrument for which to find the noise files.}
 }
-\value{
-
-}
 \description{
 (Internal) Locate noise file.
 }

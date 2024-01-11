@@ -10,13 +10,13 @@ Depends: R (>= 3.5)
 BugReports: https://github.com/arnejohannesholmin/sonR/issues
 License: LGPL-3
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 Imports:
 		ccaPP,
 		data.table,
 		fpc,
 		ncdf4,
 		pbapply,
-		SoDA,
+		sf,
 		TSD,
 		SimradRaw

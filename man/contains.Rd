@@ -15,9 +15,6 @@ contains(x, a, b = NULL, cond = "less")
 
 \item{cond}{specifies the border condition type:}
 }
-\value{
-
-}
 \description{
 Returning a categorical array (0 and 1) for the condition defined by 'a', 'b' and 'cond'.
 }

@@ -51,7 +51,7 @@ get.hins.event_small<-function(con=NULL, event=1, cruise=2009116, esnm="MS70", t
 	mtim = time$mtim
 	P = length(indt)
 	# Read the beam configuration:
-	data = read.event(event=event, cruise=cruise, esnm=esnm, var="beams", t="all")
+	data = read.event(event=event, cruise=cruise, esnm=esnm, var="beams", t=indt[1])
 	numb = data$numb[1]
 	D3 = length(unique(c(data$freq)))
 	D2 = numb/D3

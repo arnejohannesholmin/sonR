@@ -40,9 +40,6 @@ read.event_generate_noise(
 
 \item{TVG.exp}{is the exponent of the eamotric spreading of the sound wave, theoretically 2 for Sv and 4 for TS.}
 }
-\value{
-
-}
 \description{
 Estimates the noise in MS70 data.
 }

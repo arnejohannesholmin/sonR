@@ -15,9 +15,6 @@ extractBeams(data, beams = 1, var = "all", drop = FALSE)
 
 \item{drop}{Logical: If TRUE drop empty dimensionsof the output.}
 }
-\value{
-
-}
 \description{
 Extracts a beams from TSD-data, so that if a one dimensional variable has two dimensions, the first is regarded as beams and the apropriate time beams are extracted.
 }

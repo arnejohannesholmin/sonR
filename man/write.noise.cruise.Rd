@@ -6,10 +6,8 @@
 \usage{
 write.noise.cruise(
   con = NULL,
-  cruise = NULL,
   esnm = NULL,
   treat = c("bgns", "pdns", "nrns", "hins"),
-  dir.data = NULL,
   event_p = NULL,
   t_p = NULL,
   noise = NULL,
@@ -46,25 +44,21 @@ write.noise.cruise(
 )
 }
 \arguments{
-\item{con}{is the path to the file to which the noise estimates schould be written. If con==NULL, no data is written to file (only returned from the function). If con==TRUE, the data is written to the default file located in the directory "Noise/Main" in the cruise directory, and named with the cruise name and the events used to estimate the various noise types.}
-
-\item{cruise}{is the identifier of the cruise for the passive noise. Given either as the specification used by IMR (yyyynnn), or the path to the directory containing the event to be read.}
+\item{con}{is the path to the file to which the noise estimates schould be written. If con =  = NULL, no data is written to file (only returned from the function). If con =  = TRUE, the data is written to the default file located in the directory "Noise/Main" in the cruise directory, and named with the cruise name and the events used to estimate the various noise types.}
 
 \item{esnm}{is the name of the acoustical instrument, given as a four character string. Currently implemented are "EK60", "ME70", "MS70" and "SH80"/"SX80"/"SH90"/"SX90" (may be given in lover case).}
 
 \item{treat}{is a vector of strings naming the noise types to estimate, where "bgns" is the background noise, "pdns" is the periodic noise, "nrns" is the near range noise, and "hins" is the high intensity noise.}
 
-\item{dir.data}{is the path to the directory in which the projects are stored, defaulted by the variable Acoustics_datasets_directory().}
-
 \item{event_p}{is the identifier of the event for the noise in passive mode. Given either as the number of the event, a string contained in the name of the event, or the path of the event directory. More than one event may be given, in a vector.}
 
-\item{t_p}{is the identifier of the time points for the noise in passive mode. Given either as a vector of integers between 1 and the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points are extracted. If t=="all", all files are read and if t=="none" no action is done. If more than one event is given, 't_bgns' must be given as a list of vectors.}
+\item{t_p}{is the identifier of the time points for the noise in passive mode. Given either as a vector of integers between 1 and the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points are extracted. If t =  = "all", all files are read and if t =  = "none" no action is done. If more than one event is given, 't_bgns' must be given as a list of vectors.}
 
 \item{noise}{is either a list of the elements 'harm' and 'badb', representing the harmonics of the periodic beams (where the non-periodic beams are set to 1) and the the vector identifying the periodic beams, composed of 0's for non-periodic beams and 1's for periodic beams, respectively; or a character string representing the path to a directory or file from which this information should be read. If not given, the periodic nature and the harmonics of the beams are estimated from the passive data.}
 
 \item{fftthreshold}{is the threshold value for the height of the highest peak in spectral density relative to the zero frequency, identifying the preiodic beams as those with mean across pings exceeding the 'fftthreshold'.}
 
-\item{nsind}{is a specification of the voxels used in the estimation, given either as a list as input to pplot3d.event(), a vector to be intersected with the sequence of voxels along beams, a single integer > 1 representing the "farthes nsind voxels along each beam", a single numeric <=1 representing the proportion of the farthest voxels along the beams compared to the length of the beams, of sonething else (like NULL) implying taking all voxels into account:.}
+\item{nsind}{is a specification of the voxels used in the estimation, given either as a list as input to pplot3d.event(), a vector to be intersected with the sequence of voxels along beams, a single integer > 1 representing the "farthes nsind voxels along each beam", a single numeric < = 1 representing the proportion of the farthest voxels along the beams compared to the length of the beams, of sonething else (like NULL) implying taking all voxels into account:.}
 
 \item{acfq}{is the frequency of the alternating current generating the periodic noise.}
 
@@ -88,19 +82,19 @@ write.noise.cruise(
 
 \item{lowerpar}{, 'startpar' and 'upperpar' are the lower, start and upper parameter values representing the magnitude, kurtosis and phase, respectively, where the magnitude is given relative to 'scale'.}
 
-\item{kern}{is either a vector of wieghts summing to 1, specifying the smoothing of the spectral frequency used to identify the harmonics, or a single numeric = 1, specitying a Gaussian kernel with sd=1.}
+\item{kern}{is either a vector of wieghts summing to 1, specifying the smoothing of the spectral frequency used to identify the harmonics, or a single numeric = 1, specitying a Gaussian kernel with sd = 1.}
 
 \item{high}{is used in resampleHigh() in get.bgns.event() to reduce the impact from unusually high values in the fft.}
 
 \item{event_a}{is the identifier of the event for the noise in active mode. Given either as the number of the event, a string contained in the name of the event, or the path of the event directory. More than one event may be given, in a vector.}
 
-\item{t_a}{is the identifier of the time points for the noise in active mode. Given either as a vector of integers between 1 and the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points are extracted. If t=="all", all files are read and if t=="none" no action is done. If more than one event is given, 't_bgns' must be given as a list of vectors.}
+\item{t_a}{is the identifier of the time points for the noise in active mode. Given either as a vector of integers between 1 and the number of pings in the event, or a vector of time points given as strings "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF" from which the range of the time points are extracted. If t =  = "all", all files are read and if t =  = "none" no action is done. If more than one event is given, 't_bgns' must be given as a list of vectors.}
 
 \item{filter}{is the kernel used when smoothing the near range noise of each beam.}
 
 \item{nsdn}{is the number of standard deviation above the mean nrea range noise for each beam, defining the values that are set to 0. The beam is traced from the sonar and out, and at the first value below the threshold, the near range noise is set to zero for all values at and beyond this value.}
 
-\item{farv}{is the number of far voxels used for the calclulation of the mean and standard deviation used when assigning zeros to the smoothed near range noise. For farv=13, the 13 farthest non-missing values are used for each beam.}
+\item{farv}{is the number of far voxels used for the calclulation of the mean and standard deviation used when assigning zeros to the smoothed near range noise. For farv = 13, the 13 farthest non-missing values are used for each beam.}
 
 \item{surface}{is a vector of indexes for the beams affected by the surface noise (extrapolated in the near range noise estimation).}
 
@@ -117,9 +111,6 @@ write.noise.cruise(
 \item{max.memory}{puts a restiction on the mempry occupied by the function, prompting a call to the user to approve is exceeded.}
 
 \item{...}{variables used in write.TSD() (such as 'ow' for overwriting existing files).}
-}
-\value{
-
 }
 \description{
 Estimates and writes the noise in av underwater acoustic system like Simrad EK60, ME70, MS70 or SX90, based on Holmin et al. 2013: "Estimation and simulation of multibeam sonar noise".

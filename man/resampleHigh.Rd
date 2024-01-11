@@ -13,9 +13,6 @@ resampleHigh(x, high, trim = 0.1)
 
 \item{trim}{is used in x/mean(x,trim=trim).}
 }
-\value{
-
-}
 \description{
 Resamples large values from the remaining values (useful in analyses containing suspucously high values which desrupt the analysis).
 }

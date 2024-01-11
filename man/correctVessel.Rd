@@ -15,9 +15,6 @@ correctVessel(var, time, rawvessel, TOV = 0)
 
 \item{TOV}{is the time offset of the vessel information, caused by some error in the SIMRAD system.}
 }
-\value{
-
-}
 \description{
 Shifts the vessel information 'rtzv', 'lonv', 'latv', and 'ispv' by the time offset 'TOV'. Used in read.event().
 }

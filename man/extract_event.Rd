@@ -35,9 +35,6 @@ extract_event(
 
 \item{...}{are parameters passed to EKRaw2TSD().}
 }
-\value{
-
-}
 \description{
 Extracts events from a directory of raw files.
 }

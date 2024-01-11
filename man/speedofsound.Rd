@@ -32,9 +32,6 @@ speedofsound(
 
 \item{Pain}{is TRUE if pressure is given in Pascal and FALSE if given in decibar (10000 Pascal).}
 }
-\value{
-
-}
 \description{
 Computes the speed of sound of the ocean for the given temperature, salinity and pressure values. Method adopted from "sw_svel.m" and based on UNESCO 1983.
 }

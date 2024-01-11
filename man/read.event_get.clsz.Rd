@@ -19,9 +19,6 @@ read.event_get.clsz(out, beamsfiles, beamsfilesind, tlist, pamkpar, esnm)
 
 \item{esnm}{is the name of the acoustical instrument, given as a four character string. See sonR_implemented() for the implemented systems. May be given in 'data', and in lower case.}
 }
-\value{
-
-}
 \description{
 Extracts clusters of segmentation data.
 }

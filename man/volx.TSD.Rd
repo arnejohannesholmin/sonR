@@ -15,9 +15,6 @@ volx.TSD(data, esnm = "MS70", var = c("volx", "harx"), fanWidth = "b2")
 
 \item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
 }
-\value{
-
-}
 \description{
 Calculates the voxel volumes of acoustic instruments implemented in echoIBM (see sonR_implemented()). Usually the volume or area data of one ping is returned, but if muptiple time steps are given in the beam configuration data (specifically for fishery sonars), all time steps are returned if there are changes in the settings between pings.
 }

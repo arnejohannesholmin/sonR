@@ -13,9 +13,6 @@ sonR_implemented(esnm, type = c("MBS", "MBE", "SBE", "OFS"), notest = FALSE)
 
 \item{notest}{is TRUE to return the implemented systems, in which case no test is made.}
 }
-\value{
-
-}
 \description{
 Test for implemented acosutical systems in echoIBM().
 }

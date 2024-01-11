@@ -10,6 +10,7 @@ get.bgns.event(
   cruise = 2009116,
   t = NULL,
   esnm = "MS70",
+  treat = c("bgns", "pdns"),
   noise = NULL,
   fftthreshold = 0.145,
   nsind = 0.75,
@@ -75,9 +76,6 @@ get.bgns.event(
 \item{high}{is used in resampleHigh() in get.bgns.event() to reduce the impact from unusually high values in the fft.}
 
 \item{...}{variables used in write.TSD() (such as 'ow' for overwriting existing files).}
-}
-\value{
-
 }
 \description{
 Estimates the mean of exponentially distributed background noise for each beam of an underwater acoustic system, based on the lower fraction of the values specified by 'prob', and writes the result to file in the TSD format if 'con' is given.

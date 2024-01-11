@@ -11,9 +11,6 @@ vl2rt.TSD(data, var = c("rtz", "rtx"), fresh = FALSE)
 
 \item{var}{is a vector of the elements to return.}
 }
-\value{
-
-}
 \description{
 Transforms from velocity data to rotation data, given as counter clockwise around z-rotation and counter clockwise around x-rotation.
 }

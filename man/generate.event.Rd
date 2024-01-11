@@ -23,9 +23,6 @@ generate.event(
 
 \item{...}{Passed on to dir.create.}
 }
-\value{
-
-}
 \description{
 Generate a simulation event.
 }

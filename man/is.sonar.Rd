@@ -26,9 +26,6 @@ is.sonar(
 
 \item{fishery}{is TRUE to return TRUE only for fishery sonars (not including MS70).}
 }
-\value{
-
-}
 \description{
 Identifies whether the acoustic system is a sonar, fishery sonar or echosounder, for exactly one ping is 'data' is given.
 }

@@ -11,9 +11,6 @@ volx2D_oneping(data, fanWidth = "b2")
 
 \item{fanWidth}{has a number of possible values (abbreviations allowed, so that the values "e" and "b" can be used):}
 }
-\value{
-
-}
 \description{
 Calculates the volumes of the voxels of an omnidirectional fan of a multibeam sonar. Only the rectangular beams are treated!!! See read.event() for importing volumes of voxels.
 }

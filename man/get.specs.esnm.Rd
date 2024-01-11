@@ -26,9 +26,6 @@ get.specs.esnm(
 
 \item{beamstypes}{The beam type to use, where rectangluar is 1 and non-rectangular is 2.}
 }
-\value{
-
-}
 \description{
 Returns specifications of the acoustic instrument 'esnm' regarding types of beams. The function treats single time steps, except for the output "region".
 }

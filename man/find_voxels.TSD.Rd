@@ -13,9 +13,6 @@ find_voxels.TSD(pos, data, arr.ind = FALSE)
 
 \item{arr.ind}{is TRUE to return array indices, in which voxels outside of the sonar volume are indicated by zeros in one oner more of the columns.}
 }
-\value{
-
-}
 \description{
 Finds the voxels in which the positions in 'pos' are located. NAs returned for voxels outside of the sonar volume.
 }

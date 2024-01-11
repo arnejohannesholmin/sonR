@@ -29,9 +29,6 @@ edgedir1D(
 
 \item{...}{Used for robutness.}
 }
-\value{
-
-}
 \description{
 Calculates the edge points of an ecousounder based on the CTD-data, creating circular volume elements centered around the vertical upwards direction (note that the resulting data needs to be rotated back to the direction of the beams outside of this function). !!!Only one time step is treated!!!!
 }

@@ -144,9 +144,6 @@ read.event(
 
 \item{other.}{is TRUE to read other files than acoustic, electrical angle, vessel, beams, noise, ctd, school, seg, time.}
 }
-\value{
-
-}
 \description{
 Extracts variables from acoustic events.
 }

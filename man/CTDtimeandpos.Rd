@@ -9,9 +9,6 @@ CTDtimeandpos(x)
 \arguments{
 \item{x}{is a CTD file in the cnv format.}
 }
-\value{
-
-}
 \description{
 Reads the time and position of a CTD file in the cnv format.
 }

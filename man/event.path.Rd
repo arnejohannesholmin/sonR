@@ -27,9 +27,6 @@ event.path(
 
 \item{...}{is used in agrep() for locating events based on approximate string matching.}
 }
-\value{
-
-}
 \description{
 Returns a list of the following strings: (1) the path to the event, (2) the event name, (3) the event number, (4) the path to the cruise, and (5) the cruise name.
 }

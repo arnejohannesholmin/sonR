@@ -27,9 +27,6 @@ extrapolate.matrix(
 
 \item{drop.out}{is TRUE if the output should be stripped of empty dimensions by the drop() function.}
 }
-\value{
-
-}
 \description{
 Extrapolates or shrinks a matrix to according to the specifications given by 'a', 'b' and 'along'. If 'along' (defaulted to 0) is not in 1:nrow(x), 'a' and 'b' are interpreted as the number of rows to add at the beginning and at the end of the columns of the matrix (negative values imply shrinkage). If along is in in 1:nrow(x), 'a' and 'b' are interpreted as the desired lower and upper value to which the values of x[,along] are to be extrapolated by a simple linear expansion of the two first and the two last rows of 'x'. The column given by 'along' should be sorted.
 }

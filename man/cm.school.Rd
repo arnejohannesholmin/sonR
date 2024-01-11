@@ -17,9 +17,6 @@ cm.school(school, mass = 1, subset = NULL, na.rm = TRUE, excl.neg = TRUE)
 
 \item{excl.neg}{is FALSE if negarive mass values are to be included in the calculation of the centers of mass of the school.}
 }
-\value{
-
-}
 \description{
 Calculates the center of mass of a (simulated) school in 1D, 2D or 3D, or based on acoustic data.
 }

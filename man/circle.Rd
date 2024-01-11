@@ -26,9 +26,6 @@ circle(
 
 \item{n}{is (if length(and)==2) the length of 'ang' as a sequence between its first and the second element.}
 }
-\value{
-
-}
 \description{
 Returns a matrix of two columns representing x- and y-values of positions on a circle of radius 'r' and origin 'origin', defined by the angles given by 'ang' in a polar coordinate system centered at 'origin', or by 'x' or 'y' in a cartesian coordinate system.
 }

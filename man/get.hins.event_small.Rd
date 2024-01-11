@@ -41,9 +41,6 @@ get.hins.event_small(
 
 \item{...}{variables used in write.TSD() (such as 'ow' for overwriting existing files).}
 }
-\value{
-
-}
 \description{
 Estimates high intensity noise in an underwater acoustic system, by identifying high intensity one dimensional spikes.
 }

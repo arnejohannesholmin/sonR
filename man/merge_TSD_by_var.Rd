@@ -26,9 +26,6 @@ merge_TSD_by_var(
 
 \item{...}{Passed on to \code{fun} and \code{\link{write.TSD}}.}
 }
-\value{
-
-}
 \description{
 This function returns a list of indices of files of common time (utim)/sailed distance (sadv), or if this list is given merges the common files.
 }

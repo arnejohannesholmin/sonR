@@ -41,9 +41,6 @@ get.hins.event(
 
 \item{...}{variables used in write.TSD() (such as 'ow' for overwriting existing files).}
 }
-\value{
-
-}
 \description{
 Estimates high intensity noise in acoustic data by identifying high intensity one dimensional spikes. Note that this function only works on MS70 and is therefore deprecated.
 }

@@ -29,9 +29,6 @@ extract.range.TSD(
 
 \item{insert.NA}{is TRUE if the discarded data are to be kept as NA.}
 }
-\value{
-
-}
 \description{
 Extracts a subset of TSD data according to the ranges given for the variables of 'data' in 'range'.
 }

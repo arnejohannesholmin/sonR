@@ -17,9 +17,6 @@ roty(ang, radians = TRUE, block.out = FALSE, drop.out = TRUE, byrow = TRUE)
 
 \item{byrow}{is TRUE if the matrices are to be organized by rows (vertically).}
 }
-\value{
-
-}
 \description{
 Returns three dimensional rotation matrices for rotation around the y-axis of a three dimensional coordinate system.
 }

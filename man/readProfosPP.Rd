@@ -68,11 +68,6 @@ readProfosPP(
 
 \item{spar0}{The value of \code{spar} used if application of the \code{sparfact} results in negative values for \code{spar}.}
 }
-\value{
-
-
-
-}
 \description{
 This function creates two plots, (1) one showing the raw and spline smoothed track of the vessel (ship) and the raw and spline and lowess smoothed track of the school, and (2) a related plot showing the mean volume backscattering coefficient/strength of the school as a function of incidence angle rotation (increasing along the unit circle).
 }

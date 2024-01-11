@@ -44,9 +44,6 @@ soundbeam.TSD(
 
 \item{...}{allowing for argument passed to tjie function.}
 }
-\value{
-
-}
 \description{
 Calculates the midpoints (or edges along the beams, depending on 'rpos') of the voxels of a sonar or an echo sounder, relative to a global coordinate system (usually centered on the sea surface at the first vessel position, with y-axis pointing north and vertical z-axis). Only the heading is considered, as the pitch and roll of the vessel is compensated for by the sonar. If positions are wanted in the coodinate system of the vessel, set 'data' to c(list(psxv=0,psyv=0,pszv=0,rtxv=0,rtyv=0,rtzv=0,psze=0),data).
 If pitch and/or roll are not compensated for by the sonar, the function has to be altered.

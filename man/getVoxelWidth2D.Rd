@@ -11,9 +11,6 @@ getVoxelWidth2D(data, fanWidth = "b2")
 
 \item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
 }
-\value{
-
-}
 \description{
 Calculates edge values for voxels in a 2-D sonar fan. If a vertically oriented fan is
 }

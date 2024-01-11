@@ -29,9 +29,6 @@ noise.path(
 
 \item{corvar}{is a vetor of TSD names which mest be present in the correlation estimate files.}
 }
-\value{
-
-}
 \description{
 Locates the paths to files holding the noise estimates and the estimates of the correlation between voxels. First the relevant files are seached for in the event given by 'event', 'cruise', and 'esnm', and then the files are seached for in the echoIBM/Resources/Noise/Main directory by matching 'esnm' and 'utim', or by 'esnm', 'cruise' if 'utim' is not given. This may select more than one relevant file, and read.TSDs() should be applied to the detected files, possibly with clean=FALSE.
 }

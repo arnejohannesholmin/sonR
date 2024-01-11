@@ -13,9 +13,6 @@ removeDuplicated_tlist(tlist, files, ind = NULL)
 
 \item{ind}{is a vector of indices for the files for which to check for duplicated time steps.}
 }
-\value{
-
-}
 \description{
 Removes duplicated time steps from the list of time step indices 'tlist'.
 }

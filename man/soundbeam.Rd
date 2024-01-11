@@ -61,9 +61,6 @@ soundbeam(
 
 \item{totlength}{is the total length of the calculated path along which the sound beam positions are tracked.}
 }
-\value{
-
-}
 \description{
 Computes the path of a ray of sound for the given temperature, salinity and depth/pressure values. The sound beam is calculated in the x-y-plane, where y corresponds to z in three dimensions. If unequal in length, the shorter ones of the inputs are recycled. A list of the following elements is returned Used in soundbeam.TSD().
 }

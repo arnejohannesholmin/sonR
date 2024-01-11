@@ -15,9 +15,6 @@ meanexp.quantile(x, prob = 0.5, type = 6, MARGIN = NULL)
 
 \item{MARGIN}{is used in the same way as in apply().}
 }
-\value{
-
-}
 \description{
 Estimates the parameter of an exponentially distributed 'X' based on the quantile of values. F(x) = 1 - exp(-x/beta) = p => betahat = quantile(x,p) / log(1/(1-p)). Arrays up to 3 dimensions are accepted.
 }

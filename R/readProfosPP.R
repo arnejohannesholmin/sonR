@@ -15,7 +15,6 @@
 #' @examples
 #' \dontrun{}
 #'
-#' @importFrom SoDA geoXY
 #' @importFrom TSD ang2rot papply
 #'
 #' @export
@@ -189,12 +188,16 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 	# Add Cartesian coordinates for the school and vessel:
 	lat0 <- mean(x$Center.lat)
 	lon0 <- mean(x$Center.lon) 
-	schoolXY <- geoXY(x$Center.lat, x$Center.lon, lat0, lon0, unit=1) #distance (m) for each detection to mean postion
+	schoolXY <- geoXY_using_sf(x$Center.lat, x$Center.lon, lat0, lon0)
 	x$Center.x <- schoolXY[,1]
 	x$Center.y <- schoolXY[,2]
-	shipXY <- geoXY(x$Ship.lat, x$Ship.lon, lat0, lon0, unit=1) #distance (m) for each detection to mean postion
+	shipXY <- geoXY_using_sf(x$Ship.lat, x$Ship.lon, lat0, lon0)
 	x$Ship.x <- shipXY[,1]
 	x$Ship.y <- shipXY[,2]
+	
+	
+	
+	
 	
 	# Add the range from the vessel:
 	x$Center.range <- sqrt( (x$Center.x - x$Ship.x)^2 + (x$Center.y - x$Ship.y)^2 )
@@ -331,4 +334,13 @@ readProfosPP <- function(x, currentSpeed=NULL, currentAngle=NULL, compensateCurr
 	}
 	
 	return(x)
+}
+
+
+#' @importFrom sf st_as_sf st_coordinates st_transform
+geoXY_using_sf <- function(lat, lon, lat0, lon0, units = "m") {
+	df_sf <- sf::st_as_sf(data.frame(Longitude = lon, Latitude = lat), coords = c("Longitude", "Latitude"), crs = 4326)
+	xy <- sf::st_coordinates(sf::st_transform(df_sf, crs = paste0("+proj=aeqd +ellps=WGS84 +units=", units, " +no_defs +lon_0=", lon0, " +lat_0=", lat0))$geometry)
+	
+	return(xy)
 }

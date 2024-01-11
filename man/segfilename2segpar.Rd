@@ -9,9 +9,6 @@ segfilename2segpar(x, force.numeric = TRUE)
 \arguments{
 \item{x}{is a file name containing segmentation parameter names and values in pairs enclosed in brackets <> (example: "S2009116_D20091113_E0001_<bwGp><1><lsth><1e-05><usth><2e-04><sgth><1.0e-01>_T081147.seg").}
 }
-\value{
-
-}
 \description{
 Parses segmentaiton file names and extracts segmentation parameter names and values.
 }

@@ -11,9 +11,6 @@ segmaskEchosounder(event, t = "all")
 
 \item{t}{The time steps to generate theoretical segmentation for.}
 }
-\value{
-
-}
 \description{
 Create theoretical segmentation data for echosounder.
 }
