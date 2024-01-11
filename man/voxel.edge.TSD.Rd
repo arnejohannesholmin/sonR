@@ -36,9 +36,6 @@ voxel.edge.TSD(
 
 \item{fanWidth}{has a number of possible values: (1) "b1": one way beam width. (2) "b2": two way beam width. (3) "fe": beams modeled by rectangular cones with width withing the fan given by the inter-beam angle, and calculated using the equivalent beam angle. This normally causes larged fan width due to overlap between beams.}
 }
-\value{
-
-}
 \description{
 Calculates a matrix of edge points of voxels of an underwater acoustic system. The matrix contains r0 and r1, the closer and father range to each voxel; theta0 and theta1, the azimuth angle of the left and right dge of each voxel; and phi0 and phi1, the elevation angle of the lower and upper edge of each voxel, as seen from the vessel for a multi-beam sonar such as the Simrad MS70. !!!Only one time step is treated!!!!
 }

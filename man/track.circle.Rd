@@ -38,9 +38,6 @@ track.circle(
 
 \item{...}{are parameters to be passed on to plot() if plot==TRUE.}
 }
-\value{
-
-}
 \description{
 Returns a list of x-values and y-values of points defined by the fractions 'w' along the partial circular path defined by the list or matrix of origin points 'origin', the vector of radii 'r' and the list or matrix of angles 'ang'. Cumulative lengths of the path are also returned.
 }

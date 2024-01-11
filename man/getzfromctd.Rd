@@ -11,9 +11,6 @@ getzfromctd(ctd, Pain = FALSE)
 
 \item{Pain}{is TRUE if pressure "ihpr" is given in Pascal and FALSE if given in decibar relative to surface pressure (10000 Pascal, giving values approximately equivalent to water depth).}
 }
-\value{
-
-}
 \description{
 Computes the z-position based on CTD data (if missing).
 }

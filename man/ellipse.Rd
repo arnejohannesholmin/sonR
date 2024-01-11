@@ -32,9 +32,6 @@ ellipse(
 
 \item{aspectcomp}{Logical: If TRUE the points are attempted to be positioned evenly along the curve of the ellipse, and not by even angle increments.}
 }
-\value{
-
-}
 \description{
 Returns a matrix of two columns representing x- and y-values of positions on an ellipse of horizontal axis 'a', vertical axis 'b' and origin 'origin', defined by the angles given by 'ang' in a polar coordinate system centered at 'origin', or by 'x' or 'y' in a cartesian coordinate system.
 }

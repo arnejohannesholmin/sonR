@@ -11,9 +11,6 @@ blockshift(x, d)
 
 \item{d}{is the dimension of the blocks. If d[1]==nrow(x) blocks are shifted from horizontal to vertical structure, and if d[2]==ncol(x) blocks are shifted from vertical to horizontal structue.}
 }
-\value{
-
-}
 \description{
 Returns a matrix with blocks of dimension 'd' stacked vertically or lined up horizontally depending on 'd' and the dimensions of 'x'. For a 3x16 matrix and d=c(3,4) the output will be a stack of 3x4 matrices constituting a 12x4 matrix. For a 16x3 matrix and d=c(4,3) the output will be a 4x12 matrix.
 }

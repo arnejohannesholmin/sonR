@@ -35,9 +35,6 @@ get.pdns_phase.event(
 
 \item{TVG}{is FALSE if TVG compensation is to be removed from the data.}
 }
-\value{
-
-}
 \description{
 Estimates the phase of the periodic noise of the MS70 sonar. If the variables 'badb', 'pns1', 'pns2', 'harm' and 'bgns' are not present in the input list 'data', an attempt is made to read them from the directory holding the noise estimate for the given event. Only used in echoIBM.vbsc2p.event().
 }

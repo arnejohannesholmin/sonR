@@ -32,9 +32,6 @@ read.event_read_sgsc(
 
 \item{msg}{is TRUE to pring messages to the console.}
 }
-\value{
-
-}
 \description{
 Reads segmentation indices 'sgsc'.
 }

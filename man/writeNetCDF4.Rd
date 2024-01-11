@@ -30,9 +30,6 @@ seg2NetCDF4(event)
 
 \item{event}{The path to the event holding TSD files.}
 }
-\value{
-
-}
 \description{
 \code{writeNetCDF4} Writes a list of data to a netCDF4 file.
 \code{tsd2NetCDF4} Writes a list of data to a netCDF4 file.

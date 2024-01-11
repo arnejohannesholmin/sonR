@@ -17,9 +17,6 @@ getFanWidth(data, fanWidth, stretch = 1, range = 0, ind = NULL)
 
 \item{ind}{The indices of the beams to treat (such as data$rect).}
 }
-\value{
-
-}
 \description{
 Calculates the width of a 2-D sonar fan given the specifications in the parameter fanWidth. Only one time step is treated.
 }

@@ -13,9 +13,6 @@ medSmooth1_median3d(x, w = 3, maxsize = 2e+08)
 
 \item{maxsize}{is the maximum size of the array used in the median smoothing with median3d(). If prod(dim(x)[1]+w-1,dim(x)[-1],w)>maxsize, an error is issued.}
 }
-\value{
-
-}
 \description{
 Median smoothing an array along the first dimension.
 }

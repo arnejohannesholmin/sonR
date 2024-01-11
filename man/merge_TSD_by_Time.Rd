@@ -15,9 +15,6 @@ merge_TSD_by_Time(files, fun = weighted.mean, msg = FALSE, ...)
 
 \item{...}{Passed on to \code{fun} and \code{\link{write.TSD}}.}
 }
-\value{
-
-}
 \description{
 Merges the last file of the current file number and the first file of the next.
 }

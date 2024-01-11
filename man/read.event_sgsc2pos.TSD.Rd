@@ -35,9 +35,6 @@ read.event_sgsc2pos.TSD(
 
 \item{...}{used for robustness.}
 }
-\value{
-
-}
 \description{
 Transforms from 'sgsc' to positions, in a similar way as used in pplot3d.TSD(). Used in read.event() for clustering 'sgsc'.
 }

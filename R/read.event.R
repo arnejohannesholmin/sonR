@@ -134,14 +134,15 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			type <- "s"
 		}
 		varname <- paste("bgn", type, sep="")
-		suppressWarnings(read.TSDs(bgns, var=varname, msg=FALSE))
+		suppressWarnings(read.TSDs(bgns, var=varname, msg=FALSE, t = "all"))
 	}
 	getpdns <- function(pdns, relevantpdnsvar){
-		suppressWarnings(read.TSDs(pdns, var=relevantpdnsvar, msg=FALSE))
+		browser()
+		suppressWarnings(read.TSDs(pdns, var=relevantpdnsvar, msg=FALSE, t = "all"))
 	}
 	getnrns <- function(nrns, mode=c("p", "a")){
 		varname <- paste("nr0", substr(mode[1], 1, 1), sep="")
-		suppressWarnings(read.TSDs(nrns, var=varname, msg=FALSE))
+		suppressWarnings(read.TSDs(nrns, var=varname, msg=FALSE, t = "all"))
 	}
 	gethins <- function(hins){
 		suppressWarnings(read.TSDs(hins, var=labl.TSD("hins"), msg=FALSE))
@@ -440,6 +441,9 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	# Give a warning and discard any non-positive time step indices:
 	if(any(t<= 0)){
 		t <- t[t>0]
+	}
+	if(!length(t)) {
+		return(NULL)
 	}
 	
 	# 'tlist' is a list of one vector for each file in 'filelist' holding the time step number in the files:
@@ -763,17 +767,14 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			out[names(temp)[tempNotPresentInOut]] <- temp[tempNotPresentInOut]
 			out <- read.event_unzip_vbsc(out, pad=pad, split=split, t=t, fill=fill)
 			
-			# Apply TVG:
-			if(!TVG || TVG.exp != 2){
-				if(!TVG){
-					TVG.exp <- 0
-				}
+			# TVG with eexponent 2 is already in the data, but if TVG is FALSE remove the TVG is, or if TVG.exp differs from remove and then add it:
+			if(!(isTRUE(TVG) && TVG.exp == 2)){
 				# Read beams-files and ctd-files:
 				if(all(relevantbeamsvar %in% names(out))){
 					beams <- out[relevantbeamsvar]
 				}
 				else{
-					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
+					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=relevantbeamsvar)
 				}
 				if(all(relevantctdvar %in% names(out))){
 					ctd <- out[relevantctdvar]
@@ -783,8 +784,33 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 				}
 				
 				out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=TRUE, TVG.exp=2)
-				out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=FALSE, TVG.exp=TVG.exp)
+				if(isTRUE(TVG)) {
+					out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=FALSE, TVG.exp=TVG.exp)
+				}
 			}
+			# This was very wrong, as TVG.exp applies absorption, whereas TVG = FALSE should skip TVG altogether:
+			#if(!TVG || TVG.exp != 2){
+			#	if(!TVG){
+			#		TVG.exp <- 0
+			#	}
+			#	
+			#	# Read beams-files and ctd-files:
+			#	if(all(relevantbeamsvar %in% names(out))){
+			#		beams <- out[relevantbeamsvar]
+			#	}
+			#	else{
+			#		beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=relevantbeamsvar)
+			#	}
+			#	if(all(relevantctdvar %in% names(out))){
+			#		ctd <- out[relevantctdvar]
+			#	}
+			#	else{
+			#		ctd <- read.TSDs(filelist[fInd$ctd], var=relevantctdvar, msg=FALSE)
+			#	}
+			#	
+			#	out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=TRUE, TVG.exp=2)
+			#	out$vbsc <- apply.TVG(out$vbsc, beams=c(beams, ctd), rm=FALSE, TVG.exp=TVG.exp)
+			#}
 				
 			# Remove noise if required:
 			if(any(!isTRUE(bgns), !isTRUE(pdns), !isTRUE(nrns), !isTRUE(hins))){
@@ -793,7 +819,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					beams <- out[relevantbeamsvar]
 				}
 				else{
-					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsvar)
+					beams <- read.event_read_files(files=filelist, filesind=fInd$beams, tlist=tlist, var=beamsnames)
 				}
 				if(all(relevantctdvar %in% names(out))){
 					ctd <- out[relevantctdvar]
@@ -808,20 +834,34 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					bgns <- getbgns(if(is.character(bgns)) bgns else noisefiles)
 					noise <- c(noise, "bgns")
 				}
+				else {
+					bgns <- list()
+				}
 				if(!isTRUE(pdns)){
 					pdns <- getpdns(if(is.character(pdns)) pdns else noisefiles, relevantpdnsvar=relevantpdnsvar)
 					noise <- c(noise, "pdns")
+				}
+				else {
+					pdns <- list()
 				}
 				if(!isTRUE(nrns)){
 					nrns <- getnrns(if(is.character(nrns)) nrns else noisefiles, mode=c("p", "a"))
 					noise <- c(noise, "nrns")
 				}
+				else {
+					nrns <- list()
+				}
 				if(!isTRUE(hins)){
 					hins <- gethins(if(is.character(hins)) hins else noisefiles)
 					noise <- c(noise, "hins")
 				}
+				else {
+					hins <- list()
+				}
+				browser()
 				# Calculate the noise:
 				out$tlns <- read.event_generate_noise(c(list(vbsc=out$vbsc), beams, ctd, bgns, pdns, hins, nrns), noise=noise, t=t, nsind=nsind, cruise=cruise, esnm=esnm, dir.data=dir.data, hins_add=hins_add, phase=TRUE, pdns_scale=pdns_scale, TVG=TVG)
+				
 				# Subtract the noise:
 				out$vbsc <- out$vbsc-c(out$tlns)
 			}
@@ -972,7 +1012,6 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 					mask$indt <- rep(out$indt, numPerPing)
 				}
 				
-				browser()
 				# Get array indices and beam variables:
 				if(length(out$lenb) || length(out$numb)){
 					l <- lapply(ind, ind2arr.ind, c(max(out$lenb), max(out$numb)))

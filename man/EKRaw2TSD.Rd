@@ -194,11 +194,6 @@ LSSS2TSD(
 
 \item{keep.temp}{is TRUE to delete the temporary files from individual school files.}
 }
-\value{
-
-
-
-}
 \description{
 \code{EKRaw2TSD} Converts from raw data files in the EKRaw format to TSD files, readable by R using the functions read.TSD, resd.TSDs and read.event.
 

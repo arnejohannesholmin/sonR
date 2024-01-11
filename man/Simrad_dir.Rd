@@ -11,9 +11,6 @@ Simrad_dir(data, dira_offset = 0)
 
 \item{dira_offset}{An optional offset in the azimuth direction 'dira'.}
 }
-\value{
-
-}
 \description{
 Converts from Simrad beam directions to azimuth and elevation angles.
 }

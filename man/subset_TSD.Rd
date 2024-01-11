@@ -36,9 +36,6 @@ subset_TSD(
 
 \item{only.match}{is TRUE if only the arrays of length equal to the length of 'subset' are to be subsetted using 'subset'.}
 }
-\value{
-
-}
 \description{
 Extracts a subset of TSD data according to the array subset 'ind' and/or the cartesian subset 'range' and/or the logical/numeric vector of subscripts 'subset'.
 }

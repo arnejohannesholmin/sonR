@@ -11,9 +11,6 @@ getRuns(n, t)
 
 \item{t}{is a vector of time steps to group into runs.}
 }
-\value{
-
-}
 \description{
 Generates runs of length 'n' of the vector 't' of time steps.
 }

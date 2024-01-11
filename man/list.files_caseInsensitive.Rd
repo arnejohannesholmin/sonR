@@ -21,9 +21,6 @@ list.files_caseInsensitive(
 
 \item{...}{Used in \code{\link{list.files}}.}
 }
-\value{
-
-}
 \description{
 Sorts in a case insensitive matter. Created to solve the problem of errors when listing files in R as run from the terminal, in which case sorting is not case insensitive. In the R-GUI sorting is done case insensitive.
 }

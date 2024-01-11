@@ -9,9 +9,6 @@ volx1D_oneping(data)
 \arguments{
 \item{data}{is the list of the inputs used in the function as returned from read.TSD() (must include "").}
 }
-\value{
-
-}
 \description{
 Calculates the volumes of the voxels of the EK60 multifrequency echosounder given the CTD-data and beams-dataof the particular data set 'dataset'. See read.event() for importing volumes of voxels.
 }

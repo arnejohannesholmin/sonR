@@ -2,9 +2,8 @@
 #*********************************************
 #' NA
 #'
-#' @param event  is the identifier of the event, either given as the number of the event, a string contained in the name of the event, or the path of the event directory.
+#' @param event  is the path of the event directory.
 #' @param t  is either the number of the ping to be treated, as listed from 1 to the number of pings in the event, or the time point given as a string "yyyymmddHHMMSS.FFF" or "HHMMSS.FFF". Only one time step alowed!
-#' @param cruise  is either the idenfication number of the cruise, given as specified by the IMR (yyyynnn), or the path to the directory containing the event.
 #' @param bgns  is ann optional list of noise estimates (must contain the background noise 'bgns', and may contain the periodic noise estimates 'pns1', 'pns2' and 'harm'). The phase parameter 'pns2' is extracted from the data.
 #' @param beta0  is the minimum schooling threshold for the volume backscattering coefficient. For voxels where beta0<noise: beta0=noise.
 #' @param beta1  is the maximum schooling threshold for the volume backscattering coefficient, defining the probability distribution of the signal. Should be chosen on the basis of the maximum packing density of the observed species.
@@ -27,7 +26,7 @@
 #' @param subtractNoise  is TRUE if the original acoustic data should be subtracted noise, which is used when returning the total and mean volume backscatter from the segment.
 #' @param pr0s.out  is TRUE if the smoothed probabilities of insuffuciently high true volume backscattering coefficient to imply school should be returned in arrays of the same dimensions as the volume backscattering coefficient 'vbsc'.
 #' @param adds  is an optional list of variables overriding the variables in read from the event.
-#' @param sim  is a TRUE if smoothing should be done only along the first dimensions, simultaneously over the stages of the last dimension. If 'sim' is an integer larger than 1, the positions 'coords' are used 'sim' times, and the data 'x' should have length 'sim' times the length of one coordinate of 'coords'.
+#' @param sim  is TRUE if smoothing should be done only along the first dimensions, simultaneously over the stages of the last dimension. If 'sim' is an integer larger than 1, the positions 'coords' are used 'sim' times, and the data 'x' should have length 'sim' times the length of one coordinate of 'coords'.
 #'
 #' @return
 #'
@@ -41,14 +40,11 @@
 #' @export
 #' @rdname echoIBM.segment.event
 #'
-bseg.event <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, misM=NULL, iter=TRUE, factor=10^(-5/10), minmsvM=10^(-40/10), pow=1, ind=list(-(1:30), NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, filesize=3e8, hins_add=10, turns=10, phase=TRUE, TVG.exp=2, dens=NULL, segdir=NULL, esnm="MS70", subtractNoise=TRUE, pr0s.out=FALSE, adds=list(), sim=TRUE, allow.old=FALSE, TOV=0, startn=1, prefix="", ...){
+bseg.event <- function(event, t=1, bgns=NULL, beta0=NULL, beta1=NULL, misM=NULL, iter=TRUE, factor=10^(-5/10), minmsvM=10^(-40/10), pow=1, ind=list(-(1:30), NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, filesize=3e8, hins_add=10, turns=10, phase=TRUE, TVG.exp=2, dens=NULL, segdir=NULL, esnm="MS70", subtractNoise=TRUE, pr0s.out=FALSE, adds=list(), sim=TRUE, allow.old=FALSE, TOV=0, startn=1, prefix="", ...){
 	
 	########## Preparation ##########
-	# Get the directory of the event:
-	event <- event.path(event=event, cruise=cruise)$event
 	# Get the time indices and the formated time strings corresponding to 't':
 	time <- read.event(event=event, var=c("indt", "time"), t=t)
-	
 	# The number of time steps:
 	numt <- length(time$indt)
 	# Read the beam configuration:

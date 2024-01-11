@@ -9,9 +9,6 @@ sgPM(segfiles)
 \arguments{
 \item{segfiles}{is a string or vector of strings representing the path to the files or the directory from which to obtain the UNIX_time information, either by reading the UNIX_time file or by generating new information.}
 }
-\value{
-
-}
 \description{
 Reads the ordered matrix of segmentation parameters from the files given in 'segfiles', or attempts to read the variable 'sgPM' directly if 'segfiles' is a directory. If 'segfiles' is a directory, and the variable 'sgPM' is not present, a file is written with the matrix of segmentation parameters ("sgPM.tsd").
 }

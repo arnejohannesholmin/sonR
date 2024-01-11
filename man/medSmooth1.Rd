@@ -17,9 +17,6 @@ medSmooth1(x, w = 3, try.runmed = FALSE, silent = FALSE, ...)
 
 \item{...}{Used in \code{\link{medSmooth1_runmed}} and \code{\link{medSmooth1_median3d}}.}
 }
-\value{
-
-}
 \description{
 Median smoothing an array along the first dimension.
 }

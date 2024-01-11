@@ -9,9 +9,6 @@ Simrad_bwt(data)
 \arguments{
 \item{data}{is a list containing the required variables 'dirx' (vector of x-beam-directions), 'diry' (vector of y-beam-directions), 'dirz' (vector of z-beam-directions), and 'esnm' (name of the echosounder/sonar).}
 }
-\value{
-
-}
 \description{
 Converts from Simrad beam widths to x and y beam widths.
 }

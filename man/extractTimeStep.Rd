@@ -13,9 +13,6 @@ extractTimeStep(data, t = 1, var = "all")
 
 \item{var}{is a vector of the TSD-names og the variable to extract the time step from. Variables that are not present in 'var' are returned unaltered. The default var='all' select all variables.}
 }
-\value{
-
-}
 \description{
 Extracts a time step from TSD-data, so that if a one dimensional variable has two dimensions, the second is regarded as time and the apropriate time steps i extracted.
 }

@@ -24,26 +24,8 @@
 #'
 ksmooth.SG=function(coords,x,h,w=h*3,sim=FALSE,ind=list(),na.rm=FALSE){
 	
-	############ AUTHOR(S): ############
-	# Arne Johannes Holmin
-	############ LANGUAGE: #############
-	# English
-	############### LOG: ###############
 	# Start: 2013-08-23 - Clean version.
 	# Last: 2013-09-12 - Expanded to 1, 2, and 3 dimensions.
-	########### DESCRIPTION: ###########
-	# Applies a Gaussian 1-D, 2-D, or 3-D kernel on the data 'x' associated to locations 'coords', given the bandwidths given in the vector 'h'. When sim==1, NAs in the coordinates or the data are not supported.
-	########## DEPENDENCIES: ###########
-	#
-	############ VARIABLES: ############
-	# ---coords--- is a list or matrix of spatial coordinates (with names "x", "y", and "z" for 3-D data, otherwise interpreted in that order).
-	# ---x--- is the data, possibly with one extra dimension in the case that sim==1, in which case the smoothing is done simultaneously for all steps in the last dimension of 'x' using the same coordinates 'coords'. If given as a vector (dim(x)=0), the length of 'x' must be an integer multiple of the length of the corrdinates, and if this integer is larger than 1, 'sim' is set to TRUE.
-	# ---h--- is the vector of bandwidths.
-	# ---w--- is the boundary of the kernel, outside which it is 0 (should have the same length as h).
-	# ---sim--- is a TRUE if smoothing should be done only along the first dimensions, simultaneously over the stages of the last dimension. If 'sim' is an integer larger than 1, the positions 'coords' are used 'sim' times, and the data 'x' should have length 'sim' times the length of one coordinate of 'coords'.
-	# ---ind--- is a list of subscripts for the dimensions of the data 'x', given in any form accepted by [], identifying where to smooth the data. Each element of the list corresponds to one dimension of 'x', and if 'ind' is shorter than the number of dimensions of 'x', no subsetting is done in the dimensions not given. 'ind' is treated by ind.expand().
-	# ---na.rm--- is single integer representing the dimension along which NAs are discarded from the smoothing in the case that sim==1. For example, if na.rm=2 and the dimension of 'x' is [5,12,7], and x[3,2:4,5]=NA, then all data x[,2:4,] will be excluded from the smoothing and set to NA. If na.rm=FALSE, no NAs should be contained in the data.
-	
 
 	##################################################
 	##################################################

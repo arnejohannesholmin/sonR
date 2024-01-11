@@ -15,9 +15,6 @@ echoIBM.pdns(data, indt = NULL, TVG = FALSE, TVG.exp = 2)
 
 \item{TVG.exp}{is the exponent of the eamotric spreading of the sound wave, theoretically 2 for Sv and 4 for TS.}
 }
-\value{
-
-}
 \description{
 Calculates the periodic noise for all voxels based on estimates of the parameters of the periodic noise for ONE SINGLE TIME STEP. The function assumes that the phase is correctly given in data$pns3.
 }

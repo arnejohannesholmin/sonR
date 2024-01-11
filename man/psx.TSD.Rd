@@ -15,9 +15,6 @@ psx.TSD(x, pad = TRUE, split = TRUE, ...)
 
 \item{...}{Passed on to \code{\link{soundbeam.TSD}}.}
 }
-\value{
-
-}
 \description{
 (Internal) Get midpoints of voxels.
 }

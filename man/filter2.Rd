@@ -11,9 +11,6 @@ filter2(x, filter)
 
 \item{filter}{is a vector of the filter values as input to filter().}
 }
-\value{
-
-}
 \description{
 Expands the fucntion filter() to the edges, instead of returning NA.
 }

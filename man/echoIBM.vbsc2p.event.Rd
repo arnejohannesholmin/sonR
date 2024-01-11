@@ -75,9 +75,6 @@ bseg.TSD(
 
 \item{na.rm}{is single integer representing the dimension along which NAs are discarded from the smoothing in the case that sim==1. For example, if na.rm=2 and the dimension of 'x' is [5,12,7], and x[3,2:4,5]=NA, then all data x[,2:4,] will be excluded from the smoothing and set to NA. If na.rm=FALSE, no NAs should be contained in the data.}
 }
-\value{
-
-}
 \description{
 Estimates the probability of not school in voxels of sonar data.
 }

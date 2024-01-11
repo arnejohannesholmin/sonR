@@ -13,9 +13,6 @@ medSmooth1_runmed(x, w = 3, ...)
 
 \item{...}{Used for robustness.}
 }
-\value{
-
-}
 \description{
 Median smoothing an array along the first dimension.
 }

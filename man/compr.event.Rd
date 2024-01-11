@@ -118,11 +118,6 @@ compr.TSD(
 
 \item{data}{is the list of inputs variables as returned from EKRaw2TSD().}
 }
-\value{
-
-
-
-}
 \description{
 This funciton compresses the data stored in 'x' by averaging (either mean, trimmed mean or median) in depth and time bins. This is designed primarily for echosounder beams.
 

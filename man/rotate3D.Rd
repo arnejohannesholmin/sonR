@@ -38,9 +38,6 @@ rotate3D(
 
 \item{reverse}{is TRUE to reverse the rotation by reversing the order of 'by' and 'ang', and also multiplying 'ang' by -1.}
 }
-\value{
-
-}
 \description{
 Rotates the set of 'n' three dimensional points 'x' by the 'p' rotation matrices given by 'A', or by the rotation angles 'ang' around the axes given by 'by'. More than one rotations may be given, either as a [3,3,p] array holding 'p' rotation matrices, a [3,3*p] vertically block divided matrix also holding 'p' rotation matrices, or as 'p' pairs of significant characters "x", "y" and "z" and rotation angles given by 'ang'. When p>1, the output has dimensions [n,3,p], where 'n' is the number of points to be rotated. When paired==TRUE, the output has dimension [n,3].
 }

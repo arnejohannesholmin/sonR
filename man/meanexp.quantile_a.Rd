@@ -27,9 +27,6 @@ meanexp.quantile_a(
 
 \item{MARGIN}{Used in the same way as in apply().}
 }
-\value{
-
-}
 \description{
 This function accepts an addition to the expected value of 'X', 'a', which must be known. The calculation is an optimizatoin of 'beta' from an expression deduced from the cummulative distribution function (CDF) of an arbitrary 'X' (which is the mean of the CDF of X_t):
 X_t ~ exp(beta_t), where beta_t = beta + a_t

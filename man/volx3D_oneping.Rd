@@ -9,9 +9,6 @@ volx3D_oneping(data)
 \arguments{
 \item{data}{is the list of the inputs used in the function as returned from read.TSD() (must include "").}
 }
-\value{
-
-}
 \description{
 Calculates the volumes of the voxels of the MS70 multibeam sonar given the CTD-data and beams-data. See read.event() for importing volumes of voxels.
 }

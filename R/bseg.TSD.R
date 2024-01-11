@@ -67,6 +67,12 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	numt <- length(t)
 	
 	# 'beta0' or 'beta1' should be of the same length as the number of time steps:
+	if(!length(beta0)) {
+		stop("beta0 must be given, either as a single value or a vector (repeated to the number of time steps)")
+	}
+	if(!length(beta1)) {
+		stop("beta1 must be given, either as a single value or a vector (repeated to the number of time steps)")
+	}
 	if(length(beta0)!=numt){
 		beta0 <- rep(beta0,length.out=numt)
 	}
@@ -74,13 +80,12 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 		beta1 <- rep(beta1,length.out=numt)
 	}
 	
-	
 	# Update 'esnm':
 	esnm <- read.event(event=event, cruise=cruise, esnm=esnm, var="esnm", msg=FALSE)$esnm
 	
 	# 'sim' can only be TRUE for sonars:
 	if(!is.sonar(esnm)){
-		sim=FALSE
+		sim <- FALSE
 	}
 	
 	# For simultaneous smoothing for all time steps using the voxels positions in the coordinate system of the vessel, read the voxels positions only once:
@@ -105,6 +110,8 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 		cs="g"
 	}
 	noisevar=c("hini","hins")
+	
+	browser()
 	
 	# Read the acoustic data:
 	data <- read.event(event=event, cruise=cruise, esnm=esnm, t=t, var=dynamicvar, msg=FALSE, cs=cs, allow.old=allow.old, TOV=TOV)
@@ -303,7 +310,7 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	##################################################
 }
 
-echoIBM.vbsc2p.event_old <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
+echoIBM.vbsc2p.event <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
 
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin

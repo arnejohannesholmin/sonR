@@ -33,9 +33,6 @@ runif.sph(
 
 \item{reverse}{is TRUE to reverse the rotation by reversing the order of 'by' and 'ang', and also multiplying 'ang' by -1.}
 }
-\value{
-
-}
 \description{
 Generates uniformly distributed variables in the spherical volume segments defined by 'r', 'theta' and 'phi'.
 }

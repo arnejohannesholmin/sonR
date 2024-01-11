@@ -9,9 +9,6 @@ rotfun(ax)
 \arguments{
 \item{ax}{is a string containing a sequence of the characters "x", "y" and "z".}
 }
-\value{
-
-}
 \description{
 Returns a function representing the product of three dimensional rotation matrices, specified by the string 'ax'.
 }

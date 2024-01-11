@@ -15,9 +15,6 @@ summarySeg(
   n90 = 2
 )
 }
-\value{
-
-}
 \description{
 (Internal) Returns a summary of segmentation data.
 }

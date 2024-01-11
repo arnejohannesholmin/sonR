@@ -32,9 +32,6 @@ meanSv.TSD(
 
 \item{...}{Passed on to \code{\link{density}} and \code{\link{hist}}.}
 }
-\value{
-
-}
 \description{
 Locates the point at which the kernel desity estimate of the Sv of the subset is equal to half its maximum, and uses Paper III of the PhD of Holmin to estimate the mean Sv from this. The output variables all start with X, denoting the SX90 segmentation method, but are applicable to all segmentation methods.
 }

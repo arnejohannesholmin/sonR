@@ -17,9 +17,6 @@ CTD2TSD(f = NULL, outfile = NULL, hpr0 = NULL, Pain = FALSE, vessel = list())
 
 \item{vessel}{A list of vessel info by which the closest CTD station is found as the minimum of the sum of distance in meters and seconds.}
 }
-\value{
-
-}
 \description{
 Converts a CTD file to the TSD format for the variables relevant to echoIBM().
 }

@@ -132,6 +132,10 @@ soundbeam.TSD<-function(data, t=1, ind=NULL, cs="g", seabed=-12000, rot=1, compe
 	
 	
 	##### Execution #####
+	if(all(is.na(data$rtzv))) {
+		warning("All headings (rtzv) are missing, and were set to 0")
+		data$rtzv <- 0
+	}
 	# If ideal==TRUE the soundspeed is assumed to be constant equal to data$asps. In this case simple regularly spaced midpoints are returned:
 	if(ideal){
 		# Get the ranges:

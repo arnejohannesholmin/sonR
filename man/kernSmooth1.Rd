@@ -13,9 +13,6 @@ kernSmooth1(x, kern = 3, nsd = 3)
 
 \item{nsd}{is the number of standard deviations on either side of the mean of the Gaussian kernel, outside which the kernel is zero.}
 }
-\value{
-
-}
 \description{
 (Usually Gaussian) smoothing an array along the first dimension. Note: Due to high variability in the speed of the fft() used in convolve() in this function, the performance times vary greatly for different lengths of the input data. NAs are removed in the actual convolution, so a large number of NAs should not slow down the function.
 }

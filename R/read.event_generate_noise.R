@@ -24,7 +24,7 @@
 #' @export
 #' @rdname read.event_generate_noise
 #'
-read.event_generate_noise<-function(data, t=1, noise=c("bgns","pdns","nrns","hins"), nsind=0.75, cruise=2009116, esnm="MS70", dir.data=NULL, hins_add=10, phase=TRUE, pdns_scale=1e-14, TVG=TRUE, TVG.exp=2){
+read.event_generate_noise <- function(data, t=1, noise=c("bgns","pdns","nrns","hins"), nsind=0.75, cruise=2009116, esnm="MS70", dir.data=NULL, hins_add=10, phase=TRUE, pdns_scale=1e-14, TVG=TRUE, TVG.exp=2){
 	
 	############### LOG: ###############
 	# Start: 2012-11-23 - Clean version, adopted from echoIBM.vbsc2p.event().
@@ -44,6 +44,8 @@ read.event_generate_noise<-function(data, t=1, noise=c("bgns","pdns","nrns","hin
 	pdnsPresent = any(c("pns1", "pn3M", "pns3") %in% namesdata)
 	nrnsPresent = any(c("nr0a", "nr0p") %in% namesdata)
 	hinsPresent = length(data$hini)>0
+	
+	browser()
 	
 	# Expand the background noise to an array of the same size as the data:
 	if("bgns" %in% noise && bgnsPresent){

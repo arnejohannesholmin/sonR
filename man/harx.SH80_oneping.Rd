@@ -9,9 +9,6 @@ harx.SH80_oneping(data)
 \arguments{
 \item{data}{is the list of the inputs used in the function as returned from read.TSD() (must include "").}
 }
-\value{
-
-}
 \description{
 Calculates the horizontal area of the voxels of the SH80 multibeam sonar given the CTD-data and beams-data of the particular data set 'dataset'. See read.event() for importing volumes of voxels.
 }

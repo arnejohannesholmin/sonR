@@ -26,9 +26,6 @@ combine.events(
 
 \item{ctd}{is a list of beam configuration data.}
 }
-\value{
-
-}
 \description{
 (Internal) Merge segmentation events, used in SX90.segment.event() and extract_event().
 }

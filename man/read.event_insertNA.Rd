@@ -21,9 +21,6 @@ read.event_insertNA(thisout, TIME, filesind, filelist, t, tlist, var)
 
 \item{var}{is a vector of the variables to to insert NAs to.}
 }
-\value{
-
-}
 \description{
 Adds empty list elements of NAs (if vectors) to data read in read.event(). This is done by comparing to the time step indices stored in the object 'TIME'.
 }

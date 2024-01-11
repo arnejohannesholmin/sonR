@@ -499,6 +499,7 @@ EKRaw2TSD_oneFile_write <- function(i, filelist, pingsfiles, vesselfiles, rawves
 	# Inputs used in compr.TSD:
 	tres=NULL, xres=NULL, zres=NULL, rres=NULL, bres=NULL, funvbsc=c("median","mean"), funt=c("median","mean"), adds=list(), split=TRUE, skipAngles=TRUE, origin=1, apply.range.offset=FALSE, thr1m=FALSE, ...){
 
+
 	# Declare the variable names:
 	beamsnames <- TSD::labl.TSD("EKRaw2TSD_b")
 	vesselnames <- TSD::labl.TSD("EKRaw2TSD_v")
@@ -655,7 +656,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	# (2.4) asps - average speed of sound:
 	beams$asps <- thisd$data$pings$soundvelocity[1,]
 	# (2.5) numb - number of beams:
-	numb <- if(length(thisd$header$transceivercount)) thisd$header$transceivercount else length(thisd$data$config$frequency)
+	numb <- if("transceivercount" %in% names(thisd$header)) thisd$header$transceivercount else length(thisd$data$config$frequency)
 	beams$numb <- rep(numb, numt)
 	# (2.6) indi - beam indices:
 	beams$indi <- matrix(seq_len(beams$numb[1]), beams$numb[1], numt)
@@ -713,25 +714,25 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 		# Get the position in the pulselengthtable:
 		atPulselength <- which(thisd$data$config$pulselengthtable == beams$plsl[1], arr.ind=TRUE)
 		# (2.13) dirx - direction (x) of the beams:
-		beams$dirx <- matrix(thisd$data$config$dirx, beams$numb[1], numt)
+		beams$dirx <- matrix(unlist(thisd$data$config$dirx), beams$numb[1], numt)
 		# (2.14) diry - direction (y) of the beams:
-		beams$diry <- matrix(thisd$data$config$diry, beams$numb[1], numt)
+		beams$diry <- matrix(unlist(thisd$data$config$diry), beams$numb[1], numt)
 		# (2.15) dirz - direction (z) of the beams:
-		beams$dirz <- matrix(thisd$data$config$dirz, beams$numb[1], numt)
+		beams$dirz <- matrix(unlist(thisd$data$config$dirz), beams$numb[1], numt)
 		# (2.18) bwtl - beam width along ship:
-		beams$bwtl <- matrix(thisd$data$config$beamwidthalongship, beams$numb[1], numt)
+		beams$bwtl <- matrix(unlist(thisd$data$config$beamwidthalongship), beams$numb[1], numt)
 		# (2.19) bwtt - beam width athwart ship:
-		beams$bwtt <- matrix(thisd$data$config$beamwidthathwartship, beams$numb[1], numt)
+		beams$bwtt <- matrix(unlist(thisd$data$config$beamwidthathwartship), beams$numb[1], numt)
 		# (2.24) eqba - equivalent beam angle:
-		beams$eqba <- matrix(thisd$data$config$equivalentbeamangle, beams$numb[1], numt)
+		beams$eqba <- matrix(unlist(thisd$data$config$equivalentbeamangle), beams$numb[1], numt)
 		# (2.25) sacr - sa-correction:
 		#beams$sacr <- matrix(thisd$data$config$sacorrectiontable[,1], beams$numb[1], numt)
-		beams$sacr <- matrix(thisd$data$config$sacorrectiontable[atPulselength], beams$numb[1], numt)
+		beams$sacr <- matrix(unlist(thisd$data$config$sacorrectiontable[atPulselength]), beams$numb[1], numt)
 		# (2.26) tpow - transmit power:
 		beams$tpow <- thisd$data$pings$transmitpower
 		# (2.29) gain - gain:
 		#beams$gain <- matrix(thisd$data$config$gain, beams$numb[1], numt)
-		beams$gain <- matrix(thisd$data$config$gaintable[atPulselength], beams$numb[1], numt)
+		beams$gain <- matrix(unlist(thisd$data$config$gaintable[atPulselength]), beams$numb[1], numt)
 	}
 	
 	# (2.30) bmmd - beam mode:
@@ -781,7 +782,7 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	
 	# (3.3) vbsc - Volume backscattering coefficient:
 	isOmniSonar <- tolower(beams$esnm[[1]]) %in% c("sx80", "sh80", "su80", "sx90", "sh90", "su90")
-	temp <- readEKRaw_power2sv.TSD(thisd$data$pings$power, beams, cali=cali, tiltcorr=isOmniSonar, toTS=toTS, list.out=TRUE)
+	temp <- readEKRaw_power2sv.TSD(thisd$data$pings$power, beams, cali=cali, tiltcorr = isOmniSonar, toTS=toTS, list.out=TRUE)
 	pings$vbsc <- temp$vbsc
 	beams$Cgai <- temp$Cgai
 	beams$Csac <- temp$Csac
@@ -832,18 +833,22 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 
 EKRaw2TSD_getesnm <- function(thisd, numt){
 	
+	hasSoundername <- "soundername" %in% names(thisd$header)
+	hasApplicationName <- "ApplicationName" %in% names(thisd$header)
+	
+	
 	# Due to a change in the header, 'soundername' can also be named 'ApplicationName':
-	if(!length(thisd$header$soundername) && length(thisd$header$ApplicationName)){
-		esnm <- thisd$header$ApplicationName
+	if(!hasSoundername && hasApplicationName){
+		esnm <- thisd$header[["ApplicationName"]]
 	}
-	else if(length(thisd$header$soundername)){
-		esnm <- thisd$header$soundername
+	else if(hasSoundername){
+		esnm <- thisd$header[["soundername"]]
 	}
 	else{
 		stop("Neither 'soundername' nor 'ApplicationName' included in the header:\n\t", paste(names(thisd$header), thisd$header, collapse=", ", sep=" = "))
 	}
 	
-	if( length(grep("MBS", esnm) > 0) || length(grep("MS70", esnm) > 0) || identical(thisd$header$transceivercount, 500) ){
+	if( length(grep("MBS", esnm) > 0) || length(grep("MS70", esnm) > 0) && identical(thisd$header$transceivercount, 500) ){
 		rep("MS70", numt)
 	}
 	else if( length(grep("MBES", esnm) > 0) || length(grep("ME70", esnm) > 0) ){

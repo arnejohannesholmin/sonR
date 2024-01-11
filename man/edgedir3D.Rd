@@ -29,9 +29,6 @@ edgedir3D(
 
 \item{...}{Used for robutness.}
 }
-\value{
-
-}
 \description{
 Calculates the edge points of an acoustic device based on the CTD-data, using edge points along the beam maxima as basis, and extracting the vertical dimension (elevation angle) from the vertical angular distance between beam maxima. !!!Only one time step is treated!!!!
 }

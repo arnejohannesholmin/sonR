@@ -11,9 +11,6 @@ median3d(x, along = 1)
 
 \item{along}{Integer. The median is taken along this dimension.}
 }
-\value{
-
-}
 \description{
 Median along the dimension given by 'along'. The same as apply(x,(1:3)[-along],median,na.rm=TRUE), but some hundred times faster.
 }
