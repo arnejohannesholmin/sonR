@@ -30,7 +30,7 @@ get.pdns_phase.TSD<-function(data=list(), nsind=0.75, cruise=2009116, event=NULL
 	# Last: 2013-07-19 - Changed names from get.pdns_phase.MS70.TSD() to get.pdns_phase.TSD().
 	
 	
-	browser()
+	#browser()
 	##### Preparation #####
 	# Function for calculating the mean og angles:
 	angleMean=function(ang,w=1){

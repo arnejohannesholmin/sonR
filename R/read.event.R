@@ -137,7 +137,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		suppressWarnings(read.TSDs(bgns, var=varname, msg=FALSE, t = "all"))
 	}
 	getpdns <- function(pdns, relevantpdnsvar){
-		browser()
+		#browser()
 		suppressWarnings(read.TSDs(pdns, var=relevantpdnsvar, msg=FALSE, t = "all"))
 	}
 	getnrns <- function(nrns, mode=c("p", "a")){
@@ -244,7 +244,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		var <- NULL
 		t <- 0
 	}
-	if(length(t) == 0 || is.na(t)){
+	if(length(t) == 0 || (length(t) == 1 && is.na(t))){
 		return()
 	}
 	##########
@@ -445,6 +445,8 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	if(!length(t)) {
 		return(NULL)
 	}
+	
+	#browser()
 	
 	# 'tlist' is a list of one vector for each file in 'filelist' holding the time step number in the files:
 	tlist <- vector("list", length(filelist))
@@ -670,6 +672,8 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 			vessel <- out[vesselnames]
 		}
 		else{
+			#print("111111111111111aw4333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333")
+			#browser()
 			vessel <- read.event_read_files(files=filelist, filesind=fInd$vessel, tlist=tlist, var="all", origin=origin)
 		}
 		# If the time offset 'TOV' is given different from 0, extract any of "rtzv", "lonv", "latv", or "ispv" located in the raw dynamic vessel file:
@@ -858,7 +862,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 				else {
 					hins <- list()
 				}
-				browser()
+				#browser()
 				# Calculate the noise:
 				out$tlns <- read.event_generate_noise(c(list(vbsc=out$vbsc), beams, ctd, bgns, pdns, hins, nrns), noise=noise, t=t, nsind=nsind, cruise=cruise, esnm=esnm, dir.data=dir.data, hins_add=hins_add, phase=TRUE, pdns_scale=pdns_scale, TVG=TVG)
 				

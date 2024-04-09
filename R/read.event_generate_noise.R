@@ -45,7 +45,7 @@ read.event_generate_noise <- function(data, t=1, noise=c("bgns","pdns","nrns","h
 	nrnsPresent = any(c("nr0a", "nr0p") %in% namesdata)
 	hinsPresent = length(data$hini)>0
 	
-	browser()
+	#browser()
 	
 	# Expand the background noise to an array of the same size as the data:
 	if("bgns" %in% noise && bgnsPresent){

@@ -3,15 +3,15 @@ sonR R package
 
 This package contains many functions used by the packages echoIBM and cpplot3d.
 
-Version: 1.2
-Required R version: 3.5
+Version: 1.3
+Required R version: 4.2
 
 Installation
 =====
 
 ``` r
 # Install the packages that sonR depends on. Note that this updates all the specified packages to the latest (binary) version. To skip installing already installed packages, run install.packages(setdiff(dep.pck, installed.packages()[,"Package"]), repos="http://cran.us.r-project.org") instead:
-dep.pck <- c("devtools", "ccaPP", "data.table", "fpc", "ncdf4", "pbapply", "sf", "XML")
+dep.pck <- c("devtools", "ccaPP", "data.table", "expint", "fpc", "ncdf4", "pbapply", "sf", "XML")
 install.packages(dep.pck, repos="http://cran.us.r-project.org", type="binary")
 
 # Install sonR and also the packages that sonR depends on which are on GitHub (by Holmin):
