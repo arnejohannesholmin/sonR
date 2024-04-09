@@ -29,13 +29,14 @@
 #' @examples
 #' \dontrun{}
 #'
+#' @importFrom expint expint_E1
 #' @importFrom SimradRaw apply.TVG
 #' @importFrom TSD arr.ind2ind ind.expand NAs ones read.TSDs zeros
 #'
 #' @export
 #' @rdname echoIBM.vbsc2p.event
 #'
-bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
+echoIBM.vbsc2p.event <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
 	
 	##### Preparation #####
 	# A small funciton used to get the minimum of each row in a two column matrix (much faster than apply(x,1,min)):
@@ -47,19 +48,28 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	
 	# Define the function for calculating the cummulative distribution. This function takes up to one second for one ping of MS70 data, mostly due to the expint_E1() function:
 	P <- function(beta0, beta1, x, betaN){
-		# The integrand which is the exponential CDF divided by beta1, which is the upper limit of the uniform prior:
-		integrand <- function(b, beta1, x, betaN){
-			1/beta1 * exp(-x / (b + betaN))
+		
+		# 2024-03-14: THIS was not correct. Ann exponential integral should be used:
+		# # The integrand which is the exponential CDF divided by beta1, which is the upper limit of the uniform prior:
+		# integrand <- function(b, beta1, x, betaN){
+		# 	1/beta1 * exp(-x / (b + betaN))
+		# }
+		# 
+		# H <- function(beta0, beta1, x, betaN){
+		# 	integrand(b=beta0, beta1=beta1, x=x, betaN=betaN) - integrand(b=0, beta1=beta1, x=x, betaN=betaN)
+		# }
+		# 
+		# out <- H(beta0) / H(beta1)
+		# 
+		# out[outsidemaxarg_0] <- .Machine$double.eps
+		# out
+		
+		H <- function(b, x, betaN, beta1){
+			expint::expint_E1(x / (b + betan)) - expint::expint_E1(x / ( betan))
 		}
 		
-		H <- function(beta0, beta1, x, betaN){
-			integrand(b=beta0, beta1=beta1, x=x, betaN=betaN) - integrand(b=0, beta1=beta1, x=x, betaN=betaN)
-		}
+		H(beta0) / H(beta1)
 		
-		out <- H(beta0) / H(beta1)
-		
-		out[outsidemaxarg_0] <- .Machine$double.eps
-		out
 	}
 	
 	
@@ -84,7 +94,7 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	esnm <- read.event(event=event, cruise=cruise, esnm=esnm, var="esnm", msg=FALSE)$esnm
 	
 	# 'sim' can only be TRUE for sonars:
-	if(!is.sonar(esnm)){
+	if(!is.sonar(esnm[[1]])){
 		sim <- FALSE
 	}
 	
@@ -111,7 +121,7 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	}
 	noisevar=c("hini","hins")
 	
-	browser()
+	#browser()
 	
 	# Read the acoustic data:
 	data <- read.event(event=event, cruise=cruise, esnm=esnm, t=t, var=dynamicvar, msg=FALSE, cs=cs, allow.old=allow.old, TOV=TOV)
@@ -310,7 +320,7 @@ bseg.TSD <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=
 	##################################################
 }
 
-echoIBM.vbsc2p.event <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
+echoIBM.vbsc2p.event_old <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=NULL, beta1=NULL, factor=NULL, ind=list(-(1:30),NULL), nsind=0.75, smind=list(-(1:300)), range=list(), subset=NULL, h=NULL, alpha=NULL, dir.data=NULL, hins_add=10, phase=TRUE, TVG.exp=2, esnm="MS70", subtractNoise=TRUE, adds=list(), sim=TRUE, na.rm=1, allow.old=FALSE, TOV=0){
 
 	############ AUTHOR(S): ############
 	# Arne Johannes Holmin

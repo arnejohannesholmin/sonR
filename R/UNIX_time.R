@@ -40,7 +40,6 @@ UNIX_time <- function(event, file=FALSE, var="all", t="all", fresh=FALSE, allow.
 	# Update: 2016-07-22 - Changed to compress sequences and remove u000. u000 is deduced from i000 and U000 when calling UNIX_time().
 	# Last: 2016-11-03 - Fixed a major bug where new files were not registered in the event, and also set the default of 'saveData' to FALSE.
 	
-	
 	##### Preparation #####
 	processvar = c("f000", "u000", "i000", "l000", "t000", "U000", "I000", "i000_full", "I000_full")
 	processdtyp = c("char", "doub", "long", "char", "char", "doub", "long", "long", "long")

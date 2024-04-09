@@ -83,7 +83,9 @@ bseg.event <- function(event, t=1, bgns=NULL, beta0=NULL, beta1=NULL, misM=NULL,
 	
 	# Create the directory to put the segmentation files into:
 	if(length(segdir)==0){
-		dir.out <- file.path(event, c("seg", "seg0")[strff("p", var[1])+1])
+		# Disabling this as we cannot find he original funcion:
+		#dir.out <- file.path(event, c("seg", "seg0")[strff("p", var[1])+1])
+		dir.out <- file.path(event, "seg")
 	}
 	else{
 		dir.out <- file.path(event, segdir)

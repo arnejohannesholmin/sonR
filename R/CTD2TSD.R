@@ -56,8 +56,6 @@ CTD2TSD <- function(f=NULL, outfile=NULL, hpr0=NULL, Pain=FALSE, vessel=list()){
 	}
 	# Read the data file:
 	ext <- file_ext(f)
-	print(f)
-	print(ext)
 	if(ext!="cnv"){
 		warning("The input file must be a cnv file")
 		return(list())
