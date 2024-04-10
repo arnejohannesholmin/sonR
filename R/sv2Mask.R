@@ -8,7 +8,7 @@
 #' @param beta1  The upper schooling threshold given in linear value. Suggested value: 1e-2.
 #' @param h  The standard deviation in the Gaussian kernel used to smooth the probability of "not-school". Suggested value: 5.
 #' @param c  The segmentation threshold. Suggested value: 1e-5.
-#' @param beams  A list of beam configuration data. Must contain he following elements: lenb, numb, plsl, asps, sint, absr, rofs. Read this from aa .beams file in the TSD format.
+#' @param beams  A list of beam configuration data, enough to apply TVG, as well as number of beams (numb) and lengths of the beams (lenb). This can be read from a .beams file in the TSD format.
 #'
 #' @importFrom SimradRaw apply.TVG
 #' @importFrom expint expint_E1

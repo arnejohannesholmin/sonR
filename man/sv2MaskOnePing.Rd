@@ -19,7 +19,7 @@ sv2MaskOnePing(sv, betaN, beta0, beta1, h, c, beams)
 
 \item{c}{The segmentation threshold. Suggested value: 1e-5.}
 
-\item{beams}{A list of beam configuration data. Must contain he following elements: lenb, numb, plsl, asps, sint, absr, rofs. Read this from aa .beams file in the TSD format.}
+\item{beams}{A list of beam configuration data, enough to apply TVG, as well as number of beams (numb) and lengths of the beams (lenb). This can be read from a .beams file in the TSD format.}
 }
 \description{
 Function to get the segmentation mask of one ping from the Bayesian segmentation method (Holmin et al., 2024)
