@@ -510,8 +510,8 @@ EKRaw2TSD_oneFile_write <- function(i, filelist, pingsfiles, vesselfiles, rawves
 	data <- EKRaw2TSD_oneFile(i=i, filelist=filelist,  prenumt=prenumt, t=t, endian=endian, timeOffset=timeOffset, minTimeDiff=minTimeDiff, msg=msg, na.rm=na.rm, correctTime=correctTime, TVG.exp=TVG.exp, dira_offset=dira_offset, cali=cali, toTS=toTS, psze=psze, skipAngles=skipAngles, cleanNMEA=cleanNMEA, apply.range.offset=apply.range.offset, thr1m=thr1m)
 	
 	if(length(data)==0){
-		rm(data)
-		gc()
+		#rm(data)
+		#gc()
 		return(i)
 	}
 	numt <- length(data$mtim)
@@ -547,8 +547,8 @@ EKRaw2TSD_oneFile_write <- function(i, filelist, pingsfiles, vesselfiles, rawves
 		TSD::write.TSD(data[rawvesselnames], rawvesselfiles[i], numt=1, header=list(dtyp=list(imtm="doub", ilnv="doub", iltv="doub", isdv="doub")))
 	}
 	
-	rm(data)
-	gc()
+	#rm(data)
+	#gc()
 	#invisible(data)
 	i
 }
@@ -805,9 +805,9 @@ EKRaw2TSD_oneFile <- function(i, filelist,  prenumt=10, t="all", endian="little"
 	}
 	
 	
-	rm(thisd)
-	rm(temp)
-	gc()
+	#rm(thisd)
+	#rm(temp)
+	#gc()
 	# Add lengths of beams and number of beams:
 	pings$lenb <- beams$lenb
 	pings$numb <- beams$numb

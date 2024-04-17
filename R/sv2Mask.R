@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-sv2MaskOnePing <- function(sv, betaN, beta0, beta1, h, c, beams) {
+sv2MaskOnePing <- function(sv, betaN, beta0, beta1, h, c, beams, ind = list()) {
 
 	# Expand the lower schooling threshold beta0, the upper schooling threshold beta1, segmentation threshold c, and the noise betaN to a matrix with dimensions (number of samples along beams, number of beams):
 	beta0 <- matrix(beta0, nrow = beams$lenb, ncol = beams$numb, byrow = TRUE)
@@ -31,8 +31,15 @@ sv2MaskOnePing <- function(sv, betaN, beta0, beta1, h, c, beams) {
 	beta0BelowNoise <- beta0 < betaNWithTVG
 	beta0[beta0BelowNoise] <- betaNWithTVG[beta0BelowNoise]	
 	
-
-
+	# Apply the ind:
+	if(length(ind) == 2) {
+		beta0 <- beta0[ind[[1]], ind[[2]]]
+		beta1 <- beta1[ind[[1]], ind[[2]]]
+		sv <- sv[ind[[1]], ind[[2]]]
+		betaN <- betaN[ind[[1]], ind[[2]]]
+		c <- c[ind[[1]], ind[[2]]]
+	}
+	
 	# Run the cummulative distribution function evaluated at beta0, resulting in the probability of "not school":
 	p <- probabilityOfNotSchool(
 		beta0 = beta0,
@@ -57,7 +64,8 @@ probabilityOfNotSchool <- function(beta0, beta1, sv, betaN){
 	
 	# The ratio of exponential integrals is Eq. (6) in "Bayesian segmentation method.pdf":
 	H <- function(b, sv, betaN, beta1){
-		expint::expint_E1(sv / (b + betaN)) / expint::expint_E1(sv / (beta1 + betaN))
+		# Exclude values lower that 
+		expint_E1_restricted(sv / (b + betaN)) / expint_E1_restricted(sv / (beta1 + betaN))
 	}
 	
 	# Make the ratio:
@@ -65,6 +73,27 @@ probabilityOfNotSchool <- function(beta0, beta1, sv, betaN){
 		H(beta1, sv = sv, betaN = betaN, beta1 = beta1)
 	
 	return(out)
+}
+
+expint_E1_restricted <- function(x, lower = 1E-100, upper = 1E2) {
+	# Store the NA indices to insert NAs at the end:
+	NAs <- is.na(x)
+	
+	# Calculate only between lower and upper:
+	between <- x > lower & x < upper
+	between[is.na(between)] <- FALSE
+	
+	# Define the output:
+	dimx <- dim(x)
+	output <- double(prod(dimx))
+	dim(output) <- dimx
+	
+	# Apply the expint:
+	output[between] <- expint::expint_E1(x[between])
+	output[NAs] <- NA
+	
+	
+	return(output)
 }
 
 # Function for Gaussian smoothing along a vector:

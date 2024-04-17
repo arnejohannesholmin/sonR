@@ -140,8 +140,8 @@ echoIBM.vbsc2p.event <- function(event=1, t=1, cruise=2009116, bgns=NULL, beta0=
 	noisefiles <- noise.path(cruise=cruise,event=event,esnm=esnm,dir.data=dir.data)
 	data <- c(adds, data, bgns, read.TSDs(noisefiles,var=c("bgns","badb","pns1","pns2","pns3","pn3M","harm","acfq","nr0a")))
 	periodic <- which(data$badb==1)
-	rm(bgns)
-	gc()
+	#rm(bgns)
+	#gc()
 		
 	# If zeros occur in data$bgns, add a small value:
 	if(min(data$bgns)==0){
@@ -441,8 +441,8 @@ echoIBM.vbsc2p.event_old <- function(event=1, t=1, cruise=2009116, bgns=NULL, be
 	noisefiles = noise.path(cruise=cruise,event=event,esnm=esnm,dir.data=dir.data)
 	data = c(adds, data, bgns, read.TSDs(noisefiles,var=c("bgns","badb","pns1","pns2","pns3","pn3M","harm","acfq","nr0a")))
 	periodic = which(data$badb==1)
-	rm(bgns)
-	gc()
+	#rm(bgns)
+	#gc()
 
 	# If zeros occur in data$bgns, add a small value:
 	if(min(data$bgns)==0){

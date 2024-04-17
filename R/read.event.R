@@ -249,6 +249,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	}
 	##########
 	
+	#browser()
 	
 	##########
 	# The list of files in the tsd-directory inside the case:
@@ -260,6 +261,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 		warning("The event is empty")
 		return(list())
 	}
+	#browser()
 	
 	# Remove the file "UNIX_time.tsd" from the list if it is present, as this only contains information about the unix time points of the other files:
 	#filelist <- filelist[basename(filelist) != "UNIX_time.tsd"]
@@ -379,6 +381,17 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	##########
 	# Get the number of unique time point:
 	numt <- length(TIME$I000)
+	
+	if(is.numeric(t) && any(t > numt)) {
+		if(any(t <= numt)) {
+			warning("Some t exceed the number of time steps, and are removed.")
+			t <- t[t <= numt]
+		}
+		else {
+			warning("None of the time indices are valid.")
+			return(NULL)
+		}
+	}
 	
 	# 't' may be given as formated time "yyyymmddHHMMSS.FFF" or "yyyymmddSSSSS.FFF":
 	nchart <- nchar(t)
@@ -633,6 +646,7 @@ read.event <- function(event=1, var="pings", t=1, cruise=2009116, TIME=FALSE, ad
 	##################################
 	##################################
 	
+	#browser()
 	#####################################
 	### (4) Reading vessel-variables: ###
 	#####################################

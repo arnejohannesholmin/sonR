@@ -4,7 +4,7 @@
 \alias{sv2MaskOnePing}
 \title{Bayesian segmentation method for one ping}
 \usage{
-sv2MaskOnePing(sv, betaN, beta0, beta1, h, c, beams)
+sv2MaskOnePing(sv, betaN, beta0, beta1, h, c, beams, ind = list())
 }
 \arguments{
 \item{sv}{A matrix of sv (linear values) for one ping.}

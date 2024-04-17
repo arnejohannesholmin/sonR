@@ -346,8 +346,8 @@ compr.event_oneFile_write <- function(i, indt, filelist, pingsfiles, vesselfiles
 		write(paste("End", i), dumpfiles[i], append=TRUE)
 	}
 	#invisible(data)
-	rm(data)
-	gc()
+	#rm(data)
+	#gc()
 	return(filelist[i])
 }	
 #*********************************************

@@ -43,7 +43,7 @@ read.event_read_files<-function(files, filesind, tlist, var, origin=NULL){
 	
 	# Only for vessel files:
 	# Calculate the cartesian positions of the vessel in (G) defined by 'origin':
-	#browser()
+    #browser()
 	psxvRequested = ("all" %in% var && file_ext(files[filesind][1])=="vessel") || any(c("psxv", "psyv") %in% var)
 	psxvNotPresent = any(c(length(out$psxv)==0, length(out$psyv)==0))
 	if(psxvRequested && psxvNotPresent){
